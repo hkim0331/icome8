@@ -47,7 +47,7 @@ class Ucome
 
   def find_icome(sid, uhour)
     ret = @cl.find({sid: sid, uhour: uhour})
-    # CHECK: should return false? 
+    # CHECK: should return false?
     if ret.first.nil?
       []
     else
@@ -83,6 +83,7 @@ class Ucome
   end
 
   def fetch(n)
+    puts "called fetch"
     @commands[n]
   end
 
@@ -95,16 +96,18 @@ class Ucome
     end
   end
 
-  
-
   # BUG! icome can not know ucome has reset.
   # commands スタックとは別にリセットフラグをもたせるか？
   # icome のメニューにリセットを入れるか？
   def reset
     @reset_count += 1
-    @commands = Commands.new
+    @commands = []
   end
 
+  # debug
+  def hello
+    puts "receive hello"
+  end
 end
 
 #

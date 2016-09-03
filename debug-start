@@ -1,0 +1,6 @@
+#!/bin/sh
+# no good
+
+./mongodb-start.sh &
+./debug-ucome &
+./debug-icome &

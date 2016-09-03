@@ -32,9 +32,9 @@ class Icome
     today = now.to_s.split[0]
     unless $debug
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
-          (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
-          @ui.dialog("授業時間じゃありません。")
-          return
+        (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
+        @ui.dialog("授業時間じゃありません。")
+        return
       end
     end
     records = @ucome.find_icome(@sid, uhour)
@@ -99,47 +99,6 @@ class Icome
     Dir.entries(@icome8_dir).find_all{|x| x =~ /^#{term}/}.map{|x| x.split(/_/)[1]}
   end
 
-  def start
-    puts "start called"
-    Thread.new do
-      next_cmd = 0
-      reset = 0
-      while true do
-        ucome_reset = @ucome.reset_count
-        if ucome_reset > reset
-          next_cmd = 0
-          reset = ucome_reset
-        end
-        cmd = @ucome.fetch(next_cmd)
-        debug "fetch:#{cmd}, reset: #{reset}, next_cmd: #{next_cmd}"
-        if cmd.nil?
-          puts "sleep"
-          sleep INTERVAL
-          next
-        end
-
-        case cmd
-        when /^x*cowsay\s+(.+)$/
-          cowsay($1)
-        when /^display\s+(.+)$/
-          @ui.dialog($1)
-        when /^upload\s+(\S+)/
-          upload($1)
-        when /^download\s+(\S+)\s+(\S+)$/
-          download($1,$2)
-        when /^exec/
-          exec(cmd)
-        # BUG!
-        when /reset (\d+)/
-          next_cmd = $1.to_i
-        else
-          debug "error: #{cmd}"
-        end
-        next_cmd += 1
-      end
-    end
-  end
-
   # FIXME: isc to isc? or ucome to isc?
   def download(remote, local)
     debug "#{__method__} #{remote}"
@@ -193,7 +152,47 @@ if __FILE__ == $0
   DRb.start_service
   icome = Icome.new(DRbObject.new(nil, ucome))
   icome.setup_ui
-  icome.start
-  DRb.thread.join
+
+  # icome.start does not go well.
+  # from toplevel, call Thread.new.
+  Thread.new do
+    puts "thread started"
+    next_cmd = 0
+    reset = 0
+    while true do
+      # ucome_reset = @ucome.reset_count
+      # if ucome_reset > reset
+      #   next_cmd = 0
+      #   reset = ucome_reset
+      # end
+      cmd = @ucome.fetch(next_cmd)
+      puts "fetch:#{cmd}, reset: #{reset}, next_cmd: #{next_cmd}"
+      if cmd.nil?
+        puts "sleep"
+        sleep INTERVAL
+        next
+      end
+      case cmd
+      when /^x*cowsay\s+(.+)$/
+        cowsay($1)
+      when /^display\s+(.+)$/
+        @ui.dialog($1)
+      when /^upload\s+(\S+)/
+        upload($1)
+      when /^download\s+(\S+)\s+(\S+)$/
+        download($1,$2)
+      when /^exec/
+        exec(cmd)
+      # BUG!
+      when /reset (\d+)/
+        next_cmd = $1.to_i
+      else
+        debug "error: #{cmd}"
+      end
+      next_cmd += 1
+    end
+  end
 end
+
+DRb.thread.join
 
