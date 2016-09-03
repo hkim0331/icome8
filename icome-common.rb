@@ -2,7 +2,7 @@ VERSION="0.0"
 UPDATE="2016-09-04"
 APP_NAME="icome8"
 
-INTERVAL = 5
+INTERVAL = 1
 MAX_UPLOAD_SIZE  = 5000000
 
 PREFIX = {'j' => '10', 'k' => '11', 'm' => '12', 'n' => '13',

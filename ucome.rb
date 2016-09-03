@@ -83,7 +83,7 @@ class Ucome
   end
 
   def fetch(n)
-    puts "called fetch"
+    puts "called fetch #{n}"
     @commands[n]
   end
 
@@ -108,6 +108,7 @@ class Ucome
   def hello
     puts "receive hello"
   end
+
 end
 
 #

@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+a#!/usr/bin/env ruby
 # coding: utf-8
 
 require 'drb'
