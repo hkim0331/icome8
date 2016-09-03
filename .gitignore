@@ -1,0 +1,5 @@
+/upload/*
+!/upload/.place-holder
+/nohup.out
+/log/*
+!/log/.place-holder
