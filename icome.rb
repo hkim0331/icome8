@@ -38,7 +38,7 @@ class Icome
     records = @ucome.find_icome(@sid, uhour)
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
-        @ucome.create(@sid, uhour) 
+        @ucome.create(@sid, uhour)
         @ucome.update(@sid, uhour, today, @ip)
       end
     else
@@ -67,7 +67,7 @@ class Icome
     end
   end
 
-  # 個人課題, 
+  # 個人課題,
   def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
@@ -184,6 +184,6 @@ if __FILE__ == $0
   DRb.start_service
   icome = Icome.new(DRbObject.new(nil, ucome))
   icome.setup_ui
-  icome.start
+#  icome.start
   DRb.thread.join
 end

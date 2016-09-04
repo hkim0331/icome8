@@ -1,7 +1,7 @@
 # coding: utf-8
 module Gtypist
-  require './icome-dialog'
-  include Dialog
+#  require './icome-dialog'
+#  include Dialog
 
   def gtypist(pat)
     ret=[]
