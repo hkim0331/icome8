@@ -14,7 +14,11 @@ class Icome
     @ucome = ucome
     @sid = uid2sid(ENV['USER'])
     @ip = IPSocket::getaddress(Socket::gethostname)
-    @icome8_dir = File.expand_path("~/.icome8")
+    @icome8_dir = if $debug
+                    "icome8"
+                  else
+                    File.expand_path("~/.icome8")
+                  end
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
     @record = nil
   end
