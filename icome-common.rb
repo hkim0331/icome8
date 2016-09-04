@@ -1,8 +1,8 @@
-VERSION="0.0"
+VERSION="0.1"
 UPDATE="2016-09-04"
 APP_NAME="icome8"
 
-INTERVAL = 5
+INTERVAL = 1
 MAX_UPLOAD_SIZE  = 5000000
 
 PREFIX = {'j' => '10', 'k' => '11', 'm' => '12', 'n' => '13',
@@ -27,6 +27,7 @@ def hour(time)
   return 0
 end
 
+# Tue2, Tue4, ...
 def uhour(time)
   time.strftime("%a") + hour(time.strftime("%F")).to_s
 end
@@ -45,6 +46,7 @@ def this_term()
   "q3"
 end
 
+# q3_2016, ...
 def collection()
   "#{this_term()}_#{a_year()}"
 end

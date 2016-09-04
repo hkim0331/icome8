@@ -24,7 +24,7 @@ acome:
 
 clean:
 	${RM} *~ .#* *.bak nohup.out
-	${RM} -r upload/* # too much?
+#	${RM} -r upload/* # too much?
 
 
 

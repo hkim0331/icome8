@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+a#!/usr/bin/env ruby
 # coding: utf-8
 
 require 'drb'
@@ -18,7 +18,6 @@ usage:
   version
   quit
 EOF
-  exit(1)
 end
 
 #
@@ -49,6 +48,8 @@ Thread.new do
   puts "type 'quit' to quit"
   while (print "> "; cmd = STDIN.gets)
     case cmd
+    when /hello/
+      ucome.hello
     when /list/
       puts ucome.list
     when /^x*cowsay/
@@ -68,9 +69,11 @@ Thread.new do
     when /^reset/
       ucome.reset
     when /^quit/
+      puts "quit"
       ucome.reset
       exit(0)
     else
+      puts "unknown command: #{cmd}"
       usage()
     end
   end

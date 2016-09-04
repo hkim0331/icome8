@@ -1,67 +1,34 @@
-# icome7
+# icome8
 
 icome version 8.
-
-rewrote icome7
+rewrote icome7.
 
 ## require
 
-```
-$ gem install mongo
-```
+I use,
+
+* ruby 2.3.1
+* jruby 9.1.3.0
+* mongodb 3.2.9
+* gem mongo 2.3.0
 
 ## develop
 
 prep mongodb:
 
 ```sh
-localhost$ ./mongo-mongo.sh
+localhost$ ./mongodb-start.sh
+localhost$ ./debug-ucome
+localhost$ ./debug-icome
+localhost$ ./debug-acome
 ```
-
-launch ucome:
-
-```sh
-localhost$ ./ucome.rb --port port
-```
-
-then icome.
-
-```sh
-localhost$  ./icome.rb --ucome druby://localhost:port
-```
-
---debug option is also available.
 
 ## production
-
-### orange
-
-```sh
-# service mongodb start
-# service ucome start
-```
-
-ucome runs under hkim privilege.
-
-### isc
-
-```sh
-isc$ /edu/bin/icome
-```
-
-### isc admin
-
-```sh
-hkimura$ ~/icome7/admin.rb
-```
-
-* display message
-* upload dir/file ...
-  upload local:~/dir/file as remote:/srv/icome7/upload/uid/file
-  `dir/` is omitted.
-
 
 ## author
 
 hiroshi.kimura.0331@gmail.com
+
+---
+hkimura.
 

@@ -47,7 +47,7 @@ class Ucome
 
   def find_icome(sid, uhour)
     ret = @cl.find({sid: sid, uhour: uhour})
-    # CHECK: should return false? 
+    # CHECK: should return false?
     if ret.first.nil?
       []
     else
@@ -55,11 +55,8 @@ class Ucome
     end
   end
 
-  def push(cmd)
-    @commands.push(cmd)
-  end
 
-  # 個人課題
+  # 個人課題の提出状況
   def personal(sid)
     dir = File.join(@upload, sid)
     if File.directory?(dir)
@@ -69,9 +66,8 @@ class Ucome
     end
   end
 
-  # スタックトップを消すとは限らない。
-  def delete(n)
-    @commands.delete_at(n)
+  def push(cmd)
+    @commands.push(cmd)
   end
 
   def list
@@ -83,7 +79,13 @@ class Ucome
   end
 
   def fetch(n)
+    puts "called fetch #{n}"
     @commands[n]
+  end
+
+  # スタックトップを消すとは限らない。
+  def delete(n)
+    @commands.delete_at(n)
   end
 
   def upload(sid, name, contents)
@@ -95,14 +97,12 @@ class Ucome
     end
   end
 
-  
-
   # BUG! icome can not know ucome has reset.
   # commands スタックとは別にリセットフラグをもたせるか？
   # icome のメニューにリセットを入れるか？
   def reset
     @reset_count += 1
-    @commands = Commands.new
+    @commands = []
   end
 
 end
