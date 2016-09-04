@@ -27,6 +27,7 @@ def hour(time)
   return 0
 end
 
+# Tue2, Tue4, ...
 def uhour(time)
   time.strftime("%a") + hour(time.strftime("%F")).to_s
 end
@@ -45,6 +46,7 @@ def this_term()
   "q3"
 end
 
+# q3_2016, ...
 def collection()
   "#{this_term()}_#{a_year()}"
 end

@@ -1,7 +1,5 @@
 #!/usr/bin/env jruby
 # coding: utf-8
-#
-# use swing. so jruby.
 
 require 'date'
 require 'drb'
@@ -40,7 +38,7 @@ class Icome
     records = @ucome.find_icome(@sid, uhour)
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
-        @ucome.create(@sid, uhour)
+        @ucome.create(@sid, uhour) 
         @ucome.update(@sid, uhour, today, @ip)
       end
     else
@@ -59,23 +57,17 @@ class Icome
     uhours = find_uhours_from_memo(this_term())
     if uhours.empty?
       @ui.dialog("記録がありません。")
-      return
-    end
-    if uhours.count == 1
-      uhour = uhours[0]
     else
-      ret = @ui.option_dialog(uhours, "複数のクラスを受講しているようです。")
-      uhour = uhours[ret]
-    end
-    record = @ucome.find_icome(@sid, uhour)
-    if record.empty?
-      @ui.dialog("記録がありません。変ですね。")
-    else
-      @ui.dialog(record.sort.join('<br>'))
+      if uhours.count == 1
+        uhour = uhours[0]
+      else
+        uhour = uhours[@ui.option_dialog(uhours, "複数のクラスを受講しているようです。")]
+      end
+      @ui.dialog(@ucome.find_icome(@sid, uhour).sort.join('<br>'))
     end
   end
 
-  # 個人課題
+  # 個人課題, 
   def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
@@ -99,13 +91,14 @@ class Icome
     Dir.entries(@icome8_dir).find_all{|x| x =~ /^#{term}/}.map{|x| x.split(/_/)[1]}
   end
 
-  # FIXME: isc to isc? or ucome to isc?
+  # FIXME: rename as ucome_to_isc?
   def download(remote, local)
     debug "#{__method__} #{remote}"
   end
 
+  # FIXME: rename as isc_to_ucome?
   def upload(local)
-    debug "upload #{local}"
+    debug "#{__method__} #{local}"
     it = File.join(ENV['HOME'], local)
     if File.exists?(it)
       if File.size(it) < MAX_UPLOAD_SIZE
@@ -131,7 +124,6 @@ class Icome
 
   def start
     Thread.new do
-      puts "thread started"
       next_cmd = 0
       reset = 0
       while true do
@@ -140,11 +132,10 @@ class Icome
         #   next_cmd = 0
         #   reset = ucome_reset
         # end
-        puts "will fetch"
         cmd = @ucome.fetch(next_cmd)
         puts "fetch:#{cmd}, reset: #{reset}, next_cmd: #{next_cmd}"
         if cmd.nil?
-          puts "sleep"
+          puts "sleep #{INTERVAL}"
           sleep INTERVAL
           next
         end
@@ -174,6 +165,7 @@ end
 #
 # main starts here
 #
+
 $debug = false
 ucome = (ENV['UCOME'] || 'druby://127.0.0.1:9007')
 while (arg = ARGV.shift)
@@ -193,45 +185,5 @@ if __FILE__ == $0
   icome = Icome.new(DRbObject.new(nil, ucome))
   icome.setup_ui
   icome.start
-  # icome.start does not go well.
-  # from toplevel, call Thread.new.
-  #   Thread.new do
-  #     puts "thread started"
-  #     next_cmd = 0
-  #     reset = 0
-  #     while true do
-  #       # ucome_reset = @ucome.reset_count
-  #       # if ucome_reset > reset
-  #       #   next_cmd = 0
-  #       #   reset = ucome_reset
-  #       # end
-  #       cmd = ucome.fetch(next_cmd)
-  #       puts "fetch:#{cmd}, reset: #{reset}, next_cmd: #{next_cmd}"
-  #       if cmd.nil?
-  #         puts "sleep"
-  #         sleep INTERVAL
-  #         next
-  #       end
-  #       case cmd
-  #       when /^x*cowsay\s+(.+)$/
-  #         cowsay($1)
-  #       when /^display\s+(.+)$/
-  #         @ui.dialog($1)
-  #       when /^upload\s+(\S+)/
-  #         upload($1)
-  #       when /^download\s+(\S+)\s+(\S+)$/
-  #         download($1,$2)
-  #       when /^exec/
-  #         exec(cmd)
-  #       # BUG!
-  #       when /reset (\d+)/
-  #         next_cmd = $1.to_i
-  #       else
-  #         debug "error: #{cmd}"
-  #       end
-  #       next_cmd += 1
-  #     end
-  #   end
-  # end
   DRb.thread.join
 end

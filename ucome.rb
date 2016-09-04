@@ -55,11 +55,8 @@ class Ucome
     end
   end
 
-  def push(cmd)
-    @commands.push(cmd)
-  end
 
-  # 個人課題
+  # 個人課題の提出状況
   def personal(sid)
     dir = File.join(@upload, sid)
     if File.directory?(dir)
@@ -69,9 +66,8 @@ class Ucome
     end
   end
 
-  # スタックトップを消すとは限らない。
-  def delete(n)
-    @commands.delete_at(n)
+  def push(cmd)
+    @commands.push(cmd)
   end
 
   def list
@@ -85,6 +81,11 @@ class Ucome
   def fetch(n)
     puts "called fetch #{n}"
     @commands[n]
+  end
+
+  # スタックトップを消すとは限らない。
+  def delete(n)
+    @commands.delete_at(n)
   end
 
   def upload(sid, name, contents)
@@ -102,11 +103,6 @@ class Ucome
   def reset
     @reset_count += 1
     @commands = []
-  end
-
-  # debug
-  def hello
-    puts "receive hello"
   end
 
 end
