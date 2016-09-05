@@ -1,7 +1,11 @@
 #!/usr/bin/env jruby
 # coding: utf-8
 require './icome-dialog'
+require './icome-gtypist'
 include Dialog
+include Gtypist
+
+EXAM_URI = "http://literacy-2016.melt.kyutech.ac.jp/fcgi/abb2.cgi"
 
 class UI
   include Java
@@ -27,11 +31,10 @@ class UI
     case this_term()
     when /(q1)|(q2)/
       menu.add(gtypist_menu)
-    
     when /(q3)|(q4)/
       menu.add(robocar_menu)
     end
-    
+
     frame.add(menu)
     frame.pack
     frame.set_visible(true)
@@ -83,7 +86,11 @@ class UI
 
     button = JButton.new("中間テスト") do |s|
       button.add_action_listener do |e|
-        system("firefox http://literacy-2016.melt.kyutech.ac.jp/fcgi/abb2.cgi &")
+        if @debug
+          system("open #{EXAM_URI} &")
+        else
+          system("/usr/bin/firefox #{EXAM_URI} &")
+        end
       end
     end
     panel.add(button)

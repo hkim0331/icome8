@@ -43,7 +43,7 @@ def a_year()
 end
 
 def this_term()
-  "q3"
+  "q2"
 end
 
 # q3_2016, ...

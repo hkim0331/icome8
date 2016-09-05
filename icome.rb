@@ -117,7 +117,6 @@ class Icome
     end
   end
 
-
   def exec(command)
     system(command)
   end

@@ -18,9 +18,9 @@ prep mongodb:
 
 ```sh
 localhost$ ./mongodb-start.sh
-localhost$ ./debug-ucome
-localhost$ ./debug-icome
-localhost$ ./debug-acome
+localhost$ ./ucome-debug
+localhost$ ./icome-debug
+localhost$ ./acome-debug
 ```
 
 ## production
