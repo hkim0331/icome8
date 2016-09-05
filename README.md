@@ -3,6 +3,10 @@
 icome version 8.
 rewrote icome7.
 
+## README
+
+リセットが難しい。どういう手段で実施するか?
+
 ## require
 
 I use,
@@ -14,14 +18,17 @@ I use,
 
 ## develop
 
-prep mongodb:
-
 ```sh
 localhost$ ./mongodb-start.sh
 localhost$ ./debug-ucome
 localhost$ ./debug-icome
 localhost$ ./debug-acome
 ```
+
+* debug- の名前は一箇所にデバッグ関連プログラムが集まって、見やすい。
+* app-debug の名前は mongo-start みたいに、「アプリ 動詞」の順で統一できる。
+
+どっちがいいか? あんまりどうでもいいや。
 
 ## production
 

@@ -127,48 +127,39 @@ class Icome
 
   def start
     Thread.new do
-      next_cmd = 0
-      reset = 0
       while true do
-        # ucome_reset = @ucome.reset_count
-        # if ucome_reset > reset
-        #   next_cmd = 0
-        #   reset = ucome_reset
-        # end
         cmd = @ucome.fetch(next_cmd)
-        puts "fetch:#{cmd}, reset: #{reset}, next_cmd: #{next_cmd}"
         if cmd.nil?
           puts "sleep #{INTERVAL}"
           sleep INTERVAL
-          next
-        end
-        case cmd
-        when /^x*cowsay\s+(.+)$/
-          cowsay($1)
-        when /^display\s+(.+)$/
-          @ui.dialog($1)
-        when /^upload\s+(\S+)/
-          upload($1)
-        when /^download\s+(\S+)\s+(\S+)$/
-          download($1,$2)
-        when /^exec/
-          exec(cmd)
-        # BUG!
-        when /reset (\d+)/
-          next_cmd = $1.to_i
         else
-          debug "error: #{cmd}"
+          case cmd
+          when /^x*cowsay\s+(.+)$/
+            cowsay($1)
+          when /^display\s+(.+)$/
+            @ui.dialog($1)
+          when /^upload\s+(\S+)/
+            upload($1)
+          when /^download\s+(\S+)\s+(\S+)$/
+            download($1,$2)
+          when /^exec/
+            exec(cmd)
+          # BUG!
+          when /reset (\d+)/
+            next_cmd = $1.to_i
+          else
+            debug "error: #{cmd}"
+          end
         end
-        next_cmd += 1
       end
     end
   end
+
 end
 
 #
 # main starts here
 #
-
 $debug = false
 ucome = (ENV['UCOME'] || 'druby://127.0.0.1:9007')
 while (arg = ARGV.shift)
