@@ -1,4 +1,5 @@
 #!/bin/sh
+DEST=./log
 
-mongoexport -d ucome -c q3_2016 -o /srv/icome8/backup/`date +%F`.csv
+mongoexport -d ucome -c q3_2016 -o ${DEST}/`date +%F`.csv
 

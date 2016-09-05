@@ -1,4 +1,4 @@
-VERSION="1.2"
+VERSION="0.1.3"
 UPDATE="2016-09-05"
 APP_NAME="icome8"
 
