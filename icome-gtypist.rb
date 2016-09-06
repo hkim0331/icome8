@@ -1,5 +1,6 @@
 # coding: utf-8
 module Gtypist
+
   def gtypist(pat)
     ret=['gtypist score']
     File.foreach("#{ENV['HOME']}/.gtypist") do |line|
