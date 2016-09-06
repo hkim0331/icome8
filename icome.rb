@@ -121,8 +121,12 @@ class Icome
     system(command)
   end
 
-  def cowsay(s)
-    system("xcowsay --at=400,400 #{s}")
+  def xcowsay(s)
+    if PLATFORM == "java"
+      system("xcowsay --at=400,400 #{s}")
+    else
+      @u.dislay(s)
+    end
   end
 
   def start
