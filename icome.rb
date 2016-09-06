@@ -8,7 +8,6 @@ require './icome-common'
 require './icome-ui'
 
 class Icome
-  attr_accessor :interval
 
   def initialize(ucome)
     @ucome = ucome
@@ -29,10 +28,12 @@ class Icome
 
   def icome
     term  = this_term()
-    now   = Time.now
-    uhour = uhour(now)
-    today = now.to_s.split[0]
-    unless $debug
+    today, uhour = Time.now.to_s.split
+    if $debug
+      puts "term: #{term}"
+      puts "uhour: #{uhour}"
+      puts "today: #{today}"
+    else
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
         (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
         @ui.dialog("授業時間じゃありません。")
@@ -47,11 +48,11 @@ class Icome
       end
     else
       if records.include?(today)
-        dialog("出席記録は一回の授業にひとつで十分。")
+        @ui.dialog("出席記録は一回の授業にひとつで十分。")
         return
       else
         @ucome.update(@sid, uhour, today)
-        self.dialog("出席を記録しました。<br>学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
+        @ui.dialog("出席を記録しました。<br>学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
       end
     end
     memo(term, uhour, today)
@@ -122,7 +123,7 @@ class Icome
   end
 
   def xcowsay(s)
-    if PLATFORM == "java"
+    if ENV['HOME'] =~ /^\/home/
       system("xcowsay --at=400,400 #{s}")
     else
       @u.dislay(s)
