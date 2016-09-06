@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION="0.2.2"
+VERSION="0.2.3"
 
 ICOME=/home/t/hkimura/bin/icome8.rb
 SS=/edu/bin/watch-ss
