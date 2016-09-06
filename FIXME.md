@@ -1,8 +1,11 @@
 # FIXME
 
-* druby://localhost:9001 で通信できないわけは？ 
+* druby://localhost:9001 で通信できないわけは？
   druby://127.0.0.1:9001 では行けるのに。
 
+* uid, myid, subj(授業科目）をドキュメントに入れるか？
+
+* コレクション名に subj を入れるか？
 
 ## old
 

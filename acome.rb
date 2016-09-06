@@ -2,7 +2,7 @@
 # coding: utf-8
 
 require 'drb'
-require './icome-common'
+#require './icome-common'
 
 def usage
   print <<EOF

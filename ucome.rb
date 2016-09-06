@@ -33,7 +33,7 @@ class Ucome
       logger       = Logger.new("/srv/icome8/log/ucome.log", 5, 10*1024)
       logger.level = Logger::INFO
     end
-    @cl = Mongo::Client.new(mongo, logger: logger)["#{this_term()}_#{a_year()}"]
+    @cl = Mongo::Client.new(mongo, logger: logger)[collection()]
     @commands = []
     @cur = 0
     @next = -1

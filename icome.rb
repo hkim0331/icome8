@@ -21,28 +21,6 @@ EOU
   exit(1)
 end
 
-PREFIX = {'j' => '10', 'k' => '11', 'm' => '12', 'n' => '13',
-          'o' => '14', 'p' => '15', 'q' => '16', 'r' => '17' }
-
-def uid2sid(uid)
-  PREFIX[uid[0]] + uid[1,6]
-rescue
-  uid
-end
-
-def hour(time)
-  return 1 if "08:50:00" <= time and time <= "10:20:00"
-  return 2 if "10:30:00" <= time and time <= "12:00:00"
-  return 3 if "13:00:00" <= time and time <= "14:30:00"
-  return 4 if "14:40:00" <= time and time <= "16:10:00"
-  return 5 if "16:20:00" <= time and time <= "17:50:00"
-  return 0
-end
-
-def uhour(time)
-  time.strftime("%a") + hour(time.strftime("%T")).to_s
-end
-
 class Icome
 
   def initialize(ucome)
@@ -122,13 +100,17 @@ class Icome
   end
 
   def memo(term, uhour, date_time)
-    File.open(File.join(@icome8_dir, "#{term}_#{uhour}"), "a") do |fp|
+    name = File.join(@icome8_dir, "#{collection()}_#{uhour}")
+    File.open(name, "a") do |fp|
       fp.puts date_time
     end
   end
 
-  def find_uhours_from_memo(term)
-    Dir.entries(@icome8_dir).find_all{|x| x =~ /^#{term}/}.map{|x| x.split(/_/)[1]}
+  def find_uhours_from_memo(term, uhour)
+    col="#{collection()}_#{uhour}"
+    Dir.entries(@icome8_dir).
+      find_all{|x| x =~ /^#{col}/}.
+      map{|x| x.split(/_/)[1]}
   end
 
   # FIXME: rename as ucome_to_isc?

@@ -1,4 +1,6 @@
 # coding: utf-8
+require './icome-common'
+
 class UI
   include Java
   import javax.swing.JFrame
@@ -146,7 +148,7 @@ class UI
     if ret.length >= len[s]
       greeting = "<p style='color:red;'>CLEAR!!</p>"
     elsif ret.length == 0
-      greeting = "<p style='color:blue;'>やっとかないと平常点つかない。</p>"
+      greeting = "<p style='color:blue;'>やっとかないと平常点つかないよ。</p>"
     end
     dialog(ret.join('<br>') + greeting)
   end
