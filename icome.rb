@@ -126,31 +126,34 @@ class Icome
   end
 
   def start
+    puts "start"
     Thread.new do
+      i = 0
       while true do
-        cmd = @ucome.fetch(next_cmd)
-        if cmd.nil?
-          puts "sleep #{INTERVAL}"
-          sleep INTERVAL
-        else
-          case cmd
-          when /^x*cowsay\s+(.+)$/
-            cowsay($1)
-          when /^display\s+(.+)$/
-            @ui.dialog($1)
-          when /^upload\s+(\S+)/
-            upload($1)
-          when /^download\s+(\S+)\s+(\S+)$/
-            download($1,$2)
-          when /^exec/
-            exec(cmd)
-          # BUG!
-          when /reset (\d+)/
-            next_cmd = $1.to_i
-          else
-            debug "error: #{cmd}"
+        cmd = @ucome.fetch(i)
+        unless cmd.nil?
+          i += 1
+          if cmd[:status] == :enable
+            puts "cmd: #{cmd}"
+            case cmd[:command]
+            when /xcowsay\s+(.+)$/
+              xcowsay($1)
+            when /^display\s+(.+)$/
+              @ui.dialog($1)
+            when /^upload\s+(\S+)/
+              upload($1)
+            when /^download\s+(\S+)\s+(\S+)$/
+              download($1,$2)
+            when /^exec/
+              system(cmd.sub(/^exec\s*/,''))
+            when /^reset (\d+)/
+              i = $1.to_i
+            else
+              debug "error: #{cmd}"
+            end
           end
         end
+        sleep INTERVAL
       end
     end
   end
@@ -178,6 +181,6 @@ if __FILE__ == $0
   DRb.start_service
   icome = Icome.new(DRbObject.new(nil, ucome))
   icome.setup_ui
-#  icome.start
+  icome.start
   DRb.thread.join
 end

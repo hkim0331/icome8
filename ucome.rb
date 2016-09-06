@@ -38,6 +38,9 @@ class Ucome
     @next = -1
   end
 
+  #
+  # mongodb interface
+  #
   def create(sid, uhour)
     @cl.insert_one({sid: sid, uhour: uhour, icome: [], ip: []})
   end
@@ -58,8 +61,8 @@ class Ucome
   end
 
   # 個人課題の提出状況。
-  # 個人課題は ucome の動くサーバにアップロードするので、
-  # icome のローカル PC では解決できない。
+  # アップロード先は ucome の動くサーバなので、
+  # icome の動いているローカル PC では解決できない。
   def personal(sid)
     dir = File.join(@upload, sid)
     if File.directory?(dir)
@@ -69,18 +72,34 @@ class Ucome
     end
   end
 
+  #
+  # icome methods
+  #
+  # if not found, return nil.
+  def fetch(n)
+    #    @commands.delete_if{|com| com[:status]==:disable}[n]
+    puts "fetch #{n}"
+    @commands[n]
+  end
+
   # %F_#{save_as_name} は並び順のため。
-  def upload(from_sid, save_as_name, contents)
-    dir = File.join(UPLOAD, from_sid)
+  # CHECK: contents?
+  def upload(sid, save_as, contents)
+    dir = File.join(@upload, sid)
     Dir.mkdir(dir) unless File.directory?(dir)
-    to = File.join(dir, Time.now.strftime("%F_#{save_as_name}"))
+    to = File.join(dir, Time.now.strftime("%F_#{save_as}"))
     File.open(to, "w") do |f|
       f.puts contents
     end
   end
 
-  # commands interface
-  # acome の仕事。
+  def download(file, save_as)
+
+  end
+
+  #
+  # acome methods
+  #
   def push(cmd)
     @commands.push({status: :enable, command: cmd})
   end
@@ -93,12 +112,6 @@ class Ucome
     ret
   end
 
-  # スタックトップを消すとは限らない。
-  def delete(n)
-    @commands.delete_at(n)
-  end
-
-  # delete の代わりに enable/disable
   def enable(n)
     @commands[n][:status] = :enable
   end
@@ -108,13 +121,7 @@ class Ucome
   end
 
   def clear
-    @commands=[]
-  end
-
-  # icome
-  # if not found, return nil.
-  def fetch(n)
-    @commands.delete_if{|com| com[:status]==:disable}[n]
+    @commands = []
   end
 
 end

@@ -7,7 +7,20 @@ require './icome-common'
 def usage
   print <<EOF
 usage:
----not yet prepared---
+  display message
+  xcowsay message
+  upload file
+  download file
+  exec command
+  reset n
+
+  list
+  enable n
+  disable n
+  clear
+
+  druby
+  VERSION
 EOF
 end
 
@@ -37,38 +50,30 @@ Thread.new do
   puts "type 'quit' to quit"
   quit = false
   while (print "> "; cmd = STDIN.gets.strip)
-    puts "cmd: #{cmd}"
-
     case cmd
-    when /enable\s+(\d+)/
-      ucome.enable($1.to_i)
-    when /disable\s+(\d+)/
-      ucome.disable($1.to_i)
-    when /delete\s+(\d+)/
-      ucome.delete($1.to_i)
-    when /^reset/
-      ucome.reset
+    # commands to icome
+    when /^(display)|(xcowsay)|(upload)|(download)|(exec)|(reset)/
+      ucome.push(cmd)
 
-    when /^(display)|(message)/
-      ucome.push(cmd)
-    when /^x*cowsay/
-      ucome.push(cmd)
+    # commands from acome
     when /list/
       puts ucome.list
-    when /^(upload)|(get)/
-      ucome.push(cmd)
-    when /^(download)|(put)/
-      ucome.push(cmd)
-    when /^exec/
-      ucome.push(cmd)
+    when /^enable\s+(\d+)/
+      ucome.enable($1.to_i)
+    when /^disable\s+(\d+)/
+      ucome.disable($1.to_i)
+    when /^clear/
+      ucome.clear
 
     when /druby/
       puts druby
     when /^version/
       puts VERSION
+
     when /^quit/
       puts "quit"
       quit = true
+
     else
       puts "unknown command: #{cmd}"
       usage()
