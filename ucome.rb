@@ -131,8 +131,8 @@ end
 # main starts here.
 #
 $debug = (ENV['DEBUG'] || false)
-druby = (ENV['UCOME'] || 'druby://128.0.0.1:9007')
-mongo = (ENV['UCOME_MONGO'] || 'mongodb://localhost/ucome')
+druby  = (ENV['UCOME'] || 'druby://128.0.0.1:9007')
+mongo  = (ENV['MONGO'] || 'mongodb://localhost/ucome')
 
 while (arg = ARGV.shift)
   case arg
