@@ -69,6 +69,16 @@ class Ucome
     end
   end
 
+  # %F_#{save_as_name} は並び順のため。
+  def upload(from_sid, save_as_name, contents)
+    dir = File.join(UPLOAD, from_sid)
+    Dir.mkdir(dir) unless File.directory?(dir)
+    to = File.join(dir, Time.now.strftime("%F_#{save_as_name}"))
+    File.open(to, "w") do |f|
+      f.puts contents
+    end
+  end
+
   # commands interface
   # acome の仕事。
   def push(cmd)
@@ -99,16 +109,6 @@ class Ucome
 
   def clear
     @commands=[]
-  end
-
-  # %F_#{save_as_name} は並び順のため。
-  def upload(from_sid, save_as_name, contents)
-    dir = File.join(UPLOAD, from_sid)
-    Dir.mkdir(dir) unless File.directory?(dir)
-    to = File.join(dir, Time.now.strftime("%F_#{save_as_name}"))
-    File.open(to, "w") do |f|
-      f.puts contents
-    end
   end
 
   # icome

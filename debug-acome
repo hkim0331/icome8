@@ -1,3 +1,0 @@
-#!/bin/sh
-
-./acome.rb --debug --ucome druby://127.0.0.1:9007
