@@ -13,7 +13,8 @@ def usage()
   print <<EOF
 ucome #{VERSION}
 usage:
-ucome [--mongodb mongodb://server:port/db]
+ucome [--debug]
+      [--mongodb mongodb://server:port/db]
       [--druby druby://ip_address:port]
 EOF
   exit(1)
@@ -129,9 +130,10 @@ end
 #
 # main starts here.
 #
-$debug = false
+$debug = (ENV['DEBUG'] || false)
 druby = (ENV['UCOME'] || 'druby://128.0.0.1:9007')
 mongo = (ENV['UCOME_MONGO'] || 'mongodb://localhost/ucome')
+
 while (arg = ARGV.shift)
   case arg
   when /--debug/

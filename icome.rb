@@ -7,9 +7,21 @@ require 'socket'
 require './icome-common'
 require './icome-ui'
 
+def usage
+  print <<EOU
+ucome #{VERSION}
+
+# usage
+
+$ ucome [--debug] [--ucome druby://ucome_ip:port]
+EOU
+  exit(1)
+end
+
 class Icome
 
   def initialize(ucome)
+    puts "debug is on" if $debug
     @ucome = ucome
     @sid = uid2sid(ENV['USER'])
     @ip = IPSocket::getaddress(Socket::gethostname)
@@ -28,11 +40,13 @@ class Icome
 
   def icome
     term  = this_term()
-    today, uhour = Time.now.to_s.split
+    now = Time.now
+    today = now.strftime("%F")
+    uhour = uhour(now)
     if $debug
       puts "term: #{term}"
-      puts "uhour: #{uhour}"
       puts "today: #{today}"
+      puts "uhour: #{uhour}"
     else
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
         (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
@@ -47,15 +61,16 @@ class Icome
         @ucome.update(@sid, uhour, today, @ip)
       end
     else
-      if records.include?(today)
+      if (not $debug) and records.include?(today)
         @ui.dialog("出席記録は一回の授業にひとつで十分。")
         return
       else
-        @ucome.update(@sid, uhour, today)
-        @ui.dialog("出席を記録しました。<br>学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
+        @ucome.update(@sid, uhour, today, @ip)
+        @ui.dialog("出席を記録しました。<br>" +
+                   "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
       end
     end
-    memo(term, uhour, today)
+    memo(term, uhour, now.strftime("%F %T"))
   end
 
   def show
@@ -86,9 +101,9 @@ class Icome
     java.lang.System.exit(0) unless ENV['UCOME']
   end
 
-  def memo(term, uhour, today)
+  def memo(term, uhour, date_time)
     File.open(File.join(@icome8_dir, "#{term}_#{uhour}"), "a") do |fp|
-      fp.puts today
+      fp.puts date_time
     end
   end
 
@@ -98,12 +113,11 @@ class Icome
 
   # FIXME: rename as ucome_to_isc?
   def download(remote, local)
-    debug "#{__method__} #{remote}"
+    puts "#{__method__} #{remote}, #{local}" if $debug
   end
 
   # FIXME: rename as isc_to_ucome?
   def upload(local)
-    debug "#{__method__} #{local}"
     it = File.join(ENV['HOME'], local)
     if File.exists?(it)
       if File.size(it) < MAX_UPLOAD_SIZE
@@ -114,7 +128,7 @@ class Icome
     else
       # CHECK そんなことあるか？
       # FIXME 日本語メッセージだと表示されない。
-      @ui.dialog("did not find #{it}.")
+      @ui.dialog("ファイルがありません。#{it}")
     end
   end
 
@@ -126,12 +140,12 @@ class Icome
     if ENV['HOME'] =~ /^\/home/
       system("xcowsay --at=400,400 #{s}")
     else
-      @u.dislay(s)
+      @ui.dialog(s + "(use display instead)")
     end
   end
 
   def start
-    puts "start"
+    puts "start" if $debug
     Thread.new do
       i = 0
       while true do
@@ -170,11 +184,12 @@ end
 #
 $debug =(ENV['DEBUG'] ||  false)
 ucome = (ENV['UCOME'] || 'druby://127.0.0.1:9007')
+
 while (arg = ARGV.shift)
   case arg
   when /--debug/
     $debug = true
-    ucome = 'druby://localhost:9007'
+    ucome = 'druby://127.0.0.1:9007'
   when /--(druby)|(uri)|(ucome)/
     ucome = ARGV.shift
   else

@@ -6,7 +6,14 @@ require './icome-common'
 
 def usage
   print <<EOF
-usage:
+acome #{VERSION}
+
+* usage:
+
+$ ucomem[--debug] [--ucome druby://ucome_ip:port]
+
+* online methods
+
   display message
   xcowsay message
   upload file
@@ -20,7 +27,6 @@ usage:
   clear
 
   druby
-  VERSION
 EOF
 end
 
@@ -30,14 +36,13 @@ end
 
 $debug = (ENV['DEBUG'] || false)
 druby = (ENV['UCOME'] || 'druby://127.0.0.1:9007')
+
 while (arg = ARGV.shift)
   case arg
-  when /--help/
-    usage()
+  when /--debug/
+    $debug = true
   when /--(druby)|(uri)|(ucome)/
     druby = ARGV.shift
-  when /--version/
-    puts VERSION
   else
     usage()
   end
@@ -47,10 +52,10 @@ DRb.start_service
 ucome = DRbObject.new(nil, druby)
 
 Thread.new do
-  puts "type 'quit' to quit"
-  quit = false
+  puts "type ^C to quit"
   while (print "> "; cmd = STDIN.gets.strip)
     case cmd
+
     # commands to icome
     when /^(display)|(xcowsay)|(upload)|(download)|(exec)|(reset)/
       ucome.push(cmd)
@@ -79,6 +84,7 @@ Thread.new do
       usage()
     end
   end
+
 end
 
 DRb.thread.join

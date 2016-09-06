@@ -2,8 +2,6 @@
 # coding: utf-8
 require './icome-dialog'
 require './icome-gtypist'
-include Dialog
-include Gtypist
 
 EXAM_URI = "http://literacy-2016.melt.kyutech.ac.jp/fcgi/abb2.cgi"
 
@@ -11,6 +9,26 @@ class UI
   include Java
   include_package 'java.awt'
   include_package 'javax.swing'
+
+  include Gtypist
+
+  def dialog(s)
+    JOptionPane.showMessageDialog(nil, "<html>#{s}</html>", "icome",
+                                  JOptionPane::INFORMATION_MESSAGE)
+  end
+
+  def query?(s)
+    ans = JOptionPane.showConfirmDialog(nil, "<html>#{s}</html>", "icome",
+                                        JOptionPane::YES_NO_OPTION)
+    ans == JOptionPane::YES_OPTION
+  end
+
+  def option_dialog(ss, query)
+    ans = JOptionPane.showOptionDialog(nil,"<html>#{query}</html>", "icome",
+                                       JOptionPane::YES_NO_OPTION,
+                                       JOptionPane::QUESTION_MESSAGE,
+                                       nil, ss, ss[0])
+  end
 
   def initialize(icome, debug)
     @icome = icome
@@ -25,16 +43,20 @@ class UI
 
     menu = JPanel.new
     menu.set_layout(BoxLayout.new(menu, BoxLayout::Y_AXIS))
-
     menu.add(common_menu)
-
-    case this_term()
-    when /(q1)|(q2)/
+    
+    if $debug
       menu.add(gtypist_menu)
-    when /(q3)|(q4)/
       menu.add(robocar_menu)
+    else
+      case this_term()
+      when /(q1)|(q2)/
+        menu.add(gtypist_menu)
+      when /(q3)|(q4)/
+        menu.add(robocar_menu)
+      end
     end
-
+    
     frame.add(menu)
     frame.pack
     frame.set_visible(true)

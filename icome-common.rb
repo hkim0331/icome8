@@ -1,8 +1,8 @@
+APP_NAME="icome8"
 VERSION="0.2"
 UPDATE="2016-09-06"
-APP_NAME="icome8"
 
-INTERVAL = 1
+INTERVAL = 5
 MAX_UPLOAD_SIZE  = 5000000
 
 PREFIX = {'j' => '10', 'k' => '11', 'm' => '12', 'n' => '13',
@@ -27,9 +27,8 @@ def hour(time)
   return 0
 end
 
-# Tue2, Tue4, ...
 def uhour(time)
-  time.strftime("%a") + hour(time.strftime("%F")).to_s
+  time.strftime("%a") + hour(time.strftime("%T")).to_s
 end
 
 # academic year
@@ -46,7 +45,7 @@ def this_term()
   "q3"
 end
 
-# q3_2016, ...
+# use term_year as mongodb collection name.
 def collection()
   "#{this_term()}_#{a_year()}"
 end
