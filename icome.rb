@@ -7,6 +7,9 @@ require 'socket'
 require './icome-common'
 require './icome-ui'
 
+INTERVAL = 2
+MAX_UPLOAD_SIZE  = 5000000
+
 def usage
   print <<EOU
 ucome #{VERSION}
@@ -18,18 +21,35 @@ EOU
   exit(1)
 end
 
+PREFIX = {'j' => '10', 'k' => '11', 'm' => '12', 'n' => '13',
+          'o' => '14', 'p' => '15', 'q' => '16', 'r' => '17' }
+
+def uid2sid(uid)
+  PREFIX[uid[0]] + uid[1,6]
+rescue
+  uid
+end
+
+def hour(time)
+  return 1 if "08:50:00" <= time and time <= "10:20:00"
+  return 2 if "10:30:00" <= time and time <= "12:00:00"
+  return 3 if "13:00:00" <= time and time <= "14:30:00"
+  return 4 if "14:40:00" <= time and time <= "16:10:00"
+  return 5 if "16:20:00" <= time and time <= "17:50:00"
+  return 0
+end
+
+def uhour(time)
+  time.strftime("%a") + hour(time.strftime("%T")).to_s
+end
+
 class Icome
 
   def initialize(ucome)
-    puts "debug is on" if $debug
     @ucome = ucome
     @sid = uid2sid(ENV['USER'])
     @ip = IPSocket::getaddress(Socket::gethostname)
-    @icome8_dir = if $debug
-                    "icome8"
-                  else
-                    File.expand_path("~/.icome8")
-                  end
+    @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
     @record = nil
   end
@@ -98,7 +118,7 @@ class Icome
   end
 
   def quit
-    java.lang.System.exit(0) unless ENV['UCOME']
+    java.lang.System.exit(0)
   end
 
   def memo(term, uhour, date_time)
@@ -168,7 +188,7 @@ class Icome
             when /^reset (\d+)/
               i = $1.to_i
             else
-              debug "error: #{cmd}"
+              puts "error: #{cmd}"
             end
           end
         end
@@ -197,10 +217,8 @@ while (arg = ARGV.shift)
   end
 end
 
-if __FILE__ == $0
-  DRb.start_service
-  icome = Icome.new(DRbObject.new(nil, ucome))
-  icome.setup_ui
-  icome.start
-  DRb.thread.join
-end
+DRb.start_service
+icome = Icome.new(DRbObject.new(nil, ucome))
+icome.setup_ui
+icome.start
+DRb.thread.join

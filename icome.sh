@@ -2,13 +2,8 @@
 
 VERSION="0.2.1"
 
-ICOME=/home/t/hkimura/bin/icome7.rb
+ICOME=/home/t/hkimura/bin/icome8.rb
 SS=/edu/bin/watch-ss
-
-if [ "$1" = "--version" ]; then
-    echo ${VERSION}
-    exit
-fi
 
 # singleton check
 ps ax | egrep '[i]come8.rb' >/dev/null
