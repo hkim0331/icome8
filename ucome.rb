@@ -34,8 +34,13 @@ class Ucome
     end
     @cl = Mongo::Client.new(mongo, logger: logger)[collection()]
     @commands = []
+    @cur = 0
+    @next = -1
   end
 
+  #
+  # mongodb interface
+  #
   def create(sid, uhour)
     @cl.insert_one({sid: sid, uhour: uhour, icome: [], ip: []})
   end
@@ -55,8 +60,9 @@ class Ucome
     end
   end
 
-
-  # 個人課題の提出状況
+  # 個人課題の提出状況。
+  # アップロード先は ucome の動くサーバなので、
+  # icome の動いているローカル PC では解決できない。
   def personal(sid)
     dir = File.join(@upload, sid)
     if File.directory?(dir)
@@ -66,8 +72,36 @@ class Ucome
     end
   end
 
+  #
+  # icome methods
+  #
+  # if not found, return nil.
+  def fetch(n)
+    #    @commands.delete_if{|com| com[:status]==:disable}[n]
+    puts "fetch #{n}"
+    @commands[n]
+  end
+
+  # %F_#{save_as_name} は並び順のため。
+  # CHECK: contents?
+  def upload(sid, save_as, contents)
+    dir = File.join(@upload, sid)
+    Dir.mkdir(dir) unless File.directory?(dir)
+    to = File.join(dir, Time.now.strftime("%F_#{save_as}"))
+    File.open(to, "w") do |f|
+      f.puts contents
+    end
+  end
+
+  def download(file, save_as)
+
+  end
+
+  #
+  # acome methods
+  #
   def push(cmd)
-    @commands.push(cmd)
+    @commands.push({status: :enable, command: cmd})
   end
 
   def list
@@ -78,30 +112,15 @@ class Ucome
     ret
   end
 
-  def fetch(n)
-    puts "called fetch #{n}"
-    @commands[n]
+  def enable(n)
+    @commands[n][:status] = :enable
   end
 
-  # スタックトップを消すとは限らない。
-  def delete(n)
-    @commands.delete_at(n)
+  def disable(n)
+    @commands[n][:status] = :disable
   end
 
-  def upload(sid, name, contents)
-    dir = File.join(UPLOAD, sid)
-    Dir.mkdir(dir) unless File.directory?(dir)
-    to = File.join(dir,Time.now.strftime("%F_#{name}"))
-    File.open(to, "w") do |f|
-      f.puts contents
-    end
-  end
-
-  # BUG! icome can not know ucome has reset.
-  # commands スタックとは別にリセットフラグをもたせるか？
-  # icome のメニューにリセットを入れるか？
-  def reset
-    @reset_count += 1
+  def clear
     @commands = []
   end
 
