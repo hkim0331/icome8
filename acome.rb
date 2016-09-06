@@ -37,8 +37,19 @@ Thread.new do
   puts "type 'quit' to quit"
   quit = false
   while (print "> "; cmd = STDIN.gets.strip)
+    puts "cmd: #{cmd}"
+
     case cmd
-    when /^display/
+    when /enable\s+(\d+)/
+      ucome.enable($1.to_i)
+    when /disable\s+(\d+)/
+      ucome.disable($1.to_i)
+    when /delete\s+(\d+)/
+      ucome.delete($1.to_i)
+    when /^reset/
+      ucome.reset
+
+    when /^(display)|(message)/
       ucome.push(cmd)
     when /^x*cowsay/
       ucome.push(cmd)
@@ -48,20 +59,13 @@ Thread.new do
       ucome.push(cmd)
     when /^(download)|(put)/
       ucome.push(cmd)
-    when /enable\s+(\d+)/
-      ucome.enable($i.to_i)
-    when /disable\s+(\d+)/
-      ucome.disnable($i.to_i)
-    when /delete\s+(\d+)/
-      ucome.delete($1.to_i)
     when /^exec/
       ucome.push(cmd)
+
     when /druby/
       puts druby
     when /^version/
       puts VERSION
-    when /^reset/
-      ucome.reset
     when /^quit/
       puts "quit"
       quit = true

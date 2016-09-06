@@ -160,7 +160,7 @@ end
 #
 # main starts here
 #
-$debug = false
+$debug =(ENV['DEBUG'] ||  false)
 ucome = (ENV['UCOME'] || 'druby://127.0.0.1:9007')
 while (arg = ARGV.shift)
   case arg

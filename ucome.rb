@@ -82,7 +82,7 @@ class Ucome
   # commands interface
   # acome の仕事。
   def push(cmd)
-    @commands.push([status: :enable, command: cmd])
+    @commands.push({status: :enable, command: cmd})
   end
 
   def list
