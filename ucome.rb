@@ -33,7 +33,7 @@ class Ucome
       logger       = Logger.new("/srv/icome8/log/ucome.log", 5, 10*1024)
       logger.level = Logger::INFO
     end
-    @cl = Mongo::Client.new(mongo, logger: logger)[collection()]
+    @cl = Mongo::Client.new(mongo, logger: logger)["#{this_term()}_#{a_year()}"]
     @commands = []
     @cur = 0
     @next = -1
@@ -67,7 +67,7 @@ class Ucome
   def personal(sid)
     dir = File.join(@upload, sid)
     if File.directory?(dir)
-      Dir.entries(dir).delete_if{|x| x=~/^\./}
+      Dir.entries(dir).delete_if{|x| x=~ /^\./}
     else
       []
     end

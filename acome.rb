@@ -8,11 +8,11 @@ def usage
   print <<EOF
 acome #{VERSION}
 
-* usage:
+# usage:
 
-$ ucomem[--debug] [--ucome druby://ucome_ip:port]
+$ acome [--debug] [--ucome druby://ucome_ip:port]
 
-* online methods
+# online methods
 
   display message
   xcowsay message
@@ -27,6 +27,8 @@ $ ucomem[--debug] [--ucome druby://ucome_ip:port]
   clear
 
   druby
+
+type ^C to exit loop
 EOF
 end
 
@@ -34,17 +36,18 @@ end
 # main starts here
 #
 
-$debug = (ENV['DEBUG'] || false)
+debug = (ENV['DEBUG'] || false)
 druby = (ENV['UCOME'] || 'druby://127.0.0.1:9007')
 
 while (arg = ARGV.shift)
   case arg
   when /--debug/
-    $debug = true
+    debug = true
   when /--(druby)|(uri)|(ucome)/
     druby = ARGV.shift
   else
     usage()
+    exit(1)
   end
 end
 
