@@ -55,7 +55,7 @@ class Icome
         @ucome.update(@sid, uhour, today, @ip)
       end
     else
-      if (not $debug) and records.include?(today)
+      if records.include?(today)
         display("出席記録は一回の授業にひとつです。")
         return
       else

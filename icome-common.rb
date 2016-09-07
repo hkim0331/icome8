@@ -1,5 +1,5 @@
 APP_NAME="icome8"
-VERSION="0.3"
+VERSION="0.4"
 UPDATE="2016-09-07"
 
 MONGO='mongodb://localhost/ucome'

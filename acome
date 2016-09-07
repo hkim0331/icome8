@@ -1,0 +1,9 @@
+#!/bin/sh
+if [ $# = 0 ]; then
+    # production
+    UCOME='druby://150.69.90.81:9007' ./acome.rb
+else
+    # development
+    DEBUG=1 UCOME='druby://127.0.0.1:9007' ./acome.rb
+fi
+
