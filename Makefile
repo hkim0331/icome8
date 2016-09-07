@@ -1,29 +1,24 @@
 # This Makefile is not suffice.
-
-REPOS=https://github.com/hkim0331/icome8.git
+#
+# git clone https://github.com/hkim0331/icome8.git
+# もしくは
+# git clone git@github.com:hkim0331/icome8.git
+# したディレクトリで実行すること。
 
 all:
-	@echo "'make icome' on isc"
-	@echo "'make acome' on isc"
-	@echo "'make ucome' on vm2016"
-	@echo "'make clean' "
+	@echo \'make icome\' on isc
+	@echo \'make ucome\' on vm2016
 
 icome:
-	(cd ~ && git clone ${REPOS})
-	(cd ~/icome8 && install -m 0755 icome /edu/bin/)
-	(cd ~/icome8 && install -m 0755 acome ~/bin/)
+	install -m 0755 icome /edu/bin
+	install -m 0644 icome-common.rb /edu/bin
 
-# VM2016
+acome:
+	@echo use ./acome to launch.
+
 ucome:
-	(cd ~ && git clone ${REPOS} && ln -s ucome /opt/bin/)
-	mkdir -p /srv/icome8/upload
+	(cd /srv && ln -sf /home/hkim/icome8 icome8)
+	./ufw.sh
 
 clean:
 	${RM} *~ .#* *.bak nohup.out
-
-
-
-
-
-
-

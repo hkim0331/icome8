@@ -54,7 +54,7 @@ DRb.start_service
 ucome = DRbObject.new(nil, druby)
 
 Thread.new do
-  puts druby if debug
+  puts druby 
   puts "type ^C to quit"
   while (print "> "; cmd = STDIN.gets.strip)
     case cmd
