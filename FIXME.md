@@ -1,16 +1,21 @@
 # FIXME
 
-* druby://localhost:9001 で通信できないわけは？
+* BUG? druby://localhost:9001 で通信できないわけは？
   druby://127.0.0.1:9001 では行けるのに。
 
 * jname, myid, subj(授業科目）をドキュメントに入れるか？
 
 * コレクション名に subj を入れるか？
+  => NO. 入れるならドキュメントに。
 
 * ucome ではなく、mongodb にコマンドを入れるようにしたら?
 
-# DONE
+* BUG: acome:reset したら icome が回り続ける。
+  回避するには reset の効果を確認してから
+  disable reset の番号
+  だけどな。
 
+# DONE
 
 ## old
 

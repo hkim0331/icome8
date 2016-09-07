@@ -7,4 +7,4 @@ if [ ! $# = 1 ]; then
 fi
 
 ssh -f -N -L 27017:localhost:27017 $1
-ssh $1 /usr/local/bin/mongod --config workspace/icome8/mongo.conf
+

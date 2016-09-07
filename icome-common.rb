@@ -47,3 +47,11 @@ end
 def collection()
   "#{this_term()}_#{a_year()}"
 end
+
+def linux?()
+  ENV['HOME'] =~ /^\/home/
+end
+
+def osx?()
+  ENV['HOME'] =~ /^\/User/
+end

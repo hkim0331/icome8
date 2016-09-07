@@ -14,12 +14,11 @@ $ acome [--debug] [--ucome druby://ucome_ip:port]
 
 # online methods
 
-  display message
-  xcowsay message
+  [display|dialog|xcowsay] message
   upload file
   download file
   exec command
-  reset n
+  reset n (BUG: infinite loop)
 
   list
   enable n
@@ -60,7 +59,7 @@ Thread.new do
     case cmd
 
     # commands to icome
-    when /^(display)|(xcowsay)|(upload)|(download)|(exec)|(reset)/
+    when /^(display)|(dialog)|(xcowsay)|(upload)|(download)|(exec)|(reset)/
       ucome.push(cmd)
 
     # commands from acome
