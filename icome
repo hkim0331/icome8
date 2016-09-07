@@ -1,5 +1,8 @@
 #!/bin/sh
 
+ICOME=/home/t/hkimura/icome8/icome.rb
+SS=/edu/bin/watch-ss
+
 # icome を二つ起動しない。
 ps ax | egrep '[i]come.rb' >/dev/null
 if [ "$?" -eq 0 ]; then
@@ -7,19 +10,14 @@ if [ "$?" -eq 0 ]; then
     exit
 fi
 
-if [ $1 = "--debug" ]; then
+if [ $# -ge 1 ]; then
     DEBUG=1 UCOME='druby://127.0.0.1:9007' ./icome.rb
 else
-    ICOME=/home/t/hkimura/icome8/icome.rb
-    SS=/edu/bin/watch-ss
+    echo "icome の起動には 5 秒くらいかかります。"
+    UCOME='druby://150.69.90.81:9007' nohup ${ICOME} 2>/dev/null &
+fi
 
-    if [ -e ${ICOME} ]; then
-        echo "icome の起動には 5 秒くらいかかります。"
-        UCOME='druby://150.69.90.81:9007' nohup ${ICOME} 2>/dev/null &
-    fi
-
-    # additional scripts
-    if [ -e ${SS} ]; then
-        nohup ${SS} 2>/dev/null &
-    fi
+# additional scripts
+if [ -e ${SS} ]; then
+    nohup ${SS} 2>/dev/null &
 fi

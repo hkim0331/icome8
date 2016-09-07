@@ -1,6 +1,5 @@
 #!/bin/sh
-
-if [ $1 = "--debug" ]; then
+if [ $# -ge 1 ]; then
     DEBUG=1 MONGO='mongodb://localhost/ucome' \
          UCOME='druby://127.0.0.1:9007' ./ucome.rb
 else
