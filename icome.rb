@@ -199,6 +199,7 @@ while (arg = ARGV.shift)
   end
 end
 
+puts ucome if $debug
 DRb.start_service
 icome = Icome.new(DRbObject.new(nil, ucome))
 icome.setup_ui
