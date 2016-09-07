@@ -39,23 +39,23 @@ class UI
     frame = JFrame.new(APP_NAME)
     frame.set_default_close_operation(JFrame::DO_NOTHING_ON_CLOSE)
 
-    @menu = JPanel.new
-    @menu.set_layout(BoxLayout.new(menu, BoxLayout::Y_AXIS))
-    @menu.add(common_menu)
+    menu = JPanel.new
+    menu.set_layout(BoxLayout.new(menu, BoxLayout::Y_AXIS))
+    menu.add(common_menu)
 
     if @debug
-      @menu.add(gtypist_menu)
-      @menu.add(robocar_menu)
+      menu.add(gtypist_menu)
+      menu.add(robocar_menu)
     else
       case this_term()
       when /(q1)|(q2)/
-        @menu.add(gtypist_menu)
+        menu.add(gtypist_menu)
       when /(q3)|(q4)/
-        @menu.add(robocar_menu)
+        menu.add(robocar_menu)
       end
     end
 
-    frame.add(@menu)
+    frame.add(menu)
     frame.pack
     frame.set_visible(true)
   end
@@ -107,7 +107,8 @@ class UI
     button = JButton.new("中間テスト")
     uri = "http://literacy-2016.melt.kyutech.ac.jp/fcgi/abb2.cgi"
     button.add_action_listener do |e|
-      open = @debug ? "open" : "/usr/bin/firefox"
+      open = osx?() ? "open" : "/usr/bin/firefox"
+      puts "#{open} #{uri}" if @debug
       system("#{open} #{uri} &")
     end
     panel.add(button)
@@ -165,7 +166,7 @@ class UI
 
     button = JButton.new('グループ課題')
     button.add_action_listener do |e|
-      dialog("授業資料の「グループ課題提出」から提出すること。")
+      @icome.display("授業資料の「グループ課題提出」から提出すること。")
     end
     panel.add(button)
     panel

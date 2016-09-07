@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 # coding: utf-8
-#
-# will work on vm2016, ruby 2.3.1.
 
 require 'mongo'
 require 'drb'
@@ -12,10 +10,13 @@ require './icome-common'
 def usage()
   print <<EOF
 ucome #{VERSION}
-usage:
-ucome [--debug]
-      [--mongodb mongodb://server:port/db]
-      [--druby druby://ip_address:port]
+
+# usage:
+
+$ ucome [--debug]
+        [--mongodb mongodb://server:port/db]
+        [--druby druby://ip_address:port]
+
 EOF
   exit(1)
 end
@@ -33,6 +34,7 @@ class Ucome
       logger       = Logger.new("/srv/icome8/log/ucome.log", 5, 10*1024)
       logger.level = Logger::INFO
     end
+    # determin mongodb collection from launch time info.
     @cl = Mongo::Client.new(mongo, logger: logger)[collection()]
     @commands = []
     @cur = 0
@@ -42,8 +44,8 @@ class Ucome
   #
   # mongodb interface
   #
-  def create(sid, uhour)
-    @cl.insert_one({sid: sid, uhour: uhour, icome: [], ip: []})
+  def create(sid, uid, uhour)
+    @cl.insert_one({sid: sid, uid: uid, uhour: uhour, icome: [], ip: []})
   end
 
   def update(sid, uhour, date, ip)
@@ -76,10 +78,9 @@ class Ucome
   #
   # icome methods
   #
+
   # if not found, return nil.
   def fetch(n)
-    #    @commands.delete_if{|com| com[:status]==:disable}[n]
-    puts "fetch #{n}"
     @commands[n]
   end
 
@@ -131,8 +132,8 @@ end
 # main starts here.
 #
 $debug = (ENV['DEBUG'] || false)
-druby  = (ENV['UCOME'] || 'druby://128.0.0.1:9007')
-mongo  = (ENV['MONGO'] || 'mongodb://localhost/ucome')
+druby  = (ENV['UCOME'] || UCOME)
+mongo  = (ENV['MONGO'] || MONGO)
 
 while (arg = ARGV.shift)
   case arg
