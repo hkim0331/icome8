@@ -1,17 +1,12 @@
 #!/bin/sh
 
-VERSION="1.2"
+VERSION="0.2.3"
 
-ICOME=/home/t/hkimura/bin/icome7.rb
+ICOME=/home/t/hkimura/icome8/icome.rb
 SS=/edu/bin/watch-ss
 
-if [ "$1" = "--version" ]; then
-    echo ${VERSION}
-    exit
-fi
-
 # singleton check
-ps ax | egrep '[i]come8.rb' >/dev/null
+ps ax | egrep '[i]come.rb' >/dev/null
 if [ "$?" -eq 0 ]; then
     echo "icome はすでに起動しています。"
     exit

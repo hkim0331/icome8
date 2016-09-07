@@ -7,20 +7,27 @@ require 'socket'
 require './icome-common'
 require './icome-ui'
 
+def usage
+  print <<EOU
+ucome #{VERSION}
+
+# usage
+
+$ ucome [--debug] [--ucome druby://ucome_ip:port]
+
+EOU
+  exit(1)
+end
+
 class Icome
-  attr_accessor :interval
 
   def initialize(ucome)
     @ucome = ucome
-    @sid = uid2sid(ENV['USER'])
+    @uid = ENV['USER']
+    @sid = uid2sid(@uid)
     @ip = IPSocket::getaddress(Socket::gethostname)
-    @icome8_dir = if $debug
-                    "icome8"
-                  else
-                    File.expand_path("~/.icome8")
-                  end
+    @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
-    @record = nil
   end
 
   def setup_ui
@@ -29,45 +36,54 @@ class Icome
 
   def icome
     term  = this_term()
-    now   = Time.now
+    now = Time.now
+    today = now.strftime("%F")
     uhour = uhour(now)
-    today = now.to_s.split[0]
-    unless $debug
+    if $debug
+      puts "#{term} #{today}  #{uhour}"
+    else
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
         (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
-        @ui.dialog("授業時間じゃありません。")
+#        @ui.dialog("授業時間じゃありません。")
+        xcowsay("授業時間じゃありません。")
         return
       end
     end
     records = @ucome.find_icome(@sid, uhour)
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
-        @ucome.create(@sid, uhour)
+        @ucome.create(@sid, @uid, uhour)
         @ucome.update(@sid, uhour, today, @ip)
       end
     else
-      if records.include?(today)
-        dialog("出席記録は一回の授業にひとつで十分。")
+      if (not $debug) and records.include?(today)
+#        @ui.dialog("出席記録は一回の授業にひとつです。")
+        xcowsay("出席記録は一回の授業にひとつです。")
         return
       else
-        @ucome.update(@sid, uhour, today)
-        self.dialog("出席を記録しました。<br>学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
+        @ucome.update(@sid, uhour, today, @ip)
+#        @ui.dialog("出席を記録しました。<br>" +
+#                   "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
+        xcowsay("出席を記録しました。<br>" +
+                   "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
       end
     end
-    memo(term, uhour, today)
+    memo(uhour, now.strftime("%F %T"))
   end
 
   def show
-    uhours = find_uhours_from_memo(this_term())
+    uhours = find_uhours_from_memo()
     if uhours.empty?
-      @ui.dialog("記録がありません。")
+    #      @ui.dialog("記録がありません。")
+      xcowsay("記録がありません。")
     else
       if uhours.count == 1
         uhour = uhours[0]
       else
         uhour = uhours[@ui.option_dialog(uhours, "複数のクラスを受講しているようです。")]
       end
-      @ui.dialog(@ucome.find_icome(@sid, uhour).sort.join('<br>'))
+#      @ui.dialog(@ucome.find_icome(@sid, uhour).sort.join('<br>'))
+      xcowsay(@ucome.find_icome(@sid, uhour).sort.join('<br>'))
     end
   end
 
@@ -75,108 +91,113 @@ class Icome
   def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
-      @ui.dialog("まだありません。")
+#      @ui.dialog("まだありません。")
+      xcowsay("まだありません。")
     else
-      @ui.dialog(ret.sort.join("<p>"))
+#      @ui.dialog(ret.sort.join("<p>"))
+      xcowsay(ret.sort.join("<p>"))
     end
   end
 
   def quit
-    java.lang.System.exit(0) unless ENV['UCOME']
+    java.lang.System.exit(0)
   end
 
-  def memo(term, uhour, today)
-    File.open(File.join(@icome8_dir, "#{term}_#{uhour}"), "a") do |fp|
-      fp.puts today
+  def memo(uhour, date_time)
+    name = File.join(@icome8_dir, "#{collection()}_#{uhour}")
+    File.open(name, "a") do |fp|
+      fp.puts date_time
     end
   end
 
-  def find_uhours_from_memo(term)
-    Dir.entries(@icome8_dir).find_all{|x| x =~ /^#{term}/}.map{|x| x.split(/_/)[1]}
+  # CHECK: ロジックがオカシイか。
+  def find_uhours_from_memo()
+    col="#{collection()}"
+    Dir.entries(@icome8_dir).
+      find_all{|x| x =~ /^#{col}/}.
+      map{|x| x.split(/_/)[2]}
   end
 
   # FIXME: rename as ucome_to_isc?
   def download(remote, local)
-    debug "#{__method__} #{remote}"
+    puts "#{__method__} #{remote}, #{local}" if $debug
   end
 
   # FIXME: rename as isc_to_ucome?
   def upload(local)
-    debug "#{__method__} #{local}"
     it = File.join(ENV['HOME'], local)
     if File.exists?(it)
       if File.size(it) < MAX_UPLOAD_SIZE
         @ucome.upload(@sid, File.basename(local), File.open(it).read)
       else
-        @ui.dialog("too big: #{it}: #{File.size(it)}")
+#        @ui.dialog("too big: #{it}: #{File.size(it)}")
+        xcowsay("too big: #{it}: #{File.size(it)}")
       end
     else
       # CHECK そんなことあるか？
       # FIXME 日本語メッセージだと表示されない。
-      @ui.dialog("did not find #{it}.")
+#      @ui.dialog("ファイルがありません。#{it}")
+      xcowsay("ファイルがありません。#{it}")
     end
   end
-
 
   def exec(command)
     system(command)
   end
 
-  def cowsay(s)
-    system("xcowsay --at=400,400 #{s}")
+  def xcowsay(s)
+    if ENV['HOME'] =~ /^\/home/
+      system("xcowsay --at=400,400 #{s}")
+    else
+      @ui.dialog(s + "(use display instead)")
+    end
   end
 
   def start
+    puts "start" if $debug
     Thread.new do
-      next_cmd = 0
-      reset = 0
+      i = 0
       while true do
-        # ucome_reset = @ucome.reset_count
-        # if ucome_reset > reset
-        #   next_cmd = 0
-        #   reset = ucome_reset
-        # end
-        cmd = @ucome.fetch(next_cmd)
-        puts "fetch:#{cmd}, reset: #{reset}, next_cmd: #{next_cmd}"
-        if cmd.nil?
-          puts "sleep #{INTERVAL}"
-          sleep INTERVAL
-          next
+        cmd = @ucome.fetch(i)
+        unless cmd.nil?
+          i += 1
+          if cmd[:status] == :enable
+            puts "cmd: #{cmd}"
+            case cmd[:command]
+            when /xcowsay\s+(.+)$/
+              xcowsay($1)
+            when /^display\s+(.+)$/
+              @ui.dialog($1)
+            when /^upload\s+(\S+)/
+              upload($1)
+            when /^download\s+(\S+)\s+(\S+)$/
+              download($1,$2)
+            when /^exec/
+              system(cmd.sub(/^exec\s*/,''))
+            when /^reset (\d+)/
+              i = $1.to_i
+            else
+              puts "error: #{cmd}"
+            end
+          end
         end
-        case cmd
-        when /^x*cowsay\s+(.+)$/
-          cowsay($1)
-        when /^display\s+(.+)$/
-          @ui.dialog($1)
-        when /^upload\s+(\S+)/
-          upload($1)
-        when /^download\s+(\S+)\s+(\S+)$/
-          download($1,$2)
-        when /^exec/
-          exec(cmd)
-        # BUG!
-        when /reset (\d+)/
-          next_cmd = $1.to_i
-        else
-          debug "error: #{cmd}"
-        end
-        next_cmd += 1
+        sleep INTERVAL
       end
     end
   end
+
 end
 
 #
 # main starts here
 #
+$debug =(ENV['DEBUG'] || false)
+ucome = (ENV['UCOME'] || UCOME)
 
-$debug = false
-ucome = (ENV['UCOME'] || 'druby://127.0.0.1:9007')
 while (arg = ARGV.shift)
   case arg
   when /--debug/
     $debug = true
-    ucome = 'druby://localhost:9007'
   when /--(druby)|(uri)|(ucome)/
     ucome = ARGV.shift
   else
@@ -184,10 +205,8 @@ while (arg = ARGV.shift)
   end
 end
 
-if __FILE__ == $0
-  DRb.start_service
-  icome = Icome.new(DRbObject.new(nil, ucome))
-  icome.setup_ui
-#  icome.start
-  DRb.thread.join
-end
+DRb.start_service
+icome = Icome.new(DRbObject.new(nil, ucome))
+icome.setup_ui
+icome.start
+DRb.thread.join
