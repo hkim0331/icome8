@@ -7,6 +7,9 @@ require 'socket'
 require './icome-common'
 require './icome-ui'
 
+INTERVAL = 2
+MAX_UPLOAD_SIZE  = 5000000
+
 def usage
   print <<EOU
 ucome #{VERSION}
@@ -21,15 +24,10 @@ end
 class Icome
 
   def initialize(ucome)
-    puts "debug is on" if $debug
     @ucome = ucome
     @sid = uid2sid(ENV['USER'])
     @ip = IPSocket::getaddress(Socket::gethostname)
-    @icome8_dir = if $debug
-                    "icome8"
-                  else
-                    File.expand_path("~/.icome8")
-                  end
+    @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
     @record = nil
   end
@@ -98,17 +96,21 @@ class Icome
   end
 
   def quit
-    java.lang.System.exit(0) unless ENV['UCOME']
+    java.lang.System.exit(0)
   end
 
   def memo(term, uhour, date_time)
-    File.open(File.join(@icome8_dir, "#{term}_#{uhour}"), "a") do |fp|
+    name = File.join(@icome8_dir, "#{collection()}_#{uhour}")
+    File.open(name, "a") do |fp|
       fp.puts date_time
     end
   end
 
-  def find_uhours_from_memo(term)
-    Dir.entries(@icome8_dir).find_all{|x| x =~ /^#{term}/}.map{|x| x.split(/_/)[1]}
+  def find_uhours_from_memo(term, uhour)
+    col="#{collection()}_#{uhour}"
+    Dir.entries(@icome8_dir).
+      find_all{|x| x =~ /^#{col}/}.
+      map{|x| x.split(/_/)[1]}
   end
 
   # FIXME: rename as ucome_to_isc?
@@ -168,7 +170,7 @@ class Icome
             when /^reset (\d+)/
               i = $1.to_i
             else
-              debug "error: #{cmd}"
+              puts "error: #{cmd}"
             end
           end
         end
@@ -197,10 +199,8 @@ while (arg = ARGV.shift)
   end
 end
 
-if __FILE__ == $0
-  DRb.start_service
-  icome = Icome.new(DRbObject.new(nil, ucome))
-  icome.setup_ui
-  icome.start
-  DRb.thread.join
-end
+DRb.start_service
+icome = Icome.new(DRbObject.new(nil, ucome))
+icome.setup_ui
+icome.start
+DRb.thread.join
