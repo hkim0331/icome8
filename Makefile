@@ -8,7 +8,6 @@ all:
 	@echo "'make ucome' on vm2016"
 	@echo "'make clean' "
 
-# ISC
 icome:
 	(cd ~ && git clone ${REPOS})
 	(cd ~/icome8 && install -m 0755 icome /edu/bin/)
@@ -16,7 +15,7 @@ icome:
 
 # VM2016
 ucome:
-	(cd /opt && git clone ${REPOS})
+	(cd ~ && git clone ${REPOS} && ln -s ucome /opt/bin/)
 	mkdir -p /srv/icome8/upload
 
 clean:

@@ -149,6 +149,7 @@ while (arg = ARGV.shift)
 end
 
 if __FILE__ == $0
+  puts "druby: #{druby} mongo:#{mongo}" if $debug
   DRb.start_service(druby, Ucome.new(mongo))
   puts DRb.uri
   DRb.thread.join

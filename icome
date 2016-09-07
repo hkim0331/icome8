@@ -7,7 +7,7 @@ if [ "$?" -eq 0 ]; then
     exit
 fi
 
-if [ ! $# = 0 ]; then
+if [ $1 = "--debug" ]; then
     #debug
     DEBUG=1 UCOME='druby://127.0.0.1:9007' ./icome.rb
 else
