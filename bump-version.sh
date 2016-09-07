@@ -15,7 +15,7 @@ fi
 VERSION=$1
 TODAY=`date +%F`
 
-FILES="icome-common.rb icome.sh"
+FILES="icome-common.rb"
 for i in ${FILES}; do
     ${SED} -i.bak \
            -e "/^ *VERSION *=/c\
