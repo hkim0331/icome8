@@ -2,7 +2,7 @@
 # coding: utf-8
 
 require 'drb'
-#require './icome-common'
+require './icome-common'
 
 def usage
   print <<EOF
@@ -37,7 +37,7 @@ end
 #
 
 debug = (ENV['DEBUG'] || false)
-druby = (ENV['UCOME'] || 'druby://127.0.0.1:9007')
+druby = (ENV['UCOME'] || UCOME)
 
 while (arg = ARGV.shift)
   case arg

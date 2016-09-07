@@ -7,9 +7,6 @@ require 'socket'
 require './icome-common'
 require './icome-ui'
 
-INTERVAL = 2
-MAX_UPLOAD_SIZE  = 5000000
-
 def usage
   print <<EOU
 ucome #{VERSION}
@@ -17,6 +14,7 @@ ucome #{VERSION}
 # usage
 
 $ ucome [--debug] [--ucome druby://ucome_ip:port]
+
 EOU
   exit(1)
 end
@@ -25,11 +23,11 @@ class Icome
 
   def initialize(ucome)
     @ucome = ucome
-    @sid = uid2sid(ENV['USER'])
+    @uid = ENV['USER']
+    @sid = uid2sid(@uid)
     @ip = IPSocket::getaddress(Socket::gethostname)
     @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
-    @record = nil
   end
 
   def setup_ui
@@ -42,9 +40,7 @@ class Icome
     today = now.strftime("%F")
     uhour = uhour(now)
     if $debug
-      puts "term: #{term}"
-      puts "today: #{today}"
-      puts "uhour: #{uhour}"
+      puts "#{term} #{today}  #{uhour}"
     else
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
         (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
@@ -55,12 +51,12 @@ class Icome
     records = @ucome.find_icome(@sid, uhour)
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
-        @ucome.create(@sid, uhour)
+        @ucome.create(@sid, @uid, uhour)
         @ucome.update(@sid, uhour, today, @ip)
       end
     else
       if (not $debug) and records.include?(today)
-        @ui.dialog("出席記録は一回の授業にひとつで十分。")
+        @ui.dialog("出席記録は一回の授業にひとつです。")
         return
       else
         @ucome.update(@sid, uhour, today, @ip)
@@ -68,11 +64,11 @@ class Icome
                    "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
       end
     end
-    memo(term, uhour, now.strftime("%F %T"))
+    memo(uhour, now.strftime("%F %T"))
   end
 
   def show
-    uhours = find_uhours_from_memo(this_term())
+    uhours = find_uhours_from_memo()
     if uhours.empty?
       @ui.dialog("記録がありません。")
     else
@@ -99,18 +95,19 @@ class Icome
     java.lang.System.exit(0)
   end
 
-  def memo(term, uhour, date_time)
+  def memo(uhour, date_time)
     name = File.join(@icome8_dir, "#{collection()}_#{uhour}")
     File.open(name, "a") do |fp|
       fp.puts date_time
     end
   end
 
-  def find_uhours_from_memo(term, uhour)
-    col="#{collection()}_#{uhour}"
+  # CHECK: ロジックがオカシイか。
+  def find_uhours_from_memo()
+    col="#{collection()}"
     Dir.entries(@icome8_dir).
       find_all{|x| x =~ /^#{col}/}.
-      map{|x| x.split(/_/)[1]}
+      map{|x| x.split(/_/)[2]}
   end
 
   # FIXME: rename as ucome_to_isc?
@@ -184,14 +181,13 @@ end
 #
 # main starts here
 #
-$debug =(ENV['DEBUG'] ||  false)
-ucome = (ENV['UCOME'] || 'druby://127.0.0.1:9007')
+$debug =(ENV['DEBUG'] || false)
+ucome = (ENV['UCOME'] || UCOME)
 
 while (arg = ARGV.shift)
   case arg
   when /--debug/
     $debug = true
-    ucome = 'druby://127.0.0.1:9007'
   when /--(druby)|(uri)|(ucome)/
     ucome = ARGV.shift
   else
