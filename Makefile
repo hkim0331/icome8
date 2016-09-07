@@ -6,25 +6,20 @@ all:
 	@echo "'make ucome' on vm2016"
 	@echo "'make clean' "
 
-isc: icome acome
-
+# ISC
 icome:
-	install -m 0755 icome.sh /edu/bin/icome
-	install -m 0755 icome.rb /home/t/hkimura/bin/icome8.rb
+	(cd ~ && git clone https://github.com/hkim0331/icome8.git)
+	(cd ~/icome8 && install -m 0755 icome /edu/bin/)
+	(cd ~/icome8 && install -m 0755 acome ~/bin/)
 
+# VM2016
 ucome:
-	install -m 0644 VERSION /opt/icome8
-	install -m 0755 ucome.rb /opt/icome8/bin
+	(cd /opt && git clone https://github.com/hkim0331/icome8.git)
 	mkdir -p /srv/icome8/upload
-	sudo install -m 0755 ucome.service /etc/init.d/ucome
-	sudo install -m 0755 ucome-backup.sh /etc/cron.weekly/ucome-backup
-	sudo update-rc.d ucome defaults
 
-acome:
-	install -m 0755 acome.rb
+
 clean:
 	${RM} *~ .#* *.bak nohup.out
-#	${RM} -r upload/* # too much?
 
 
 

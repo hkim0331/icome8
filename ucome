@@ -1,0 +1,12 @@
+#!/bin/sh
+if [ $# = 0 ]; then
+    # production
+    MONGO='mongodb://dbs.melt.kyutech.ac.jp/ucome' \
+         DRUBY='druby://150.69.90.83:9007' ./ucome.rb
+else
+    # development
+    DEBUG=1 MONGO='mongodb://localhost/ucome' \
+         DRUBY='druby://127.0.0.1:9007' ./ucome.rb
+fi
+
+
