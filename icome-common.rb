@@ -1,6 +1,6 @@
 APP_NAME="icome8"
-VERSION="0.4"
-UPDATE="2016-09-07"
+VERSION="0.4.1"
+UPDATE="2016-09-08"
 
 MONGO='mongodb://localhost/ucome'
 UCOME='druby://127.0.0.1:9007'
