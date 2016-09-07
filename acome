@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $1 = "--debug" ]; then
+if [ $# -ge 1 ]; then
     DEBUG=1 UCOME='druby://127.0.0.1:9007' ./acome.rb
 else
     UCOME='druby://150.69.90.81:9007' ./acome.rb
