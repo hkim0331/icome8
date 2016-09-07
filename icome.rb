@@ -44,7 +44,8 @@ class Icome
     else
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
         (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
-        @ui.dialog("授業時間じゃありません。")
+#        @ui.dialog("授業時間じゃありません。")
+        xcowsay("授業時間じゃありません。")
         return
       end
     end
@@ -56,11 +57,14 @@ class Icome
       end
     else
       if (not $debug) and records.include?(today)
-        @ui.dialog("出席記録は一回の授業にひとつです。")
+#        @ui.dialog("出席記録は一回の授業にひとつです。")
+        xcowsay("出席記録は一回の授業にひとつです。")
         return
       else
         @ucome.update(@sid, uhour, today, @ip)
-        @ui.dialog("出席を記録しました。<br>" +
+#        @ui.dialog("出席を記録しました。<br>" +
+#                   "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
+        xcowsay("出席を記録しました。<br>" +
                    "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
       end
     end
@@ -70,14 +74,16 @@ class Icome
   def show
     uhours = find_uhours_from_memo()
     if uhours.empty?
-      @ui.dialog("記録がありません。")
+    #      @ui.dialog("記録がありません。")
+      xcowsay("記録がありません。")
     else
       if uhours.count == 1
         uhour = uhours[0]
       else
         uhour = uhours[@ui.option_dialog(uhours, "複数のクラスを受講しているようです。")]
       end
-      @ui.dialog(@ucome.find_icome(@sid, uhour).sort.join('<br>'))
+#      @ui.dialog(@ucome.find_icome(@sid, uhour).sort.join('<br>'))
+      xcowsay(@ucome.find_icome(@sid, uhour).sort.join('<br>'))
     end
   end
 
@@ -85,9 +91,11 @@ class Icome
   def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
-      @ui.dialog("まだありません。")
+#      @ui.dialog("まだありません。")
+      xcowsay("まだありません。")
     else
-      @ui.dialog(ret.sort.join("<p>"))
+#      @ui.dialog(ret.sort.join("<p>"))
+      xcowsay(ret.sort.join("<p>"))
     end
   end
 
@@ -122,12 +130,14 @@ class Icome
       if File.size(it) < MAX_UPLOAD_SIZE
         @ucome.upload(@sid, File.basename(local), File.open(it).read)
       else
-        @ui.dialog("too big: #{it}: #{File.size(it)}")
+#        @ui.dialog("too big: #{it}: #{File.size(it)}")
+        xcowsay("too big: #{it}: #{File.size(it)}")
       end
     else
       # CHECK そんなことあるか？
       # FIXME 日本語メッセージだと表示されない。
-      @ui.dialog("ファイルがありません。#{it}")
+#      @ui.dialog("ファイルがありません。#{it}")
+      xcowsay("ファイルがありません。#{it}")
     end
   end
 

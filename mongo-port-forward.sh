@@ -1,5 +1,5 @@
 #!/bin/sh
-# ローカル のポート27017 を mongodb-server の ポート 27017 に転送する。
+# ローカル のポート 27017 を mongodb-server の ポート 27017 に転送する。
 
 if [ ! $# = 1 ]; then
     echo usage: $0 mongo-server
