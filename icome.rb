@@ -12,7 +12,8 @@ def usage
 ucome #{VERSION}
 # usage
 
-$ ucome [--debug] [--ucome druby://ucome_ip:port]
+$ ucome [--debug] [--druby druby://ucome_ip:port]
+
 EOU
   exit(1)
 end
@@ -78,7 +79,8 @@ class Icome
       if uhours.count == 1
         uhour = uhours[0]
       else
-        uhour = uhours[@ui.option_dialog(uhours, "複数のクラスを受講しているようです。")]
+        uhour = uhours[@ui.option_dialog(uhours,
+                                         "複数のクラスを受講しているようです。")]
       end
       display(@ucome.find_icome(@sid, uhour).sort.join('<br>'))
     end
@@ -88,7 +90,8 @@ class Icome
   def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
-      display("秘密裡に抜きます。<br>ファイルを指定した名前でセーブすること。")
+      display("秘密裡に抜きます。<br>ファイルを指定した名前でセーブすること。<br>"+
+             "間違うと回収できないよ。")
     else
       display(ret.sort.join("<br>"))
     end
