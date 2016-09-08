@@ -5,7 +5,7 @@ require 'mongo'
 require 'drb'
 require 'socket'
 require 'logger'
-require './icome-common'
+require_relative 'icome-common'
 
 def usage()
   print <<EOF

@@ -5,17 +5,21 @@
 # git clone git@github.com:hkim0331/icome8.git
 # したディレクトリで実行すること。
 
+ISC=/edu/lib/icome8
+ISC_BIN=/edu/bin
+
 all:
 	@echo \'make icome\' on isc
 	@echo \'make ucome\' on vm2016
 
-icome:
-	if [ ! -d /edu/lib/icome8 ]; then
-		mkdir /edu/lib/icome8
+isc:
+	if [ ! -d ${ISC} ]; then \
+		mkdir ${ISC}; \
 	fi
-	install -m 0755 icome /edu/lib/
-	install -m 0644 icome-common.rb /edu/lib
-	ln -s /edu/bin/icome /edu/lib/icome8/icome
+	install -m 0755 icome.rb ${ISC}
+	install -m 0644 icome-common.rb ${ISC}
+	install -m 0644 icome-ui.rb ${ISC}
+	install -m 0755 icome ${ISC_BIN}
 
 acome:
 	@echo use ./acome to launch.

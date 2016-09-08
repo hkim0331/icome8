@@ -4,8 +4,8 @@
 require 'date'
 require 'drb'
 require 'socket'
-require './icome-common'
-require './icome-ui'
+require_relative 'icome-common'
+require_relative 'icome-ui'
 
 def usage
   print <<EOU
@@ -88,7 +88,7 @@ class Icome
   def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
-      display("まだありません。")
+      display("秘密裡に抜きます。<br>ファイルを指定した名前でセーブすること。")
     else
       display(ret.sort.join("<br>"))
     end
