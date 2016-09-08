@@ -2,24 +2,22 @@
 # coding: utf-8
 
 require 'drb'
-#require './icome-common'
+require './icome-common'
 
 def usage
   print <<EOF
 acome #{VERSION}
-
 # usage:
 
 $ acome [--debug] [--ucome druby://ucome_ip:port]
 
 # online methods
 
-  display message
-  xcowsay message
+  [display|dialog|xcowsay] message
   upload file
   download file
   exec command
-  reset n
+  reset n (BUG: infinite loop)
 
   list
   enable n
@@ -28,7 +26,7 @@ $ acome [--debug] [--ucome druby://ucome_ip:port]
 
   druby
 
-type ^C to exit loop
+to exit, type ^C.
 EOF
 end
 
@@ -37,7 +35,7 @@ end
 #
 
 debug = (ENV['DEBUG'] || false)
-druby = (ENV['UCOME'] || 'druby://127.0.0.1:9007')
+druby = (ENV['UCOME'] || UCOME)
 
 while (arg = ARGV.shift)
   case arg
@@ -55,12 +53,13 @@ DRb.start_service
 ucome = DRbObject.new(nil, druby)
 
 Thread.new do
+  puts druby
   puts "type ^C to quit"
   while (print "> "; cmd = STDIN.gets.strip)
     case cmd
 
     # commands to icome
-    when /^(display)|(xcowsay)|(upload)|(download)|(exec)|(reset)/
+    when /^(display)|(dialog)|(xcowsay)|(upload)|(download)|(exec)|(reset)/
       ucome.push(cmd)
 
     # commands from acome
