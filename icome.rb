@@ -4,8 +4,8 @@
 require 'date'
 require 'drb'
 require 'socket'
-require './icome-common'
-require './icome-ui'
+require_relative 'icome-common'
+require_relative 'icome-ui'
 
 def usage
   print <<EOU
