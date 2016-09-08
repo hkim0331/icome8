@@ -9,7 +9,7 @@ def usage
 acome #{VERSION}
 # usage:
 
-$ acome [--debug] [--ucome druby://ucome_ip:port]
+$ acome [--debug] [--druby druby://ucome_ip:port]
 
 # online methods
 
