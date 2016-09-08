@@ -135,6 +135,7 @@ class Icome
   end
 
   def exec(command)
+    puts "exec: #{command}" if $debug
     system(command)
   end
 
@@ -160,11 +161,12 @@ class Icome
         unless cmd.nil?
           i += 1
           if cmd[:status] == :enable
-            puts "cmd: #{cmd}"
+            sleep INTERVAL
+            puts "cmd: #{cmd}" if $debug
             case cmd[:command]
-            when /xcowsay\s+(.+)$/
+            when /^xcowsay\s+(.+)$/
               xcowsay($1)
-            when /dialog\s+(.+)$/
+            when /^dialog\s+(.+)$/
               @ui.dialog($1)
             when /^display\s+(.+)$/
               display($1)
@@ -173,7 +175,7 @@ class Icome
             when /^download\s+(\S+)\s+(\S+)$/
               download($1,$2)
             when /^exec/
-              system(cmd.sub(/^exec\s*/,''))
+              self.exec cmd[:command].sub(/^exec\s*/,'')
             when /^reset (\d+)/
               i = $1.to_i
             else
@@ -181,7 +183,6 @@ class Icome
             end
           end
         end
-        sleep INTERVAL
       end
     end
   end
