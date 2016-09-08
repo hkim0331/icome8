@@ -73,9 +73,9 @@ Thread.new do
     when /^clear/
       ucome.clear
 
-    when /(druby)|(ucome)/
+    when /^(druby)|(ucome)/
       puts druby
-    when /mongo/
+    when /^mongo/
       puts ucome.mongo
     when /^version/
       puts VERSION
