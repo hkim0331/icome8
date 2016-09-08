@@ -46,12 +46,12 @@ class Ucome
   # mongodb interface
   #
   def create(sid, uid, uhour)
-    @cl.insert_one({sid: sid, uid: uid, uhour: uhour, icome: [], ip: []})
+    @cl.insert_one({sid: sid, uid: uid, uhour: uhour, icome: []})
   end
 
   def update(sid, uhour, date, ip)
     @cl.update_one({sid: sid, uhour: uhour},
-                   {"$addToSet" => {icome: date, ip: ip}})
+                   {"$addToSet" => {icome: [date, ip]}})
   end
 
   def find_icome(sid, uhour)
@@ -60,7 +60,7 @@ class Ucome
     if ret.first.nil?
       []
     else
-      ret.first[:icome]
+      ret.first[:icome]         # returns [[date1,ip1],[date2,ip2,...]]
     end
   end
 
@@ -82,6 +82,7 @@ class Ucome
 
   # if not found, return nil.
   def fetch(n)
+    #puts "fetch" if $debug
     @commands[n]
   end
 

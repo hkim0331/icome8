@@ -82,7 +82,10 @@ class Icome
         uhour = uhours[@ui.option_dialog(uhours,
                                          "複数のクラスを受講しているようです。")]
       end
-      display(@ucome.find_icome(@sid, uhour).sort.join('<br>'))
+      dates = @ucome.find_icome(@sid, uhour).
+              map{|x| "#{x[0]}:#{x[1].split(/\./)[3]}"}.
+              sort.join('<br>')
+      display("日付:座席<br>" + dates)
     end
   end
 
@@ -130,6 +133,7 @@ class Icome
         display("too big: #{it}: #{File.size(it)}")
       end
     else
+      # 表示するとめんどくさいか？ 「もう一度取ってください」とか。
       display("ファイルがありません。#{it}")
     end
   end
@@ -156,11 +160,12 @@ class Icome
     Thread.new do
       i = 0
       while true do
+        sleep INTERVAL
         cmd = @ucome.fetch(i)
+        puts cmd if $debug and (not cmd.nil?)
         unless cmd.nil?
           i += 1
           if cmd[:status] == :enable
-            sleep INTERVAL
             puts "cmd: #{cmd}" if $debug
             case cmd[:command]
             when /^xcowsay\s+(.+)$/
