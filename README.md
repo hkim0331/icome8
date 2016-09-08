@@ -3,6 +3,10 @@
 icome version 8.
 rewrote icome7.
 
+* 2016-09-08 release 1.0.0
+* 2016-09-08 hotfix 1.0.1 ucome を (cd icome8 && make start) でスタートさせる。
+
+
 ## README
 
 リセットが難しい。どういう手段で実施するか?
