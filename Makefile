@@ -28,5 +28,17 @@ ucome:
 	(cd /srv && ln -sf /home/hkim/icome8 icome8)
 	./ufw.sh
 
+start: ucome_start
+
+ucome_start:
+	nohup ./ucome 2>/dev/null &
+
+stop: ucome_stop
+
+ucome_stop:
+	kill `ps ax | grep '[u]come' | awk '{print $$1}'`
+
 clean:
 	${RM} *~ .#* *.bak nohup.out
+
+

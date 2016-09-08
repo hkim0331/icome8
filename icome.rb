@@ -139,11 +139,11 @@ class Icome
   end
 
   def xcowsay(s)
-    puts "s:#{s}"
     system("xcowsay --at=200,100 '#{s}'")
   end
 
   def display(s)
+    puts "display: #{s}" if $debug
     if linux?()
       xcowsay(s.gsub(/<br>/,"\n"))
     else
