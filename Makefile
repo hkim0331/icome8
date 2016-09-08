@@ -6,6 +6,7 @@
 # したディレクトリで実行すること。
 
 ISC=/edu/lib/icome8
+ISC_BIN=/edu/bin
 
 all:
 	@echo \'make icome\' on isc
@@ -13,11 +14,12 @@ all:
 
 isc:
 	if [ ! -d ${ISC} ]; then \
-		mkdir ${ISC} \
+		mkdir ${ISC}; \
 	fi
-	install -m 0755 icome icome.rb ${ISC}
+	install -m 0755 icome.rb ${ISC}
 	install -m 0644 icome-common.rb ${ISC}
-	ln -s /edu/bin/icome ${ISC}/icome
+	install -m 0644 icome-ui.rb ${ISC}
+	install -m 0755 icome ${ISC_BIN}
 
 acome:
 	@echo use ./acome to launch.

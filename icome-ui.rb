@@ -1,5 +1,5 @@
 # coding: utf-8
-require './icome-common'
+require_relative 'icome-common'
 
 class UI
   include Java
