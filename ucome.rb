@@ -5,7 +5,7 @@ require 'mongo'
 require 'drb'
 require 'socket'
 require 'logger'
-require './icome-common'
+require_relative 'icome-common'
 
 def usage()
   print <<EOF
@@ -35,7 +35,8 @@ class Ucome
       logger.level = Logger::INFO
     end
     # determin mongodb collection from launch time info.
-    @cl = Mongo::Client.new(mongo, logger: logger)[collection()]
+    @mongo = mongo
+    @cl = Mongo::Client.new(@mongo, logger: logger)[collection()]
     @commands = []
     @cur = 0
     @next = -1
@@ -102,6 +103,10 @@ class Ucome
   #
   # acome methods
   #
+  def mongo
+    @mongo
+  end
+  
   def push(cmd)
     @commands.push({status: :enable, command: cmd})
   end

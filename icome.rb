@@ -4,16 +4,15 @@
 require 'date'
 require 'drb'
 require 'socket'
-require './icome-common'
-require './icome-ui'
+require_relative 'icome-common'
+require_relative 'icome-ui'
 
 def usage
   print <<EOU
 ucome #{VERSION}
-
 # usage
 
-$ ucome [--debug] [--ucome druby://ucome_ip:port]
+$ ucome [--debug] [--druby druby://ucome_ip:port]
 
 EOU
   exit(1)
@@ -22,10 +21,15 @@ end
 class Icome
 
   def initialize(ucome)
+    @ip = IPSocket::getaddress(Socket::gethostname)
+    unless $debug or c_2b?(@ip) or c_2b?(@ip)
+      display("教室外から icome 出来ません。")
+      sleep 3
+      quit
+    end
     @ucome = ucome
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
-    @ip = IPSocket::getaddress(Socket::gethostname)
     @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
   end
@@ -75,17 +79,19 @@ class Icome
       if uhours.count == 1
         uhour = uhours[0]
       else
-        uhour = uhours[@ui.option_dialog(uhours, "複数のクラスを受講しているようです。")]
+        uhour = uhours[@ui.option_dialog(uhours,
+                                         "複数のクラスを受講しているようです。")]
       end
       display(@ucome.find_icome(@sid, uhour).sort.join('<br>'))
     end
   end
 
-  # 個人課題,
+  # 個人課題、提出状況は ucome に聞かないと。
   def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
-      display("まだありません。")
+      display("秘密裡に抜きます。<br>ファイルを指定した名前でセーブすること。<br>"+
+             "間違うと回収できないよ。")
     else
       display(ret.sort.join("<br>"))
     end
@@ -109,12 +115,12 @@ class Icome
       map{|x| x.split(/_/)[2]}
   end
 
-  # FIXME: rename as ucome_to_isc?
+  # rename as ucome_to_isc?
   def download(remote, local)
     puts "#{__method__} #{remote}, #{local}" if $debug
   end
 
-  # FIXME: rename as isc_to_ucome?
+  # rename as isc_to_ucome?
   def upload(local)
     it = File.join(ENV['HOME'], local)
     if File.exists?(it)
@@ -133,11 +139,11 @@ class Icome
   end
 
   def xcowsay(s)
-    puts "s:#{s}"
     system("xcowsay --at=200,100 '#{s}'")
   end
 
   def display(s)
+    puts "display: #{s}" if $debug
     if linux?()
       xcowsay(s.gsub(/<br>/,"\n"))
     else
@@ -154,11 +160,12 @@ class Icome
         unless cmd.nil?
           i += 1
           if cmd[:status] == :enable
-            puts "cmd: #{cmd}"
+            sleep INTERVAL
+            puts "cmd: #{cmd}" if $debug
             case cmd[:command]
-            when /xcowsay\s+(.+)$/
+            when /^xcowsay\s+(.+)$/
               xcowsay($1)
-            when /dialog\s+(.+)$/
+            when /^dialog\s+(.+)$/
               @ui.dialog($1)
             when /^display\s+(.+)$/
               display($1)
@@ -167,7 +174,7 @@ class Icome
             when /^download\s+(\S+)\s+(\S+)$/
               download($1,$2)
             when /^exec/
-              system(cmd.sub(/^exec\s*/,''))
+              self.exec cmd[:command].sub(/^exec\s*/,'')
             when /^reset (\d+)/
               i = $1.to_i
             else
@@ -175,7 +182,6 @@ class Icome
             end
           end
         end
-        sleep INTERVAL
       end
     end
   end

@@ -2,15 +2,14 @@
 # coding: utf-8
 
 require 'drb'
-require './icome-common'
+require_relative 'icome-common'
 
 def usage
   print <<EOF
 acome #{VERSION}
-
 # usage:
 
-$ acome [--debug] [--ucome druby://ucome_ip:port]
+$ acome [--debug] [--druby druby://ucome_ip:port]
 
 # online methods
 
@@ -25,9 +24,10 @@ $ acome [--debug] [--ucome druby://ucome_ip:port]
   disable n
   clear
 
-  druby
+  [druby|ucome]
+  mongo
 
-type ^C to exit loop
+to exit, type ^C.
 EOF
 end
 
@@ -54,7 +54,7 @@ DRb.start_service
 ucome = DRbObject.new(nil, druby)
 
 Thread.new do
-  puts druby 
+  puts druby
   puts "type ^C to quit"
   while (print "> "; cmd = STDIN.gets.strip)
     case cmd
@@ -73,8 +73,10 @@ Thread.new do
     when /^clear/
       ucome.clear
 
-    when /druby/
+    when /^(druby)|(ucome)/
       puts druby
+    when /^mongo/
+      puts ucome.mongo
     when /^version/
       puts VERSION
 

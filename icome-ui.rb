@@ -1,5 +1,5 @@
 # coding: utf-8
-require './icome-common'
+require_relative 'icome-common'
 
 class UI
   include Java
@@ -8,28 +8,33 @@ class UI
   import javax.swing.JPanel
   import javax.swing.BoxLayout
   import javax.swing.JOptionPane
-  # include Java
-  # include_package 'java.awt'
-  # include_package 'javax.swing'
+  import java.awt.Color
 
-  attr_accessor :menu
+  @my_gray = Color.new(224,223,221)
 
   def dialog(s)
+    @jpanel.setBackground(Color.red)
     JOptionPane.showMessageDialog(nil, "<html>#{s}</html>", "icome",
                                   JOptionPane::INFORMATION_MESSAGE)
+    @jpanel.setBackground(@my_gray)
   end
 
   def query?(s)
+    @jpanel.setBackground(Color.red)
     ans = JOptionPane.showConfirmDialog(nil, "<html>#{s}</html>", "icome",
                                         JOptionPane::YES_NO_OPTION)
+    @jpanel.setBackground(@my_gray)
     ans == JOptionPane::YES_OPTION
   end
 
   def option_dialog(ss, query)
+    @jpanel.setBackground(Color.red)
     ans = JOptionPane.showOptionDialog(nil,"<html>#{query}</html>", "icome",
                                        JOptionPane::YES_NO_OPTION,
                                        JOptionPane::QUESTION_MESSAGE,
                                        nil, ss, ss[0])
+    @jpanel.setBackground(@my_gray)
+    ans
   end
 
   def initialize(icome, debug)
@@ -39,8 +44,12 @@ class UI
     frame = JFrame.new(APP_NAME)
     frame.set_default_close_operation(JFrame::DO_NOTHING_ON_CLOSE)
 
+    @jpanel = JPanel.new
+#    @jpanel.setBackground(Color.lightGray)
+
     menu = JPanel.new
     menu.set_layout(BoxLayout.new(menu, BoxLayout::Y_AXIS))
+
     menu.add(common_menu)
 
     if @debug
@@ -55,7 +64,8 @@ class UI
       end
     end
 
-    frame.add(menu)
+    @jpanel.add(menu)
+    frame.add(@jpanel)
     frame.pack
     frame.set_visible(true)
   end
