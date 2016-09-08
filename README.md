@@ -3,6 +3,10 @@
 icome version 8.
 rewrote icome7.
 
+* 2016-09-08 release 1.0.0
+* 2016-09-08 hotfix 1.0.1 ucome を (cd icome8 && make start) でスタートさせる。
+
+
 ## README
 
 リセットが難しい。どういう手段で実施するか?
@@ -20,21 +24,17 @@ I use,
 
 ```sh
 localhost$ ./mongodb-start.sh
-localhost$ ./debug-ucome
-localhost$ ./debug-icome
-localhost$ ./debug-acome
+localhost$ ./ucome --debug
+localhost$ ./icome --debug
+localhost$ ./acome --debug
 ```
-
-* debug- の名前は一箇所にデバッグ関連プログラムが集まって、見やすい。
-* app-debug の名前は mongo-start みたいに、「アプリ 動詞」の順で統一できる。
-
-どっちがいいか? あんまりどうでもいいや。
 
 ## production
 
 ## GitHub
 
 https://github.com/hkim0331/icome8.git
+git@github.com:hkim0331/icome8.git
 
 ## author
 
