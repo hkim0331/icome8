@@ -7,7 +7,7 @@ if [ "$?" -eq 0 ]; then
 fi
 
 ICOME=/edu/lib/icome8/icome.rb
-if [ $# -neq 0 ]; then
+if [ $# -ne 0 ]; then
     DEBUG=1 UCOME='druby://127.0.0.1:9007' ${ICOME} $@
     exit
 fi
