@@ -24,7 +24,8 @@ $ acome [--debug] [--druby druby://ucome_ip:port]
   disable n
   clear
 
-  druby
+  [druby|ucome]
+  mongo
 
 to exit, type ^C.
 EOF
@@ -72,8 +73,10 @@ Thread.new do
     when /^clear/
       ucome.clear
 
-    when /druby/
+    when /^(druby)|(ucome)/
       puts druby
+    when /^mongo/
+      puts ucome.mongo
     when /^version/
       puts VERSION
 

@@ -34,8 +34,9 @@ class Ucome
       logger       = Logger.new("/srv/icome8/log/ucome.log", 5, 10*1024)
       logger.level = Logger::INFO
     end
+    @mongo = mongo
     # determin mongodb collection from launch time info.
-    @cl = Mongo::Client.new(mongo, logger: logger)[collection()]
+    @cl = Mongo::Client.new(@mongo, logger: logger)[collection()]
     @commands = []
     @cur = 0
     @next = -1
@@ -102,6 +103,10 @@ class Ucome
   #
   # acome methods
   #
+  def mongo
+    @mongo
+  end
+  
   def push(cmd)
     @commands.push({status: :enable, command: cmd})
   end

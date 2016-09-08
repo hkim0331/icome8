@@ -135,6 +135,7 @@ class Icome
   end
 
   def exec(command)
+    puts "command: #{command}"if $debug
     system(command)
   end
 
