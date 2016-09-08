@@ -10,11 +10,9 @@ require './icome-ui'
 def usage
   print <<EOU
 ucome #{VERSION}
-
 # usage
 
 $ ucome [--debug] [--ucome druby://ucome_ip:port]
-
 EOU
   exit(1)
 end
@@ -22,10 +20,15 @@ end
 class Icome
 
   def initialize(ucome)
+    @ip = IPSocket::getaddress(Socket::gethostname)
+    unless $debug or c_2b?(@ip) or c_2b?(@ip)
+      display("教室外から icome 出来ません。")
+      sleep 3
+      quit
+    end
     @ucome = ucome
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
-    @ip = IPSocket::getaddress(Socket::gethostname)
     @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
   end
@@ -81,7 +84,7 @@ class Icome
     end
   end
 
-  # 個人課題,
+  # 個人課題、提出状況は ucome に聞かないと。
   def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
@@ -109,12 +112,12 @@ class Icome
       map{|x| x.split(/_/)[2]}
   end
 
-  # FIXME: rename as ucome_to_isc?
+  # rename as ucome_to_isc?
   def download(remote, local)
     puts "#{__method__} #{remote}, #{local}" if $debug
   end
 
-  # FIXME: rename as isc_to_ucome?
+  # rename as isc_to_ucome?
   def upload(local)
     it = File.join(ENV['HOME'], local)
     if File.exists?(it)

@@ -10,8 +10,12 @@ all:
 	@echo \'make ucome\' on vm2016
 
 icome:
-	install -m 0755 icome /edu/bin
-	install -m 0644 icome-common.rb /edu/bin
+	if [ ! -d /edu/lib/icome8 ]; then
+		mkdir /edu/lib/icome8
+	fi
+	install -m 0755 icome /edu/lib/
+	install -m 0644 icome-common.rb /edu/lib
+	ln -s /edu/bin/icome /edu/lib/icome8/icome
 
 acome:
 	@echo use ./acome to launch.

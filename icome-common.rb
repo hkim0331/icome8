@@ -55,3 +55,11 @@ end
 def osx?()
   ENV['HOME'] =~ /^\/User/
 end
+
+def c_2b?(ip)
+  ip =~ /^10.28.100.\d+/
+end
+
+def c_2g?(ip)
+  ip =~ /^10.28.102.\d+/
+end
