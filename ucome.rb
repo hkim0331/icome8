@@ -1,21 +1,22 @@
 #!/usr/bin/env ruby
 # coding: utf-8
-#
-# will work on vm2016, ruby 2.3.1.
 
 require 'mongo'
 require 'drb'
 require 'socket'
 require 'logger'
-require './icome-common'
+require_relative 'icome-common'
 
 def usage()
   print <<EOF
 ucome #{VERSION}
-usage:
-ucome [--debug]
-      [--mongodb mongodb://server:port/db]
-      [--druby druby://ip_address:port]
+
+# usage:
+
+$ ucome [--debug]
+        [--mongodb mongodb://server:port/db]
+        [--druby druby://ip_address:port]
+
 EOF
   exit(1)
 end
@@ -33,7 +34,9 @@ class Ucome
       logger       = Logger.new("/srv/icome8/log/ucome.log", 5, 10*1024)
       logger.level = Logger::INFO
     end
-    @cl = Mongo::Client.new(mongo, logger: logger)["#{this_term()}_#{a_year()}"]
+    # determin mongodb collection from launch time info.
+    @mongo = mongo
+    @cl = Mongo::Client.new(@mongo, logger: logger)[collection()]
     @commands = []
     @cur = 0
     @next = -1
@@ -42,13 +45,13 @@ class Ucome
   #
   # mongodb interface
   #
-  def create(sid, uhour)
-    @cl.insert_one({sid: sid, uhour: uhour, icome: [], ip: []})
+  def create(sid, uid, uhour)
+    @cl.insert_one({sid: sid, uid: uid, uhour: uhour, icome: []})
   end
 
   def update(sid, uhour, date, ip)
     @cl.update_one({sid: sid, uhour: uhour},
-                   {"$addToSet" => {icome: date, ip: ip}})
+                   {"$addToSet" => {icome: [date, ip]}})
   end
 
   def find_icome(sid, uhour)
@@ -57,7 +60,7 @@ class Ucome
     if ret.first.nil?
       []
     else
-      ret.first[:icome]
+      ret.first[:icome]         # returns [[date1,ip1],[date2,ip2,...]]
     end
   end
 
@@ -76,10 +79,10 @@ class Ucome
   #
   # icome methods
   #
+
   # if not found, return nil.
   def fetch(n)
-    #    @commands.delete_if{|com| com[:status]==:disable}[n]
-    puts "fetch #{n}"
+    #puts "fetch" if $debug
     @commands[n]
   end
 
@@ -101,6 +104,10 @@ class Ucome
   #
   # acome methods
   #
+  def mongo
+    @mongo
+  end
+  
   def push(cmd)
     @commands.push({status: :enable, command: cmd})
   end
@@ -131,8 +138,8 @@ end
 # main starts here.
 #
 $debug = (ENV['DEBUG'] || false)
-druby  = (ENV['UCOME'] || 'druby://128.0.0.1:9007')
-mongo  = (ENV['MONGO'] || 'mongodb://localhost/ucome')
+druby  = (ENV['UCOME'] || UCOME)
+mongo  = (ENV['MONGO'] || MONGO)
 
 while (arg = ARGV.shift)
   case arg
@@ -148,6 +155,7 @@ while (arg = ARGV.shift)
 end
 
 if __FILE__ == $0
+  puts "druby: #{druby} mongo:#{mongo}"
   DRb.start_service(druby, Ucome.new(mongo))
   puts DRb.uri
   DRb.thread.join

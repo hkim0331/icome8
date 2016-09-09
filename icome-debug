@@ -1,9 +1,0 @@
-#!/bin/sh
-
-ps ax | egrep '[i]come.rb' >/dev/null
-if [ "$?" -eq 0 ]; then
-    echo "icome はすでに起動しています。"
-    exit
-fi
-
-DEBUG=1 UCOME='druby://127.0.0.1:9007' ./icome.rb

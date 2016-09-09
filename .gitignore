@@ -5,3 +5,6 @@
 !/log/.place-holder
 /icome8/*
 !/icome8/.place-holder
+
+# duplicates in ~/.gitignore_global. why? 2016-09-09.
+*.bak
