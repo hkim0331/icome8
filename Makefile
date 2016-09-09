@@ -13,6 +13,10 @@ all:
 	@echo \'make ucome\' on vm2016
 
 isc:
+	if [ ! -d /edu ]; then \
+		echo must exec on isc; \
+		exit 1; \
+	fi
 	if [ ! -d ${ISC} ]; then \
 		mkdir ${ISC}; \
 	fi
