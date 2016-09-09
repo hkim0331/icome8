@@ -68,7 +68,7 @@ class Icome
                 "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
       end
     end
-    memo(uhour, now.strftime("%F %T"))
+    memo(uhour, now.strftime("%F %T"), @ip)
   end
 
   def show
@@ -101,18 +101,17 @@ class Icome
     java.lang.System.exit(0)
   end
 
-  def memo(uhour, date_time)
+  def memo(uhour, date_time, ip)
     name = File.join(@icome8_dir, "#{collection()}_#{uhour}")
     File.open(name, "a") do |fp|
-      fp.puts date_time
+      fp.puts "#{date_time} #{ip}"
     end
   end
 
   def find_uhours_from_memo()
     col="#{collection()}"
     Dir.entries(@icome8_dir).
-      find_all{|x| x =~ /^#{col}/}.
-      map{|x| x.split(/_/)[2]}
+      find_all{|x| x =~ /^#{col}/}.map{|x| x.split(/_/)[2]}
   end
 
   # rename as ucome_to_isc?
