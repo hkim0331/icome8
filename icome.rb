@@ -44,7 +44,7 @@ class Icome
     today = now.strftime("%F")
     uhour = uhour(now)
     if $debug
-      puts "#{term} #{today}  #{uhour}"
+      puts "#{term} #{today} #{uhour}"
     else
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
         (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
@@ -53,13 +53,15 @@ class Icome
       end
     end
     records = @ucome.find_icome(@sid, uhour)
+    # records: [[date1, ip1], [date2, ip2], ...]
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
         @ucome.create(@sid, @uid, uhour)
         @ucome.update(@sid, uhour, today, @ip)
       end
     else
-      if records.include?(today)
+      # FIXME: NG!
+      if records.map{|r| r.first}.include?(today)
         display("出席記録は一回の授業にひとつです。")
         return
       else
@@ -82,10 +84,11 @@ class Icome
         uhour = uhours[@ui.option_dialog(uhours,
                                          "複数のクラスを受講しているようです。")]
       end
-      dates = @ucome.find_icome(@sid, uhour).
-              map{|x| "#{x[0]}:#{x[1].split(/\./)[3]}"}.
-              sort.join('<br>')
-      display("日付:座席<br>" + dates)
+      # FIXME: NG!
+      date_sheet = @ucome.find_icome(@sid, uhour).
+                   map{|x| "#{x[0]}:#{x[1].split(/\./)[3]}"}.
+                   sort.join('<br>')
+      display("日付:座席<br>" + date_sheet)
     end
   end
 
