@@ -15,7 +15,7 @@ $ acome [--debug] [--druby druby://ucome_ip:port]
 
   [display|dialog|xcowsay] message
   upload file
-  download file
+  download file (not yet)
   exec command
   reset n (BUG: infinite loop)
 
