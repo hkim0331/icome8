@@ -23,7 +23,7 @@ class Icome
   def initialize(ucome)
     @ip = IPSocket::getaddress(Socket::gethostname)
     unless $debug or c_2b?(@ip) or c_2b?(@ip)
-      display("教室外から icome 出来ません。")
+      display("教室外から icome 出来ません。<br>さようなら。")
       sleep 3
       quit
     end
