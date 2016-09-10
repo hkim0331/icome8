@@ -169,7 +169,6 @@ class Icome
         unless cmd.nil?
           i += 1
           if cmd[:status] == :enable
-            puts "cmd: #{cmd}" if $debug
             case cmd[:command]
             when /^xcowsay\s+(.+)$/
               xcowsay($1)
