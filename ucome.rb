@@ -56,7 +56,6 @@ class Ucome
 
   def find_icome(sid, uhour)
     ret = @cl.find({sid: sid, uhour: uhour})
-    # CHECK: should return false?
     if ret.first.nil?
       []
     else

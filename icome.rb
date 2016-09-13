@@ -23,7 +23,7 @@ class Icome
   def initialize(ucome)
     @ip = IPSocket::getaddress(Socket::gethostname)
     unless $debug or c_2b?(@ip) or c_2b?(@ip)
-      display("教室外から icome 出来ません。")
+      display("教室外から icome 出来ません。<br>さようなら。")
       sleep 3
       quit
     end
@@ -44,7 +44,7 @@ class Icome
     today = now.strftime("%F")
     uhour = uhour(now)
     if $debug
-      puts "#{term} #{today}  #{uhour}"
+      puts "#{term} #{today} #{uhour}"
     else
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
         (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
@@ -63,7 +63,8 @@ class Icome
         return
       end
     else
-      if records.include?(today)
+      # FIXME: NG!
+      if records.map{|r| r.first}.include?(today)
         display("出席記録は一回の授業にひとつです。")
         return
       else
@@ -174,7 +175,6 @@ class Icome
         unless cmd.nil?
           i += 1
           if cmd[:status] == :enable
-            puts "cmd: #{cmd}" if $debug
             case cmd[:command]
             when /^xcowsay\s+(.+)$/
               xcowsay($1)
