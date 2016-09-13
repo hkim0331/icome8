@@ -7,7 +7,7 @@ require 'socket'
 require_relative 'icome-common'
 require_relative 'icome-ui'
 
-def usage
+ def usage
   print <<EOU
 ucome #{VERSION}
 # usage
@@ -52,23 +52,30 @@ class Icome
         return
       end
     end
-    records = @ucome.find_icome(@sid, uhour)
+    records = @ucome.find_date_ip(@sid, uhour)
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
-        @ucome.create(@sid, @uid, uhour)
-        @ucome.update(@sid, uhour, today, @ip)
+        # @ucome.create(@sid, @uid, uhour)
+        # @ucome.update(@sid, uhour, today, @ip)
+        puts "call @ucome.insert" if $debug
+        @ucome.insert(@sid, uhour, today, @ip)
+      else
+        return
       end
     else
       if records.include?(today)
         display("出席記録は一回の授業にひとつです。")
         return
       else
-        @ucome.update(@sid, uhour, today, @ip)
-        display("出席を記録しました。<br>" +
-                "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
+        # @ucome.update(@sid, uhour, today, @ip)
+        @ucome.insert(@sid, uhour, today, @ip)
+#        display("出席を記録しました。<br>" +
+#                "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
       end
     end
-    memo(uhour, now.strftime("%F %T"))
+    display("出席を記録しました。<br>" +
+            "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
+    memo(uhour, now.strftime("%F %T"), @ip)
   end
 
   def show
@@ -82,10 +89,12 @@ class Icome
         uhour = uhours[@ui.option_dialog(uhours,
                                          "複数のクラスを受講しているようです。")]
       end
-      dates = @ucome.find_icome(@sid, uhour).
-              map{|x| "#{x[0]}:#{x[1].split(/\./)[3]}"}.
-              sort.join('<br>')
-      display("日付:座席<br>" + dates)
+      # dates = @ucome.find_icome(@sid, uhour).
+      #         map{|x| "#{x[0]}:#{x[1].split(/\./)[3]}"}.
+      #         sort.join('<br>')
+      display("日付:座席<br>" +
+              @ucome.find_date_ip(@sid, uhour).
+                map{|x| "#{x[0]}:#{x[1].split(/\./)[3]}"}.join('<br>'))
     end
   end
 
@@ -104,18 +113,17 @@ class Icome
     java.lang.System.exit(0)
   end
 
-  def memo(uhour, date_time)
+  def memo(uhour, date_time, ip)
     name = File.join(@icome8_dir, "#{collection()}_#{uhour}")
     File.open(name, "a") do |fp|
-      fp.puts date_time
+      fp.puts "#{date_time} #{ip}"
     end
   end
 
   def find_uhours_from_memo()
     col="#{collection()}"
     Dir.entries(@icome8_dir).
-      find_all{|x| x =~ /^#{col}/}.
-      map{|x| x.split(/_/)[2]}
+      find_all{|x| x =~ /^#{col}/}.map{|x| x.split(/_/)[2]}
   end
 
   # rename as ucome_to_isc?

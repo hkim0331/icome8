@@ -1,6 +1,6 @@
 APP_NAME="icome8"
-VERSION="1.1"
-UPDATE="2016-09-09"
+VERSION="1.2"
+UPDATE="2016-09-13"
 
 MONGO='mongodb://localhost/ucome'
 UCOME='druby://127.0.0.1:9007'
@@ -48,6 +48,7 @@ def collection()
   "#{this_term()}_#{a_year()}"
 end
 
+# FIXME
 def linux?()
   ENV['HOME'] =~ /^\/home/
 end

@@ -64,6 +64,16 @@ class Ucome
     end
   end
 
+  def insert(sid, uhour, date, ip)
+    @cl.insert_one({sid: sid, uhour: uhour, date: date, ip: ip})
+  end
+
+  #@cl.find() returns a View instance.
+  def find_date_ip(sid, uhour)
+    @cl.find({sid: sid, uhour: uhour}, {date: 1, ip: 1}).
+      map{|x| [x[:date],x[:ip]]}
+  end
+
   # 個人課題の提出状況。
   # アップロード先は ucome の動くサーバなので、
   # icome の動いているローカル PC では解決できない。
