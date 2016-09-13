@@ -9,8 +9,9 @@ ISC=/edu/lib/icome8
 ISC_BIN=/edu/bin
 
 all:
-	@echo \'make icome\' on isc
-	@echo \'make ucome\' on vm2016
+	@echo "*'make icome' on isc to install icome."
+	@echo "  use acome from icome8 installed directory."
+	@echo "* 'make vm2016' on vm2016 to install ucome."
 
 isc:
 	if [ ! -d /edu ]; then \
@@ -28,9 +29,9 @@ isc:
 acome:
 	@echo use ./acome to launch.
 
-ucome:
-	(cd /srv && ln -sf /home/hkim/icome8 icome8)
-	./ufw.sh
+vm2016:
+	@echo "install ucome by 'cd /srv && ln -sf /home/hkim/icome8 icome8'"
+	@echo "check ucome port are opened './ufw.sh'"
 
 start: ucome_start
 
