@@ -23,8 +23,8 @@ class UI
     @jpanel.setBackground(Color.red)
     ans = JOptionPane.showConfirmDialog(nil, "<html>#{s}</html>", "icome",
                                         JOptionPane::YES_NO_OPTION)
-    ans == JOptionPane::YES_OPTION
     @jpanel.setBackground(@my_gray)
+    ans == JOptionPane::YES_OPTION
   end
 
   def option_dialog(ss, query)
