@@ -23,8 +23,8 @@ class UI
     @jpanel.setBackground(Color.red)
     ans = JOptionPane.showConfirmDialog(nil, "<html>#{s}</html>", "icome",
                                         JOptionPane::YES_NO_OPTION)
-    @jpanel.setBackground(@my_gray)
     ans == JOptionPane::YES_OPTION
+    @jpanel.setBackground(@my_gray)
   end
 
   def option_dialog(ss, query)
@@ -84,7 +84,6 @@ class UI
 
     # 詳細ボタン
     # 日付の他に時刻、シートが記録されている。
-    
     if @debug
       button = JButton.new('Quit')
       button.add_action_listener do |e|

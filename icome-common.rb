@@ -48,6 +48,7 @@ def collection()
   "#{this_term()}_#{a_year()}"
 end
 
+# FIXME
 def linux?()
   ENV['HOME'] =~ /^\/home/
 end

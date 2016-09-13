@@ -7,7 +7,7 @@ require 'socket'
 require_relative 'icome-common'
 require_relative 'icome-ui'
 
-def usage
+ def usage
   print <<EOU
 ucome #{VERSION}
 # usage
