@@ -55,6 +55,7 @@ class Icome
     records = @ucome.find_date_ip(@sid, uhour)
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
+        # change in 1.2
         # @ucome.create(@sid, @uid, uhour)
         # @ucome.update(@sid, uhour, today, @ip)
         puts "call @ucome.insert" if $debug
@@ -68,10 +69,11 @@ class Icome
         display("出席記録は一回の授業にひとつです。")
         return
       else
+        # change in 1.2
         # @ucome.update(@sid, uhour, today, @ip)
+        # display("出席を記録しました。<br>" +
+        #         "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
         @ucome.insert(@sid, uhour, today, @ip)
-#        display("出席を記録しました。<br>" +
-#                "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
       end
     end
     display("出席を記録しました。<br>" +

@@ -45,23 +45,24 @@ class Ucome
   #
   # mongodb interface
   #
-  def create(sid, uid, uhour)
-    @cl.insert_one({sid: sid, uid: uid, uhour: uhour, icome: []})
-  end
+  # obsolete in 1.2
+  # def create(sid, uid, uhour)
+  #   @cl.insert_one({sid: sid, uid: uid, uhour: uhour, icome: []})
+  # end
 
-  def update(sid, uhour, date, ip)
-    @cl.update_one({sid: sid, uhour: uhour},
-                   {"$addToSet" => {icome: [date, ip]}})
-  end
+  # def update(sid, uhour, date, ip)
+  #   @cl.update_one({sid: sid, uhour: uhour},
+  #                  {"$addToSet" => {icome: [date, ip]}})
+  # end
 
-  def find_icome(sid, uhour)
-    ret = @cl.find({sid: sid, uhour: uhour})
-    if ret.first.nil?
-      []
-    else
-      ret.first[:icome]         # returns [[date1,ip1],[date2,ip2,...]]
-    end
-  end
+  # def find_icome(sid, uhour)
+  #   ret = @cl.find({sid: sid, uhour: uhour})
+  #   if ret.first.nil?
+  #     []
+  #   else
+  #     ret.first[:icome]         # returns [[date1,ip1],[date2,ip2,...]]
+  #   end
+  # end
 
   def insert(sid, uhour, date, ip)
     @cl.insert_one({sid: sid, uhour: uhour, date: date, ip: ip})
@@ -70,7 +71,7 @@ class Ucome
   #@cl.find() returns a View instance.
   def find_date_ip(sid, uhour)
     @cl.find({sid: sid, uhour: uhour}, {date: 1, ip: 1}).
-      map{|x| [x[:date],x[:ip]]}
+      map{|x| [x[:date], x[:ip]]}
   end
 
   # 個人課題の提出状況。
@@ -116,7 +117,7 @@ class Ucome
   def mongo
     @mongo
   end
-  
+
   def push(cmd)
     @commands.push({status: :enable, command: cmd})
   end
