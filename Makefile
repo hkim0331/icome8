@@ -9,8 +9,8 @@ ISC=/edu/lib/icome8
 ISC_BIN=/edu/bin
 
 all:
-	@echo "*'make icome' on isc to install icome."
-	@echo "  use acome from icome8 installed directory."
+	@echo "* 'make isc' on isc to install icome."
+	@echo "   use acome from icome8 installed directory."
 	@echo "* 'make vm2016' on vm2016 to install ucome."
 
 isc:

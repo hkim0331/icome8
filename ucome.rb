@@ -24,7 +24,7 @@ end
 class Ucome
   attr_reader :reset_count
 
-  def initialize(mongo = 'mongodb://localhost/ucome')
+  def initialize(mongo = 'mongodb://localhost/test')
     if $debug || !!ENV['DEBUG']
       @upload = "./upload"
       logger       = Logger.new(STDERR)
