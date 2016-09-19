@@ -15,7 +15,7 @@ ucome #{VERSION}
 
 $ ucome [--debug]
         [--mongodb mongodb://server:port/db]
-        [--druby druby://ip_address:port]
+        [--ucome druby://my_ip_address:port]
 
 EOF
   exit(1)

@@ -12,7 +12,7 @@ require_relative 'icome-ui'
 ucome #{VERSION}
 # usage
 
-$ ucome [--debug] [--druby druby://ucome_ip:port]
+$ icome [--debug] [--ucome druby://ucome_ip:port]
 
 EOU
   exit(1)
