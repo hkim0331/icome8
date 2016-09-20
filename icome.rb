@@ -12,7 +12,7 @@ require_relative 'icome-ui'
 ucome #{VERSION}
 # usage
 
-$ ucome [--debug] [--druby druby://ucome_ip:port]
+$ icome [--debug] [--ucome druby://ucome_ip:port]
 
 EOU
   exit(1)
@@ -21,21 +21,18 @@ end
 class Icome
 
   def initialize(ucome)
+    @ui = UI.new(self, $debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
     unless $debug or c_2b?(@ip) or c_2b?(@ip)
-      display("教室外から icome 出来ません。<br>さようなら。")
-      sleep 3
+      display("#{@ip}<br>教室外から icome 出来ません。<br>さようなら。")
       quit
+      DRb.thread.join
     end
     @ucome = ucome
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
     @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
-  end
-
-  def setup_ui
-    @ui = UI.new(self, $debug)
   end
 
   def icome
@@ -55,6 +52,7 @@ class Icome
     records = @ucome.find_date_ip(@sid, uhour)
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
+        # change in 1.2
         # @ucome.create(@sid, @uid, uhour)
         # @ucome.update(@sid, uhour, today, @ip)
         puts "call @ucome.insert" if $debug
@@ -68,10 +66,11 @@ class Icome
         display("出席記録は一回の授業にひとつです。")
         return
       else
+        # change in 1.2
         # @ucome.update(@sid, uhour, today, @ip)
+        # display("出席を記録しました。<br>" +
+        #         "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
         @ucome.insert(@sid, uhour, today, @ip)
-#        display("出席を記録しました。<br>" +
-#                "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
       end
     end
     display("出席を記録しました。<br>" +
@@ -221,6 +220,5 @@ end
 puts ucome if $debug
 DRb.start_service
 icome = Icome.new(DRbObject.new(nil, ucome))
-icome.setup_ui
 icome.start
 DRb.thread.join

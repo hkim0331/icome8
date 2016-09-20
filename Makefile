@@ -9,8 +9,8 @@ ISC=/edu/lib/icome8
 ISC_BIN=/edu/bin
 
 all:
-	@echo "*'make icome' on isc to install icome."
-	@echo "  use acome from icome8 installed directory."
+	@echo "* 'make isc' on isc to install icome."
+	@echo "   use acome from icome8 installed directory."
 	@echo "* 'make vm2016' on vm2016 to install ucome."
 
 isc:
@@ -33,14 +33,13 @@ vm2016:
 	@echo "install ucome by 'cd /srv && ln -sf /home/hkim/icome8 icome8'"
 	@echo "check ucome port are opened './ufw.sh'"
 
-start: ucome_start
+# start ucome in production mode.
+start:
+	MONGO='mongodb://dbs.melt.kyutech.ac.jp/ucome' \
+	UCOME='druby://150.69.90.81:9007' \
+	nohup ./ucome.rb 2>/dev/null &
 
-ucome_start:
-	nohup ./ucome 2>/dev/null &
-
-stop: ucome_stop
-
-ucome_stop:
+stop:
 	kill `ps ax | grep '[u]come' | awk '{print $$1}'`
 
 clean:
