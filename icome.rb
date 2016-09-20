@@ -21,21 +21,18 @@ end
 class Icome
 
   def initialize(ucome)
+    @ui = UI.new(self, $debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
     unless $debug or c_2b?(@ip) or c_2b?(@ip)
-      display("教室外から icome 出来ません。<br>さようなら。")
-      sleep 3
+      display("#{@ip}<br>教室外から icome 出来ません。<br>さようなら。")
       quit
+      DRb.thread.join
     end
     @ucome = ucome
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
     @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
-  end
-
-  def setup_ui
-    @ui = UI.new(self, $debug)
   end
 
   def icome
@@ -223,6 +220,5 @@ end
 puts ucome if $debug
 DRb.start_service
 icome = Icome.new(DRbObject.new(nil, ucome))
-icome.setup_ui
 icome.start
 DRb.thread.join
