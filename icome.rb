@@ -9,7 +9,7 @@ require_relative 'icome-ui'
 
  def usage
   print <<EOU
-ucome #{VERSION}
+icome #{VERSION}
 # usage
 
 $ icome [--debug] [--ucome druby://ucome_ip:port]
@@ -31,7 +31,11 @@ class Icome
     @ucome = ucome
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
+    # FIXME:
+    # これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
+    # デバッグモードなので、まあいいやできるレベルだが。
     @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
+    #
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
   end
 
