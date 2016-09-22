@@ -14,6 +14,6 @@ fi
 echo "icome の起動には 5 秒くらいかかります。"
 UCOME='druby://150.69.90.81:9007' nohup ${ICOME} 2>/dev/null &
 
-if [ -e /edu/bin/watch-ss ]; then
-    nohup /edu/bin/watch-ss 2>/dev/null &
+if [ -e /edu/bin/xwatch-ss ]; then
+    nohup /edu/bin/xwatch-ss 2>/dev/null &
 fi
