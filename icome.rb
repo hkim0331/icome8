@@ -21,6 +21,14 @@ end
 class Icome
 
   def initialize(ucome)
+    begin
+     ucome.ping
+    rescue
+      puts "ucome does not respond. will quit."
+      quit
+      DRb.thread.join
+    end
+
     @ui = UI.new(self, $debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
     unless $debug or c_2b?(@ip) or c_2b?(@ip)
@@ -29,6 +37,7 @@ class Icome
       DRb.thread.join
     end
     @ucome = ucome
+
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
     # FIXME:
@@ -93,9 +102,6 @@ class Icome
         uhour = uhours[@ui.option_dialog(uhours,
                                          "複数のクラスを受講しているようです。")]
       end
-      # dates = @ucome.find_icome(@sid, uhour).
-      #         map{|x| "#{x[0]}:#{x[1].split(/\./)[3]}"}.
-      #         sort.join('<br>')
       display("日付:座席<br>" +
               @ucome.find_date_ip(@sid, uhour).
                 map{|x| "#{x[0]}:#{x[1].split(/\./)[3]}"}.join('<br>'))
