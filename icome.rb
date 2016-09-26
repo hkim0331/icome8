@@ -9,7 +9,7 @@ require_relative 'icome-ui'
 
  def usage
   print <<EOU
-ucome #{VERSION}
+icome #{VERSION}
 # usage
 
 $ icome [--debug] [--ucome druby://ucome_ip:port]
@@ -21,6 +21,14 @@ end
 class Icome
 
   def initialize(ucome)
+    begin
+     ucome.ping
+    rescue
+      puts "ucome does not respond. will quit."
+      quit
+      DRb.thread.join
+    end
+
     @ui = UI.new(self, $debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
     unless $debug or c_2b?(@ip) or c_2b?(@ip)
@@ -29,9 +37,14 @@ class Icome
       DRb.thread.join
     end
     @ucome = ucome
+
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
+    # FIXME:
+    # これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
+    # デバッグモードなので、まあいいやできるレベルだが。
     @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
+    #
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
   end
 
@@ -52,24 +65,19 @@ class Icome
     records = @ucome.find_date_ip(@sid, uhour)
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
-        # change in 1.2
-        # @ucome.create(@sid, @uid, uhour)
-        # @ucome.update(@sid, uhour, today, @ip)
-        puts "call @ucome.insert" if $debug
+        puts "will call @ucome.insert" if $debug
         @ucome.insert(@sid, uhour, today, @ip)
+      # FIXME: ここで myid を付与したい。
+      # @ucome.create_myid(@sid, @uid)
+      # ってのは？
       else
         return
       end
     else
-      # FIXME: NG!
       if records.map{|r| r.first}.include?(today)
         display("出席記録は一回の授業にひとつです。")
         return
       else
-        # change in 1.2
-        # @ucome.update(@sid, uhour, today, @ip)
-        # display("出席を記録しました。<br>" +
-        #         "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
         @ucome.insert(@sid, uhour, today, @ip)
       end
     end
@@ -89,9 +97,6 @@ class Icome
         uhour = uhours[@ui.option_dialog(uhours,
                                          "複数のクラスを受講しているようです。")]
       end
-      # dates = @ucome.find_icome(@sid, uhour).
-      #         map{|x| "#{x[0]}:#{x[1].split(/\./)[3]}"}.
-      #         sort.join('<br>')
       display("日付:座席<br>" +
               @ucome.find_date_ip(@sid, uhour).
                 map{|x| "#{x[0]}:#{x[1].split(/\./)[3]}"}.join('<br>'))

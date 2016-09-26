@@ -7,6 +7,9 @@
 * BUG? druby://localhost:9001 で通信できないわけは？
   druby://127.0.0.1:9001 では行けるのに。
 
+* BUG? ccl 使用時、monbodb://localhost:27017 でエラーになるか？
+  monbodb://127.0.0.1:27017 ではどうか？ 2016-09-26
+
 * jname, myid, subj(授業科目）をドキュメントに入れるか？
 
 * ucome ではなく、mongodb にコマンドを入れるようにしたら?
