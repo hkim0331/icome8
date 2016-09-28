@@ -67,9 +67,8 @@ class Icome
       if @ui.query?("#{uhour} を受講しますか？")
         puts "will call @ucome.insert" if $debug
         @ucome.insert(@sid, uhour, today, @ip)
-      # FIXME: ここで myid を付与したい。
-      # @ucome.create_myid(@sid, @uid)
-      # ってのは？
+      # FIXME: ここで myid を付与したい。面倒か？
+      #@ucome.create_myid(@sid, @uid)
       else
         return
       end

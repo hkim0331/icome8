@@ -85,6 +85,10 @@ class Ucome
     end
   end
 
+  def create_myid(sid, uid)
+    myid=cl.find(
+    
+  end
   def download(file, save_as)
 
   end
