@@ -7,6 +7,7 @@ if [ "$?" -eq 0 ]; then
     exit
 fi
 
+echo "icome の起動には 5 秒くらいかかります。"
 ICOME=/edu/lib/icome8/icome.rb
 UCOME='druby://150.69.90.81:9007' nohup ${ICOME} 2>/dev/null &
 
