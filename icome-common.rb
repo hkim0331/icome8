@@ -48,7 +48,7 @@ def collection()
   "#{this_term()}_#{a_year()}"
 end
 
-# FIXME
+# FIXME, not smart.
 def linux?()
   ENV['HOME'] =~ /^\/home/
 end
@@ -58,9 +58,9 @@ def osx?()
 end
 
 def c_2b?(ip)
-  ip =~ /^10.28.100.\d+/
+  ip =~ /^10\.27\.100\.\d+/
 end
 
 def c_2g?(ip)
-  ip =~ /^10.28.102.\d+/
+  ip =~ /^10\.27\.102\.\d+/
 end
