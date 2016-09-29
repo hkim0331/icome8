@@ -31,7 +31,7 @@ class Icome
 
     @ui = UI.new(self, $debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
-    unless $debug or c_2b?(@ip) or c_2b?(@ip)
+    unless $debug or c_2b?(@ip) or c_2g?(@ip)
       display("#{@ip}<br>教室外から icome 出来ません。<br>さようなら。")
       quit
       DRb.thread.join
