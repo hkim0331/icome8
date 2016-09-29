@@ -1,7 +1,6 @@
 # icome8
 
-icome version 8.
-rewrote icome7.
+icome version 8, which is version up from icome7.
 
 * 2016-09-08 1.0.0.
 * 2016-09-08 1.0.1, ucome を (cd icome8 && make start) でスタートさせる。
@@ -44,4 +43,3 @@ hiroshi.kimura.0331@gmail.com
 
 ---
 hkimura.
-
