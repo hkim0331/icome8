@@ -1,6 +1,6 @@
 APP_NAME="icome8"
-VERSION="1.2.3"
-UPDATE="2016-09-25"
+VERSION="1.3.0"
+UPDATE="2016-09-29"
 
 MONGO='mongodb://localhost/ucome'
 UCOME='druby://127.0.0.1:9007'
@@ -48,7 +48,7 @@ def collection()
   "#{this_term()}_#{a_year()}"
 end
 
-# FIXME
+# FIXME, not smart.
 def linux?()
   ENV['HOME'] =~ /^\/home/
 end
@@ -58,9 +58,9 @@ def osx?()
 end
 
 def c_2b?(ip)
-  ip =~ /^10.28.100.\d+/
+  ip =~ /^10\.27\.100\.\d+/
 end
 
 def c_2g?(ip)
-  ip =~ /^10.28.102.\d+/
+  ip =~ /^10\.27\.102\.\d+/
 end
