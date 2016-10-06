@@ -5,7 +5,7 @@
 # git clone git@github.com:hkim0331/icome8.git
 # したディレクトリで実行すること。
 
-ISC=/edu/lib/icome8
+#ISC=/edu/lib/icome8
 ISC_BIN=/edu/bin
 
 all:
@@ -18,12 +18,12 @@ isc:
 		echo must exec on isc; \
 		exit 1; \
 	fi
-	if [ ! -d ${ISC} ]; then \
-		mkdir ${ISC}; \
-	fi
-	install -m 0755 icome.rb ${ISC}
-	install -m 0644 icome-common.rb ${ISC}
-	install -m 0644 icome-ui.rb ${ISC}
+# 	if [ ! -d ${ISC} ]; then \
+# 		mkdir ${ISC}; \
+# 	fi
+# 	install -m 0755 icome.rb ${ISC}
+# 	install -m 0644 icome-common.rb ${ISC}
+# 	install -m 0644 icome-ui.rb ${ISC}
 	install -m 0755 icome ${ISC_BIN}
 
 acome:
