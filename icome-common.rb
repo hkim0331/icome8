@@ -64,3 +64,7 @@ end
 def c_2g?(ip)
   ip =~ /^10\.27\.102\.\d+/
 end
+
+def remote_t?(ip)
+  ip =~ /^10\.27\.104\.1$/
+end

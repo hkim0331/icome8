@@ -28,10 +28,10 @@ class Icome
       quit
       DRb.thread.join
     end
-
+    puts "debug mode" if $debug
     @ui = UI.new(self, $debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
-    unless $debug or c_2b?(@ip) or c_2g?(@ip)
+    unless $debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
       display("#{@ip}<br>教室外から icome 出来ません。<br>さようなら。")
       quit
       DRb.thread.join
@@ -156,7 +156,7 @@ class Icome
   end
 
   def xcowsay(s)
-    system("xcowsay --at=200,100 --reading-speed=2000 '#{s}'")
+    system("xcowsay --at=200,100 --reading-speed=1000 '#{s}'")
   end
 
   def display(s)
