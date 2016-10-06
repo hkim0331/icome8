@@ -156,7 +156,7 @@ class Icome
   end
 
   def xcowsay(s)
-    system("xcowsay --at=200,100 '#{s}'")
+    system("xcowsay --at=200,100 --reading-speed=2000 '#{s}'")
   end
 
   def display(s)
