@@ -57,7 +57,7 @@ class Icome
       puts "#{term} #{today} #{uhour}"
     else
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
-        (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
+        (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thu1)|(thu4)/i)
         display("授業時間じゃありません。")
         return
       end
