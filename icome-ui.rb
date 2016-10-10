@@ -82,8 +82,6 @@ class UI
     end
     panel.add(button)
 
-    # 詳細ボタン
-    # 日付の他に時刻、シートが記録されている。
     if @debug
       button = JButton.new('Quit')
       button.add_action_listener do |e|
@@ -168,13 +166,13 @@ class UI
 
     button = JButton.new('個人課題')
     button.add_action_listener do |e|
-      @icome.personal
+      @icome.personal_assignments
     end
     panel.add(button)
 
     button = JButton.new('グループ課題')
     button.add_action_listener do |e|
-      @icome.display("授業資料の「グループ課題提出」から提出すること。")
+      @icome.group_assignments
     end
     panel.add(button)
     panel

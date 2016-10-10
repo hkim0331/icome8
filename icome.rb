@@ -40,6 +40,11 @@ class Icome
 
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
+
+    # under construction 2016-10-10
+    #    @gid =
+    #
+
     # FIXME:
     # これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
     # デバッグモードなので、まあいいやできるレベルだが。
@@ -103,14 +108,19 @@ class Icome
   end
 
   # 個人課題、提出状況は ucome に聞かないと。
-  def personal()
-    ret = @ucome.personal(@sid)
+  def personal_assignments()
+    ret = @ucome.personal_assignments(@sid)
     if ret.empty?
       display("秘密裡に抜きます。<br>ファイルを指定した名前でセーブすること。<br>"+
              "間違うと回収できないよ。")
     else
       display(ret.sort.join("<br>"))
     end
+  end
+
+  def group_assignments()
+    ret = @ucome.group_assignments(@gid)
+    display("授業資料の「グループ課題提出」から提出すること。")
   end
 
   def quit

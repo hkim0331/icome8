@@ -55,13 +55,18 @@ class Ucome
   # 個人課題の提出状況。
   # アップロード先は ucome の動くサーバなので、
   # icome の動いているローカル PC では解決できない。
-  def personal(sid)
+  def personal_assignments(sid)
     dir = File.join(@upload, sid)
     if File.directory?(dir)
       Dir.entries(dir).delete_if{|x| x=~ /^\./}
     else
       []
     end
+  end
+
+  # under construction, 2016-10-10
+  def group_assignments(sid)
+
   end
 
   #
