@@ -80,14 +80,12 @@ class Ucome
   end
 
   def group_ex(sid)
-    sid="15108012"
     gid = sid2gid(sid)
     if gid.nil?
       ["グループが見つからないよ。"]
     else
       ret = @ds["as_2016"].find({gid: gid}, {num: 1}).
               map{|x| x[:num]}
-      puts "ret: #{ret}"
       [ "gid #{gid}:"] + ret
     end
   end
@@ -98,7 +96,6 @@ class Ucome
 
   # if not found, return nil.
   def fetch(n)
-    #puts "fetch" if $debug
     @commands[n]
   end
 
