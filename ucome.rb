@@ -24,7 +24,7 @@ end
 class Ucome
   attr_reader :reset_count
 
-  def initialize(mongo = 'mongodb://127.0.0.1/test')
+  def initialize(mongo = MONGO)
     if $debug || !!ENV['DEBUG']
       @upload = "./upload"
       logger       = Logger.new(STDERR)
@@ -36,10 +36,12 @@ class Ucome
     end
     # determin mongodb collection from launch time info.
     @mongo = mongo
-    @cl = Mongo::Client.new(@mongo, logger: logger)[collection()]
+    @ds = Mongo::Client.new(@mongo, logger: logger)
+    @cl = @ds[collection()]
     @commands = []
     @cur = 0
     @next = -1
+    puts "mongodb: #{@mongo}"
   end
 
   def insert(sid, uhour, date, ip)
@@ -64,13 +66,36 @@ class Ucome
     end
   end
 
+  # FIXME, ダサい。
+  def sid2gid(sid)
+    if ret = @ds["rb_2016"].find({status: 1, m1: sid}).first
+      ret[:gid]
+    elsif ret = @ds["rb_2016"].find({status: 1, m2: sid}).first
+      ret[:gid]
+    elsif ret = @ds["rb_2016"].find({status: 1, m3: sid}).first
+      ret[:gid]
+    else
+      nil
+    end
+  end
+
+  def group_ex(sid)
+    gid = sid2gid(sid)
+    if gid.nil?
+      ["グループが見つからないよ。"]
+    else
+      ret = @ds["as_2016"].find({gid: gid}, {num: 1}).
+              map{|x| x[:num]}
+      [ "gid #{gid}:"] + ret
+    end
+  end
+
   #
   # icome methods
   #
 
   # if not found, return nil.
   def fetch(n)
-    #puts "fetch" if $debug
     @commands[n]
   end
 
@@ -148,9 +173,8 @@ while (arg = ARGV.shift)
 end
 
 if __FILE__ == $0
-  puts "druby: #{druby} mongo:#{mongo}"
   DRb.start_service(druby, Ucome.new(mongo))
-  puts DRb.uri
+  puts "druby: #{DRb.uri}"
   DRb.thread.join
 else
   puts "debug mode(pry?)"

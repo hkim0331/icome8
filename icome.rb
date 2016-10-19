@@ -103,7 +103,7 @@ class Icome
     end
   end
 
-  # 個人課題、提出状況は ucome に聞かないと。
+  # FIXME: メソッド名は personal_ex がいいと思う。
   def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
@@ -111,6 +111,16 @@ class Icome
              "間違うと回収できないよ。")
     else
       display(ret.sort.join("<br>"))
+    end
+  end
+
+  # FIXME: object_id から日付を取り出せないか？
+  def group_ex()
+    ret = @ucome.group_ex(@sid)
+    if ret.empty?
+      display("提出物が見当たりません。")
+    else
+      display(ret.join("<br>"))
     end
   end
 

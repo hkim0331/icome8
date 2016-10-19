@@ -174,7 +174,7 @@ class UI
 
     button = JButton.new('グループ課題')
     button.add_action_listener do |e|
-      @icome.display("授業資料の「グループ課題提出」から提出すること。")
+      @icome.group_ex()
     end
     panel.add(button)
     panel
