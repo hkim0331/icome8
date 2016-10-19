@@ -1,8 +1,8 @@
 APP_NAME="icome8"
-VERSION="1.3.0"
-UPDATE="2016-09-29"
+VERSION="1.4.1"
+UPDATE="2016-10-19"
 
-MONGO='mongodb://localhost/ucome'
+MONGO='mongodb://127.0.0.1:27017/ucome'
 UCOME='druby://127.0.0.1:9007'
 
 INTERVAL = 2
@@ -63,4 +63,8 @@ end
 
 def c_2g?(ip)
   ip =~ /^10\.27\.102\.\d+/
+end
+
+def remote_t?(ip)
+  ip =~ /^10\.27\.104\.1$/
 end

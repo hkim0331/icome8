@@ -28,10 +28,10 @@ class Icome
       quit
       DRb.thread.join
     end
-
+    puts "debug mode" if $debug
     @ui = UI.new(self, $debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
-    unless $debug or c_2b?(@ip) or c_2g?(@ip)
+    unless $debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
       display("#{@ip}<br>教室外から icome 出来ません。<br>さようなら。")
       quit
       DRb.thread.join
@@ -62,7 +62,7 @@ class Icome
       puts "#{term} #{today} #{uhour}"
     else
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
-        (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thr1)|(thr4)/i)
+        (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thu1)|(thu4)/i)
         display("授業時間じゃありません。")
         return
       end
@@ -107,9 +107,15 @@ class Icome
     end
   end
 
+<<<<<<< HEAD
   # 個人課題、提出状況は ucome に聞かないと。
   def personal_assignments()
     ret = @ucome.personal_assignments(@sid)
+=======
+  # FIXME: メソッド名は personal_ex がいいと思う。
+  def personal()
+    ret = @ucome.personal(@sid)
+>>>>>>> master
     if ret.empty?
       display("秘密裡に抜きます。<br>ファイルを指定した名前でセーブすること。<br>"+
              "間違うと回収できないよ。")
@@ -118,9 +124,20 @@ class Icome
     end
   end
 
+<<<<<<< HEAD
   def group_assignments()
     ret = @ucome.group_assignments(@gid)
     display("授業資料の「グループ課題提出」から提出すること。")
+=======
+  # FIXME: object_id から日付を取り出せないか？
+  def group_ex()
+    ret = @ucome.group_ex(@sid)
+    if ret.empty?
+      display("提出物が見当たりません。")
+    else
+      display(ret.join("<br>"))
+    end
+>>>>>>> master
   end
 
   def quit
@@ -165,7 +182,7 @@ class Icome
   end
 
   def xcowsay(s)
-    system("xcowsay --at=200,100 '#{s}'")
+    system("xcowsay --at=200,100 --reading-speed=1000 '#{s}'")
   end
 
   def display(s)
