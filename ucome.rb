@@ -66,6 +66,7 @@ class Ucome
     end
   end
 
+  # FIXME, ダサい。
   def sid2gid(sid)
     if ret = @ds["rb_2016"].find({status: 1, m1: sid}).first
       ret[:gid]
@@ -79,12 +80,15 @@ class Ucome
   end
 
   def group_ex(sid)
-    sid = '15108012'
+    sid="15108012"
     gid = sid2gid(sid)
     if gid.nil?
-      "見つからないよ。"
+      ["グループが見つからないよ。"]
     else
-      "gid#{gid}だな。"
+      ret = @ds["as_2016"].find({gid: gid}, {num: 1}).
+              map{|x| x[:num]}
+      puts "ret: #{ret}"
+      [ "gid #{gid}:"] + ret
     end
   end
 

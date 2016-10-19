@@ -103,7 +103,7 @@ class Icome
     end
   end
 
-  # 個人課題、提出状況は ucome に聞かないと。
+  # FIXME: メソッド名は personal_ex がいいと思う。
   def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
@@ -120,7 +120,7 @@ class Icome
     if ret.empty?
       display("提出物が見当たりません。")
     else
-      display(ret.sort.join("<br>"))
+      display(ret.join("<br>"))
     end
   end
 

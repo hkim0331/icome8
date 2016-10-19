@@ -1,8 +1,11 @@
 #!/bin/sh
 if [ $# -eq 0 ]; then
-    MONGO='mongodb://dbs.melt.kyutech.ac.jp/ucome' \
-         UCOME='druby://150.69.90.81:9007' ./ucome.rb
+    MONGO='mongodb://dbs.melt.kyutech.ac.jp:27017/ucome' \
+         UCOME='druby://150.69.90.81:9007' \
+         ./ucome.rb
 else
-    DEBUG=1 MONGO='mongodb://127.0.0.1/ucome' \
-         UCOME='druby://127.0.0.1:9007' ./ucome.rb $@
+    DEBUG=1 \
+         MONGO='mongodb://127.0.0.1:27017/ucome' \
+         UCOME='druby://127.0.0.1:9007' \
+         ./ucome.rb
 fi
