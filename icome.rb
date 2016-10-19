@@ -114,6 +114,16 @@ class Icome
     end
   end
 
+  # FIXME: object_id から日付を取り出せないか？
+  def group_ex()
+    ret = @ucome.group_ex(@sid)
+    if ret.empty?
+      display("提出物が見当たりません。")
+    else
+      display(ret.sort.join("<br>"))
+    end
+  end
+
   def quit
     java.lang.System.exit(0)
   end
