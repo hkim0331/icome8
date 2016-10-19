@@ -1,5 +1,5 @@
 #!/bin/sh
 
-/usr/local/bin/mongod --config ./mongo.conf
+exec /usr/local/bin/mongod --config ./mongo.conf
 
 

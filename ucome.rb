@@ -15,7 +15,7 @@ ucome #{VERSION}
 
 $ ucome [--debug]
         [--mongodb mongodb://server:port/db]
-        [--druby druby://ip_address:port]
+        [--ucome druby://my_ip_address:port]
 
 EOF
   exit(1)
@@ -24,7 +24,7 @@ end
 class Ucome
   attr_reader :reset_count
 
-  def initialize(mongo = 'mongodb://localhost/ucome')
+  def initialize(mongo = 'mongodb://127.0.0.1/test')
     if $debug || !!ENV['DEBUG']
       @upload = "./upload"
       logger       = Logger.new(STDERR)
@@ -42,26 +42,14 @@ class Ucome
     @next = -1
   end
 
-  #
-  # mongodb interface
-  #
-  def create(sid, uid, uhour)
-    @cl.insert_one({sid: sid, uid: uid, uhour: uhour, icome: []})
+  def insert(sid, uhour, date, ip)
+    @cl.insert_one({sid: sid, uhour: uhour, date: date, ip: ip})
   end
 
-  def update(sid, uhour, date, ip)
-    @cl.update_one({sid: sid, uhour: uhour},
-                   {"$addToSet" => {icome: [date, ip]}})
-  end
-
-  def find_icome(sid, uhour)
-    ret = @cl.find({sid: sid, uhour: uhour})
-    # CHECK: should return false?
-    if ret.first.nil?
-      []
-    else
-      ret.first[:icome]         # returns [[date1,ip1],[date2,ip2,...]]
-    end
+  #@cl.find() returns a View instance.
+  def find_date_ip(sid, uhour)
+    @cl.find({sid: sid, uhour: uhour}, {date: 1, ip: 1}).
+      map{|x| [x[:date], x[:ip]]}
   end
 
   # 個人課題の提出状況。
@@ -107,7 +95,7 @@ class Ucome
   def mongo
     @mongo
   end
-  
+
   def push(cmd)
     @commands.push({status: :enable, command: cmd})
   end
@@ -130,6 +118,11 @@ class Ucome
 
   def clear
     @commands = []
+  end
+
+  # for checking ucome availability
+  def ping
+    "pong"
   end
 
 end

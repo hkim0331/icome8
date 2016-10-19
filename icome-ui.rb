@@ -45,13 +45,9 @@ class UI
     frame.set_default_close_operation(JFrame::DO_NOTHING_ON_CLOSE)
 
     @jpanel = JPanel.new
-#    @jpanel.setBackground(Color.lightGray)
-
     menu = JPanel.new
     menu.set_layout(BoxLayout.new(menu, BoxLayout::Y_AXIS))
-
     menu.add(common_menu)
-
     if @debug
       menu.add(gtypist_menu)
       menu.add(robocar_menu)
@@ -86,6 +82,8 @@ class UI
     end
     panel.add(button)
 
+    # 詳細ボタン
+    # 日付の他に時刻、シートが記録されている。
     if @debug
       button = JButton.new('Quit')
       button.add_action_listener do |e|

@@ -1,11 +1,11 @@
 # icome8
 
-icome version 8.
-rewrote icome7.
+icome version 8, which is version up from icome7.
 
-* 2016-09-08 release 1.0.0
-* 2016-09-08 hotfix 1.0.1 ucome を (cd icome8 && make start) でスタートさせる。
-
+* 2016-09-08 1.0.0.
+* 2016-09-08 1.0.1, ucome を (cd icome8 && make start) でスタートさせる。
+* 2016-09-08 1.0.2, exec
+* 2016-09-08 1.0.3, メニューにブロックの状況に応じて赤で囲み
 
 ## README
 
@@ -25,8 +25,8 @@ I use,
 ```sh
 localhost$ ./mongodb-start.sh
 localhost$ ./ucome --debug
-localhost$ ./icome --debug
 localhost$ ./acome --debug
+localhost$ ./icome.rb --debug
 ```
 
 ## production
@@ -34,7 +34,8 @@ localhost$ ./acome --debug
 ## GitHub
 
 https://github.com/hkim0331/icome8.git
-git@github.com:hkim0331/icome8.git
+
+ssh://git@github.com:hkim0331/icome8.git
 
 ## author
 
@@ -42,4 +43,3 @@ hiroshi.kimura.0331@gmail.com
 
 ---
 hkimura.
-

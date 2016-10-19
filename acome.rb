@@ -9,13 +9,13 @@ def usage
 acome #{VERSION}
 # usage:
 
-$ acome [--debug] [--druby druby://ucome_ip:port]
+$ acome [--debug] [--ucome druby://ucome_ip:port]
 
 # online methods
 
   [display|dialog|xcowsay] message
   upload file
-  download file
+  download file (not yet)
   exec command
   reset n (BUG: infinite loop)
 
