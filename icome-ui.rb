@@ -82,8 +82,12 @@ class UI
     end
     panel.add(button)
 
-    # 詳細ボタン
-    # 日付の他に時刻、シートが記録されている。
+    button = JButton.new('recover firefox')
+    button.add_action_listener do |e|
+      @icome.firefox_recover()
+    end
+    panel.add(button)
+
     if @debug
       button = JButton.new('Quit')
       button.add_action_listener do |e|
@@ -169,7 +173,7 @@ class UI
 
     button = JButton.new('個人課題')
     button.add_action_listener do |e|
-      @icome.personal
+      @icome.personal_ex()
     end
     panel.add(button)
 
