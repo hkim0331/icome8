@@ -45,4 +45,9 @@ stop:
 clean:
 	${RM} *~ .#* *.bak nohup.out
 
-
+# 別々の場所で起動するように。
+# debug:
+# 	/usr/local/bin/mongod --config ./mongo.conf
+# 	./ucome --debug
+# 	./acome --debug
+# 	./icome.rb --debug
