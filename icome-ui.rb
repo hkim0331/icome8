@@ -98,11 +98,12 @@ class UI
     panel = JPanel.new
     panel.set_layout(BoxLayout.new(panel, BoxLayout::Y_AXIS))
 
-    button = JButton.new('5/18 gtypist')
-    button.add_action_listener do |e|
-      gtypist('May 18')
-    end
-    panel.add(button)
+    # 2016
+    # button = JButton.new('5/18 gtypist')
+    # button.add_action_listener do |e|
+    #   gtypist('May 18')
+    # end
+    # panel.add(button)
 
     %w{Q1 Q2 Q3 Q4 Q5}.each do |s|
       button = JButton.new("gtypist #{s}")
