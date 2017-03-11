@@ -103,8 +103,7 @@ class Icome
     end
   end
 
-  # FIXME: メソッド名は personal_ex がいいと思う。
-  def personal()
+    def personal_ex()
     ret = @ucome.personal(@sid)
     if ret.empty?
       display("秘密裡に抜きます。<br>ファイルを指定した名前でセーブすること。<br>"+
@@ -124,6 +123,11 @@ class Icome
     end
   end
 
+  def firefox_recover(e)
+    system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
+    display("これでもダメなら hkimura にすがれ。")
+  end
+  
   def quit
     java.lang.System.exit(0)
   end
