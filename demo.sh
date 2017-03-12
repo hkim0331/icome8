@@ -1,5 +1,6 @@
 #!/bin/sh
 # standalone のデモ環境
+# FIXME: demo.sh stop などで起動したプロセスをきちんと終わる。
 
 mongod --config ./mongo.conf &
 # or

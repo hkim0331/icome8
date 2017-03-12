@@ -7,19 +7,16 @@ require 'socket'
 require_relative 'icome-common'
 require_relative 'icome-ui'
 
- def usage
+def usage
   print <<EOU
 icome #{VERSION}
 # usage
-
 $ icome [--debug] [--ucome druby://ucome_ip:port]
-
 EOU
   exit(1)
 end
 
 class Icome
-
   def initialize(ucome)
     begin
      ucome.ping
