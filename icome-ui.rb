@@ -82,8 +82,12 @@ class UI
     end
     panel.add(button)
 
-    # 詳細ボタン
-    # 日付の他に時刻、シートが記録されている。
+    button = JButton.new('Firefox 復旧')
+    button.add_action_listener do |e|
+      @icome.firefox_recover()
+    end
+    panel.add(button)
+
     if @debug
       button = JButton.new('Quit')
       button.add_action_listener do |e|
@@ -97,13 +101,6 @@ class UI
   def gtypist_menu
     panel = JPanel.new
     panel.set_layout(BoxLayout.new(panel, BoxLayout::Y_AXIS))
-
-    # 2016
-    # button = JButton.new('5/18 gtypist')
-    # button.add_action_listener do |e|
-    #   gtypist('May 18')
-    # end
-    # panel.add(button)
 
     %w{Q1 Q2 Q3 Q4 Q5}.each do |s|
       button = JButton.new("gtypist #{s}")
@@ -121,7 +118,6 @@ class UI
       system("#{open} #{uri} &")
     end
     panel.add(button)
-
     panel
   end
 
@@ -169,7 +165,7 @@ class UI
 
     button = JButton.new('個人課題')
     button.add_action_listener do |e|
-      @icome.personal
+      @icome.personal_ex()
     end
     panel.add(button)
 
