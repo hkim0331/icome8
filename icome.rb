@@ -123,11 +123,11 @@ class Icome
     end
   end
 
-  def firefox_recover(e)
+  def firefox_recover()
     system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
     display("これでもダメなら hkimura にすがれ。")
   end
-  
+
   def quit
     java.lang.System.exit(0)
   end
