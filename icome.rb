@@ -7,19 +7,16 @@ require 'socket'
 require_relative 'icome-common'
 require_relative 'icome-ui'
 
- def usage
+def usage
   print <<EOU
 icome #{VERSION}
 # usage
-
 $ icome [--debug] [--ucome druby://ucome_ip:port]
-
 EOU
   exit(1)
 end
 
 class Icome
-
   def initialize(ucome)
     begin
      ucome.ping
@@ -103,8 +100,7 @@ class Icome
     end
   end
 
-  # FIXME: メソッド名は personal_ex がいいと思う。
-  def personal()
+    def personal_ex()
     ret = @ucome.personal(@sid)
     if ret.empty?
       display("秘密裡に抜きます。<br>ファイルを指定した名前でセーブすること。<br>"+
@@ -122,6 +118,11 @@ class Icome
     else
       display(ret.join("<br>"))
     end
+  end
+
+  def firefox_recover()
+    system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
+    display("これでもダメなら hkimura にすがれ。")
   end
 
   def quit
