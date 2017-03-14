@@ -66,7 +66,7 @@ class Ucome
     end
   end
 
-  # FIXME, ダサい。
+  # FIXME, ダサい。データベースの設計がまずい。
   def sid2gid(sid)
     if ret = @ds["rb_2016"].find({status: 1, m1: sid}).first
       ret[:gid]
