@@ -175,6 +175,13 @@ class UI
       @icome.group_ex()
     end
     panel.add(button)
+
+    button = JButton.new('LPCXpresso 修復')
+    button.add_action_listener do |e|
+      @icome.lpcxpresso_recover()
+    end
+    panel.add(button)
+
     panel
   end
 
