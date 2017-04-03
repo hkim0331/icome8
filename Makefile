@@ -24,8 +24,9 @@ isc:
 acome:
 	@echo use ./acome to launch.
 
-ucome:
-	install ucome.rb icome-common.rb /srv/ucome/bin
+install-ucome:
+	cp ucome.rb icome-common.rb /srv/ucome/bin
+	chmod +x /srv/ucome/bin/ucome
 
 start:
 	MONGO='mongodb://127.0.0.1/ucome' \
