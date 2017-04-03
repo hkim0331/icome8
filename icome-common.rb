@@ -2,8 +2,9 @@ APP_NAME="icome8"
 VERSION="1.4.2"
 UPDATE="2017-03-11"
 
+
 MONGO='mongodb://127.0.0.1:27017/ucome'
-UCOME='druby://150.69.90.82:9007'
+UCOME='druby://127.0.0.1:9007'
 
 INTERVAL = 2
 MAX_UPLOAD_SIZE  = 5000000

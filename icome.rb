@@ -38,10 +38,6 @@ class Icome
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
 
-    # under construction 2016-10-10
-    #    @gid =
-    #
-
     # FIXME:
     # これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
     # デバッグモードなので、まあいいやできるレベルだが。
@@ -244,8 +240,8 @@ while (arg = ARGV.shift)
     usage()
   end
 end
-
-puts ucome if $debug
+ucome = 'druby://127.0.0.1:9007' if $debug
+puts ucome
 DRb.start_service
 icome = Icome.new(DRbObject.new(nil, ucome))
 icome.start

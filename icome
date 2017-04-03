@@ -12,7 +12,7 @@ if [ -f /home/t/hkimura/icome8/icome.rb ]; then
     ICOME=/home/t/hkimura/icome8/icome.rb
     UCOME='druby://150.69.90.82:9007' nohup ${ICOME} 2>/dev/null &
 else
-    ./icome.rb --debug --ucome druby://150.69.90.81:9007 &
+    DEBUG=1 ./icome.rb
 fi
 
 # 2017-03-12, この nohup の意味は？
