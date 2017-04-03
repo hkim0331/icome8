@@ -10,7 +10,7 @@ echo icome の起動には 5 秒くらいかかります。
 
 if [ -f /home/t/hkimura/icome8/icome.rb ]; then
     ICOME=/home/t/hkimura/icome8/icome.rb
-    UCOME='druby://150.69.90.81:9007' nohup ${ICOME} 2>/dev/null &
+    UCOME='druby://150.69.90.82:9007' nohup ${ICOME} 2>/dev/null &
 else
     ./icome.rb --debug --ucome druby://150.69.90.81:9007 &
 fi

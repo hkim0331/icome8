@@ -15,39 +15,24 @@ all:
 
 isc:
 	if [ ! -d /edu ]; then \
-		echo must exec on isc; \
-		exit 1; \
+		@echo must exec on isc; \
+	else ;\
+		install -m 0755 icome ${ISC_BIN}; \
 	fi
-# 	if [ ! -d ${ISC} ]; then \
-# 		mkdir ${ISC}; \
-# 	fi
-# 	install -m 0755 icome.rb ${ISC}
-# 	install -m 0644 icome-common.rb ${ISC}
-# 	install -m 0644 icome-ui.rb ${ISC}
-	install -m 0755 icome ${ISC_BIN}
 
 acome:
 	@echo use ./acome to launch.
 
-vm2016:
-	@echo "install ucome by 'cd /srv && ln -sf /home/hkim/icome8 icome8'"
-	@echo "check ucome port are opened './ufw.sh'"
+ucome:
+	install ucome.rb icome-common.rb /srv/ucome/bin
 
-# start ucome in production mode.
 start:
-	MONGO='mongodb://dbs.melt.kyutech.ac.jp/ucome' \
-	UCOME='druby://150.69.90.81:9007' \
-	nohup ./ucome.rb 2>/dev/null &
+ 	MONGO='mongodb://127.0.0.1/ucome' \
+ 	UCOME='druby://150.69.90.81:9007' \
+ 	./ucome.rb 2> /srv/ucome/log/ucome.log
 
 stop:
 	kill `ps ax | grep '[u]come' | awk '{print $$1}'`
 
 clean:
 	${RM} *~ .#* *.bak nohup.out
-
-# 別々の場所で起動するように。
-# debug:
-# 	/usr/local/bin/mongod --config ./mongo.conf
-# 	./ucome --debug
-# 	./acome --debug
-# 	./icome.rb --debug
