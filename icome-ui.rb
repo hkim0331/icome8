@@ -82,7 +82,7 @@ class UI
     end
     panel.add(button)
 
-    button = JButton.new('Firefox 復旧')
+    button = JButton.new('Firefox 修復')
     button.add_action_listener do |e|
       @icome.firefox_recover()
     end
@@ -110,14 +110,15 @@ class UI
       panel.add(button)
     end
 
-    button = JButton.new("中間テスト")
-    uri = "http://literacy-2016.melt.kyutech.ac.jp/fcgi/abb2.cgi"
-    button.add_action_listener do |e|
-      open = osx?() ? "open" : "/usr/bin/firefox"
-      puts "#{open} #{uri}" if @debug
-      system("#{open} #{uri} &")
-    end
-    panel.add(button)
+    # button = JButton.new("中間テスト")
+    # uri = "http://literacy-2016.melt.kyutech.ac.jp/fcgi/abb2.cgi"
+    # button.add_action_listener do |e|
+    #   open = osx?() ? "open" : "/usr/bin/firefox"
+    #   puts "#{open} #{uri}" if @debug
+    #   system("#{open} #{uri} &")
+    # end
+    # panel.add(button)           
+
     panel
   end
 
@@ -174,6 +175,13 @@ class UI
       @icome.group_ex()
     end
     panel.add(button)
+
+    button = JButton.new('LPCXpresso 修復')
+    button.add_action_listener do |e|
+      @icome.lpcxpresso_recover()
+    end
+    panel.add(button)
+
     panel
   end
 

@@ -103,8 +103,9 @@ class Icome
     def personal_ex()
     ret = @ucome.personal(@sid)
     if ret.empty?
-      display("秘密裡に抜きます。<br>ファイルを指定した名前でセーブすること。<br>"+
-             "間違うと回収できないよ。")
+      display("秘密裡に抜きます。<br>"+
+              "ファイルを指定した名前でセーブすること。<br>"+
+              "間違うと回収できないよ。")
     else
       display(ret.sort.join("<br>"))
     end
@@ -122,7 +123,13 @@ class Icome
 
   def firefox_recover()
     system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
-    display("これでもダメなら hkimura にすがれ。")
+    display("トライしてみた。<br>"+
+            "firefox を再起動してみれ。<br>これでもダメなら hkimura を呼ぶ。")
+  end
+
+  def lpcxpresso_recover()
+    system("find ~/LPCXresso/workspace -name .lock -exec rm {} \\;")
+    display("lpcxpresso & してみよう。ダメなら hkimura を呼ぶしか。")
   end
 
   def quit
