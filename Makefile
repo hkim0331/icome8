@@ -9,9 +9,10 @@
 ISC_BIN=/edu/bin
 
 all:
-	@echo "* 'make isc' on isc to install icome."
-	@echo "   use acome from icome8 installed directory."
-	@echo "* 'make vm2016' on vm2016 to install ucome."
+	@echo "'make isc' on isc to install icome client."
+	@echo "'make ucome' on server to install/setup ucome."
+	@echo "'make start' start the installed server ucome"
+	@echo "acome from installed isc folder (hkimura only)"
 
 isc:
 	if [ ! -d /edu ]; then \
@@ -27,9 +28,9 @@ ucome:
 	install ucome.rb icome-common.rb /srv/ucome/bin
 
 start:
- 	MONGO='mongodb://127.0.0.1/ucome' \
- 	UCOME='druby://150.69.90.81:9007' \
- 	./ucome.rb 2> /srv/ucome/log/ucome.log
+	MONGO='mongodb://127.0.0.1/ucome' \
+	UCOME='druby://150.69.90.81:9007' \
+	./ucome.rb 2> /srv/ucome/log/ucome.log
 
 stop:
 	kill `ps ax | grep '[u]come' | awk '{print $$1}'`
