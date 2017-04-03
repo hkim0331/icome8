@@ -1,21 +1,12 @@
 #!/bin/sh
 # standalone のデモ環境
-# FIXME: demo.sh stop などで起動したプロセスをきちんと終わる。
 
-mongod --config ./mongo.conf &
-# or
-#ssh -f -N -L 27017:localhost:27017 $1
-
-sleep 1
+# try ipv6
 # ucome
-#DEBUG=1 MONGO='mongodb://[::1]:27017/test'  UCOME='druby://127.0.0.1:9007' ./ucome.rb &
-./ucome --debug &
+DEBUG=1 MONGO='mongodb://[::1]:27017/test'  UCOME='druby://127.0.0.1:9007' ./ucome.rb &
 
-sleep 1
 # acome
-#DEBUG=1 UCOME='druby://127.0.0.1:9007' ./acome.rb &
-./acome --debug &
+DEBUG=1 UCOME='druby://127.0.0.1:9007' ./acome.rb &
 
-sleep 1
 # icome
-./icome.rb --debug
+./icome.rb --debug &

@@ -37,6 +37,7 @@ class Icome
 
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
+
     # FIXME:
     # これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
     # デバッグモードなので、まあいいやできるレベルだが。
@@ -64,9 +65,8 @@ class Icome
       if @ui.query?("#{uhour} を受講しますか？")
         puts "will call @ucome.insert" if $debug
         @ucome.insert(@sid, uhour, today, @ip)
-      # FIXME: ここで myid を付与したい。
-      # @ucome.create_myid(@sid, @uid)
-      # ってのは？
+      # FIXME: ここで myid を付与したい。面倒か？
+      #@ucome.create_myid(@sid, @uid)
       else
         return
       end
@@ -100,7 +100,8 @@ class Icome
     end
   end
 
-    def personal_ex()
+  # FIXME: メソッド名は personal_ex がいいと思う。
+  def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
       display("秘密裡に抜きます。<br>"+
@@ -239,8 +240,8 @@ while (arg = ARGV.shift)
     usage()
   end
 end
-
-puts ucome if $debug
+ucome = 'druby://127.0.0.1:9007' if $debug
+puts ucome
 DRb.start_service
 icome = Icome.new(DRbObject.new(nil, ucome))
 icome.start

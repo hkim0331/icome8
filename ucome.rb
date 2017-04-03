@@ -10,13 +10,10 @@ require_relative 'icome-common'
 def usage()
   print <<EOF
 ucome #{VERSION}
-
-# usage:
-
+usage:
 $ ucome [--debug]
         [--mongodb mongodb://server:port/db]
         [--ucome druby://my_ip_address:port]
-
 EOF
   exit(1)
 end
@@ -66,7 +63,7 @@ class Ucome
     end
   end
 
-  # FIXME, ダサい。データベースの設計がまずい。
+  # FIXME, ダサい。データベースの設計がまずいのが原因か。
   def sid2gid(sid)
     if ret = @ds["rb_2016"].find({status: 1, m1: sid}).first
       ret[:gid]
@@ -177,5 +174,5 @@ if __FILE__ == $0
   puts "druby: #{DRb.uri}"
   DRb.thread.join
 else
-  puts "debug mode(pry?)"
+  puts "debug mode(irb?)"
 end
