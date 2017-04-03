@@ -117,7 +117,7 @@ class UI
     #   puts "#{open} #{uri}" if @debug
     #   system("#{open} #{uri} &")
     # end
-    # panel.add(button)           
+    # panel.add(button)
 
     panel
   end
