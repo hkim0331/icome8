@@ -27,8 +27,8 @@ class Ucome
       logger       = Logger.new(STDERR)
       logger.level = Logger::DEBUG
     else
-      @upload = "/srv/icome8/upload"
-      logger       = Logger.new("/srv/icome8/log/ucome.log", 5, 10*1024)
+      @upload = "/srv/ucome/upload"
+      logger       = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
       logger.level = Logger::INFO
     end
     # determin mongodb collection from launch time info.
@@ -153,7 +153,7 @@ end
 # main starts here.
 #
 $debug = (ENV['DEBUG'] || false)
-druby  = (ENV['UCOME'] || UCOME)
+druby  = (ENV['DRUBY'] || UCOME)
 mongo  = (ENV['MONGO'] || MONGO)
 
 while (arg = ARGV.shift)
