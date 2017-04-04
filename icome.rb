@@ -18,27 +18,28 @@ end
 
 class Icome
   def initialize(ucome, debug)
-    begin
-     ucome.ping
-    rescue
-      puts "ucome does not respond. will quit."
-      quit
-      DRb.thread.join
-    end
     @debug = debug
     puts "debug mode" if @debug
     @ui = UI.new(self, @debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
     @ucome = ucome
-
+    self.ping
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
-
-    # FIXME:
-    # これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
+    # FIXME: これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
     @icome8_dir = @debug ? "icome8" : File.expand_path("~/.icome8")
-    #
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
+  end
+
+  def ping
+    begin
+     @ucome.ping
+    rescue
+      puts $!
+      @ui.dialog "ucome does not respond. will quit."
+      self.quit
+      DRb.thread.join
+    end
   end
 
   def icome
@@ -182,9 +183,12 @@ class Icome
     system("xcowsay --at=200,100 --reading-speed=1000 '#{s}'")
   end
 
+  def has_xcowsay?()
+    File.exists?("/edu/bin/xcowsay") or File.exists?("/usr/games/xcowsay")
+  end
+
   def display(s)
-    puts "display: #{s}" if @debug
-    if linux?()
+    if has_xcowsay?()
       xcowsay(s.gsub(/<br>/,"\n"))
     else
       @ui.dialog(s)

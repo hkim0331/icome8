@@ -124,6 +124,7 @@ class UI
 
   def gtypist(pat)
     gtypist = "#{ENV['HOME']}/.gtypist"
+    message = ""
     if File.exists?(gtypist)
       ret = []
       File.foreach(gtypist) do |line|
@@ -131,10 +132,11 @@ class UI
           ret.push "#{line.chomp}<br>"
         end
       end
-      dialog(ret.join)
+      message = ret.join
     else
-      dialog("do gtypist!")
+      message = "do gtypist!"
     end
+    @icome.display(message)
   end
 
   def gtypist_all()
@@ -142,7 +144,7 @@ class UI
     IO.popen("./bin/gtypist-check.rb") do |p|
       ret = p.readlines.map{|l| l.chomp}
     end
-    dialog(ret.join('<br>'))
+    @icome.display(ret.join('<br>'))
   end
 
   def gtypist_stage(s)
@@ -157,7 +159,7 @@ class UI
     elsif ret.length == 0
       greeting = "<p style='color:blue;'>やっとかないと平常点つかないよ。</p>"
     end
-    dialog(ret.join('<br>') + greeting)
+    @icome.display(ret.join('<br>') + greeting)
   end
 
   def robocar_menu
