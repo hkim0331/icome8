@@ -31,8 +31,9 @@ def uhour(time)
   time.strftime("%a") + hour(time.strftime("%T")).to_s
 end
 
+# FIXME
 def this_term()
-  "q3"
+  "q1"
 end
 
 # academic year. used by ucome only.
