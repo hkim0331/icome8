@@ -1,6 +1,7 @@
 APP_NAME="icome8"
-VERSION="1.4.2"
-UPDATE="2017-03-11"
+VERSION="1.5.2"
+UPDATE="2017-04-04"
+
 
 MONGO='mongodb://127.0.0.1:27017/ucome'
 UCOME='druby://127.0.0.1:9007'
@@ -30,8 +31,9 @@ def uhour(time)
   time.strftime("%a") + hour(time.strftime("%T")).to_s
 end
 
+# FIXME
 def this_term()
-  "q3"
+  "q1"
 end
 
 # academic year. used by ucome only.
