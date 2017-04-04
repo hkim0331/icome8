@@ -1,5 +1,3 @@
 #!/bin/sh
-# exec すると Makefile 中で使えない。
+# exec すると Makefile 中で使えないよ。
 exec /usr/local/bin/mongod --config ./mongo.conf
-
-

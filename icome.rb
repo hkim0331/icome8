@@ -7,19 +7,16 @@ require 'socket'
 require_relative 'icome-common'
 require_relative 'icome-ui'
 
- def usage
+def usage
   print <<EOU
 icome #{VERSION}
 # usage
-
 $ icome [--debug] [--ucome druby://ucome_ip:port]
-
 EOU
   exit(1)
 end
 
 class Icome
-
   def initialize(ucome)
     begin
      ucome.ping
@@ -40,6 +37,7 @@ class Icome
 
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
+
     # FIXME:
     # これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
     # デバッグモードなので、まあいいやできるレベルだが。
@@ -67,9 +65,8 @@ class Icome
       if @ui.query?("#{uhour} を受講しますか？")
         puts "will call @ucome.insert" if $debug
         @ucome.insert(@sid, uhour, today, @ip)
-      # FIXME: ここで myid を付与したい。
-      # @ucome.create_myid(@sid, @uid)
-      # ってのは？
+      # FIXME: ここで myid を付与したい。面倒か？
+      #@ucome.create_myid(@sid, @uid)
       else
         return
       end
@@ -103,11 +100,13 @@ class Icome
     end
   end
 
-    def personal_ex()
+  # FIXME: メソッド名は personal_ex がいいと思う。
+  def personal()
     ret = @ucome.personal(@sid)
     if ret.empty?
-      display("秘密裡に抜きます。<br>ファイルを指定した名前でセーブすること。<br>"+
-             "間違うと回収できないよ。")
+      display("秘密裡に抜きます。<br>"+
+              "ファイルを指定した名前でセーブすること。<br>"+
+              "間違うと回収できないよ。")
     else
       display(ret.sort.join("<br>"))
     end
@@ -123,11 +122,17 @@ class Icome
     end
   end
 
-  def firefox_recover(e)
+  def firefox_recover()
     system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
-    display("これでもダメなら hkimura にすがれ。")
+    display("トライしてみた。<br>"+
+            "firefox を再起動してみれ。<br>これでもダメなら hkimura を呼ぶ。")
   end
-  
+
+  def lpcxpresso_recover()
+    system("find ~/LPCXresso/workspace -name .lock -exec rm {} \\;")
+    display("lpcxpresso & してみよう。ダメなら hkimura を呼ぶしか。")
+  end
+
   def quit
     java.lang.System.exit(0)
   end
@@ -235,8 +240,8 @@ while (arg = ARGV.shift)
     usage()
   end
 end
-
-puts ucome if $debug
+ucome = 'druby://127.0.0.1:9007' if $debug
+puts ucome
 DRb.start_service
 icome = Icome.new(DRbObject.new(nil, ucome))
 icome.start

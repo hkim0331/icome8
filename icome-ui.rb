@@ -82,7 +82,7 @@ class UI
     end
     panel.add(button)
 
-    button = JButton.new('recover firefox')
+    button = JButton.new('Firefox 修復')
     button.add_action_listener do |e|
       @icome.firefox_recover()
     end
@@ -102,13 +102,6 @@ class UI
     panel = JPanel.new
     panel.set_layout(BoxLayout.new(panel, BoxLayout::Y_AXIS))
 
-    # 2016
-    # button = JButton.new('5/18 gtypist')
-    # button.add_action_listener do |e|
-    #   gtypist('May 18')
-    # end
-    # panel.add(button)
-
     %w{Q1 Q2 Q3 Q4 Q5}.each do |s|
       button = JButton.new("gtypist #{s}")
       button.add_action_listener do |e|
@@ -117,14 +110,14 @@ class UI
       panel.add(button)
     end
 
-    button = JButton.new("中間テスト")
-    uri = "http://literacy-2016.melt.kyutech.ac.jp/fcgi/abb2.cgi"
-    button.add_action_listener do |e|
-      open = osx?() ? "open" : "/usr/bin/firefox"
-      puts "#{open} #{uri}" if @debug
-      system("#{open} #{uri} &")
-    end
-    panel.add(button)
+    # button = JButton.new("中間テスト")
+    # uri = "http://literacy-2016.melt.kyutech.ac.jp/fcgi/abb2.cgi"
+    # button.add_action_listener do |e|
+    #   open = osx?() ? "open" : "/usr/bin/firefox"
+    #   puts "#{open} #{uri}" if @debug
+    #   system("#{open} #{uri} &")
+    # end
+    # panel.add(button)
 
     panel
   end
@@ -182,6 +175,13 @@ class UI
       @icome.group_ex()
     end
     panel.add(button)
+
+    button = JButton.new('LPCXpresso 修復')
+    button.add_action_listener do |e|
+      @icome.lpcxpresso_recover()
+    end
+    panel.add(button)
+
     panel
   end
 
