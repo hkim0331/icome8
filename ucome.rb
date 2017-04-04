@@ -152,8 +152,8 @@ end
 # main starts here.
 #
 debug = (ENV['DEBUG'] || false)
-druby  = (ENV['UCOME'] || UCOME)
-mongo  = (ENV['MONGO'] || MONGO)
+druby = (ENV['UCOME'] || UCOME)
+mongo = (ENV['MONGO'] || MONGO)
 
 while (arg = ARGV.shift)
   case arg

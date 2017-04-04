@@ -1,5 +1,5 @@
 APP_NAME="icome8"
-VERSION="1.5.2"
+VERSION="1.5.1"
 UPDATE="2017-04-04"
 
 

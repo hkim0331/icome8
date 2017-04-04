@@ -234,21 +234,22 @@ end
 #
 # main starts here
 #
-$debug =(ENV['DEBUG'] || false)
-ucome = (ENV['UCOME'] || UCOME)
+$debug = (ENV['DEBUG'] || false)
+ucome  = (ENV['UCOME'] || UCOME)
 
 while (arg = ARGV.shift)
   case arg
   when /--debug/
     $debug = true
-  when /--(druby)|(uri)|(ucome)/
+  when /--(druby)|(ucome)/
     ucome = ARGV.shift
   else
     usage()
   end
 end
-ucome = 'druby://127.0.0.1:9007' if $debug
-puts ucome
+
+puts "ucome: #{ucome}"
+
 DRb.start_service
 icome = Icome.new(DRbObject.new(nil, ucome))
 icome.start
