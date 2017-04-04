@@ -128,12 +128,12 @@ class Icome
   def firefox_recover()
     system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
     display("トライしてみた。<br>"+
-            "firefox を再起動してみれ。<br>これでもダメなら hkimura を呼ぶ。")
+            "firefox を再起動してみれ。<br>ダメなら hkimura を呼ぶ。")
   end
 
   def lpcxpresso_recover()
     system("find ~/LPCXresso/workspace -name .lock -exec rm {} \\;")
-    display("lpcxpresso & してみよう。ダメなら hkimura を呼ぶしか。")
+    display("lpcxpresso & してみよう。ダメなら hkimura を呼ぶ。")
   end
 
   def quit
