@@ -172,7 +172,6 @@ if __FILE__ == $0
   DRb.start_service(ucome, Ucome.new(mongo, debug))
   if debug
     puts "ucome: #{ucome}"
-    puts "druby: #{DRb.uri}"
   end
   DRb.thread.join
 else

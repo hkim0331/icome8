@@ -1,7 +1,4 @@
 #!/bin/sh
+./acome.rb --ucome 'druby://127.0.0.1:9007'
 
-if [ $# -eq 0 ]; then
-    ./acome.rb
-else
-    DEBUG=1 UCOME='druby://127.0.0.1:9007' ./acome.rb $@
-fi
+
