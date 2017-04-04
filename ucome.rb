@@ -21,13 +21,13 @@ end
 class Ucome
   attr_reader :reset_count
 
-  def initialize(mongo,debug)
+  def initialize(mongo, debug)
     if debug
-      @upload = "./upload"
+      @upload      = "./upload"
       logger       = Logger.new(STDERR)
       logger.level = Logger::DEBUG
     else
-      @upload = "/srv/ucome/upload"
+      @upload      = "/srv/ucome/upload"
       logger       = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
       logger.level = Logger::INFO
     end
@@ -152,7 +152,7 @@ end
 # main starts here.
 #
 debug = (ENV['DEBUG'] || false)
-druby = (ENV['UCOME'] || UCOME)
+ucome = (ENV['UCOME'] || UCOME)
 mongo = (ENV['MONGO'] || MONGO)
 
 while (arg = ARGV.shift)
@@ -162,15 +162,18 @@ while (arg = ARGV.shift)
   when /--mongo/
     mongo = ARGV.shift
   when /--(druby)|(ucome)/
-    druby = ARGV.shift
+    ucomey = ARGV.shift
   else
     usage()
   end
 end
 
 if __FILE__ == $0
-  DRb.start_service(druby, Ucome.new(mongo, debug))
-  puts "druby: #{DRb.uri}"
+  DRb.start_service(ucome, Ucome.new(mongo, debug))
+  if debug
+    puts "ucome: #{ucome}"
+    puts "druby: #{DRb.uri}"
+  end
   DRb.thread.join
 else
   puts "debug mode, use irb?"

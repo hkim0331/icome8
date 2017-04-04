@@ -36,14 +36,14 @@ end
 #
 
 debug = (ENV['DEBUG'] || false)
-druby = (ENV['UCOME'] || UCOME)
+ucome = (ENV['UCOME'] || UCOME)
 
 while (arg = ARGV.shift)
   case arg
   when /--debug/
     debug = true
-  when /--(druby)|(uri)|(ucome)/
-    druby = ARGV.shift
+  when /--(ucome)|(druby)/
+    ucome = ARGV.shift
   else
     usage()
     exit(1)
@@ -51,32 +51,34 @@ while (arg = ARGV.shift)
 end
 
 DRb.start_service
-ucome = DRbObject.new(nil, druby)
+@ucome = DRbObject.new(nil, ucome)
 
 Thread.new do
-  puts druby
+  puts "ucome: #{ucome}"
   puts "type ^C to quit"
   while (print "> "; cmd = STDIN.gets.strip)
     case cmd
 
     # commands to icome
     when /^(display)|(dialog)|(xcowsay)|(upload)|(download)|(exec)|(reset)/
-      ucome.push(cmd)
+      @ucome.push(cmd)
 
     # commands from acome
     when /list/
-      puts ucome.list
+      puts @ucome.list
     when /^enable\s+(\d+)/
-      ucome.enable($1.to_i)
+      @ucome.enable($1.to_i)
     when /^disable\s+(\d+)/
-      ucome.disable($1.to_i)
+      @ucome.disable($1.to_i)
     when /^clear/
-      ucome.clear
+      @ucome.clear
 
-    when /^(druby)|(ucome)/
-      puts druby
+    when /^(ucome)|(druby)/
+      puts ucome
+
     when /^mongo/
-      puts ucome.mongo
+      puts @ucome.mongo
+
     when /^version/
       puts VERSION
 

@@ -20,14 +20,8 @@ acome:
 	@echo use ./acome to launch.
 
 ucome-install:
-	cp ucome.sh ucome.rb icome-common.rb /srv/ucome/bin
-	chmod +x /srv/ucome/bin/ucome.{sh.rb}
-
-# for debug. name of start is inappropriate.
-ucome-debug:
-	MONGO='mongodb://127.0.0.1/ucome' \
-	UCOME='druby://150.69.90.82:9007' \
-	./ucome.rb 2> /srv/ucome/log/ucome.log
+	cp ucome.rb icome-common.rb /srv/ucome/bin
+	chmod +x /srv/ucome/bin/ucome.rb
 
 stop:
 	kill `ps ax | grep '[u]come' | awk '{print $$1}'`
