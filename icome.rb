@@ -17,7 +17,7 @@ EOU
 end
 
 class Icome
-  def initialize(ucome)
+  def initialize(ucome, debug)
     begin
      ucome.ping
     rescue
@@ -25,14 +25,10 @@ class Icome
       quit
       DRb.thread.join
     end
-    puts "debug mode" if $debug
-    @ui = UI.new(self, $debug)
+    @debug = debug
+    puts "debug mode" if @debug
+    @ui = UI.new(self, @debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
-    # unless $debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
-    #   display("#{@ip}<br>教室外から icome 出来ません。<br>さようなら。")
-    #   quit
-    #   DRb.thread.join
-    # end
     @ucome = ucome
 
     @uid = ENV['USER']
@@ -40,27 +36,25 @@ class Icome
 
     # FIXME:
     # これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
-    # デバッグモードなので、まあいいやできるレベルだが。
-    @icome8_dir = $debug ? "icome8" : File.expand_path("~/.icome8")
+    @icome8_dir = @debug ? "icome8" : File.expand_path("~/.icome8")
     #
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
   end
 
   def icome
-    unless $debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
-      display("#{@ip}<br>教室外から icome 出来ません。<br>さようなら。")
+    unless @debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
+      display("#{@ip}<br>教室外からできません。")
       return
-#      quit
-#      DRb.thread.join
     end
 
     term  = this_term()
     now = Time.now
     today = now.strftime("%F")
     uhour = uhour(now)
-    if $debug
+    if @debug
       puts "#{term} #{today} #{uhour}"
     else
+      # CHECK, should be function.
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
         (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thu1)|(thu4)/i)
         display("授業時間じゃありません。")
@@ -70,7 +64,7 @@ class Icome
     records = @ucome.find_date_ip(@sid, uhour)
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
-        puts "will call @ucome.insert" if $debug
+        puts "will call @ucome.insert" if @debug
         @ucome.insert(@sid, uhour, today, @ip)
       # FIXME: ここで myid を付与したい。面倒か？
       #@ucome.create_myid(@sid, @uid)
@@ -159,7 +153,10 @@ class Icome
 
   # rename as ucome_to_isc?
   def download(remote, local)
-    puts "#{__method__} #{remote}, #{local}" if $debug
+    if @debug
+      puts "#{__method__} #{remote}, #{local}"
+      puts "not yet implemented"
+    end
   end
 
   # rename as isc_to_ucome?
@@ -186,7 +183,7 @@ class Icome
   end
 
   def display(s)
-    puts "display: #{s}" if $debug
+    puts "display: #{s}" if @debug
     if linux?()
       xcowsay(s.gsub(/<br>/,"\n"))
     else
@@ -195,13 +192,13 @@ class Icome
   end
 
   def start
-    puts "start" if $debug
+    puts "start" if @debug
     Thread.new do
       i = 0
       while true do
         sleep INTERVAL
         cmd = @ucome.fetch(i)
-        puts cmd if $debug and (not cmd.nil?)
+        puts cmd if @debug and (not cmd.nil?)
         unless cmd.nil?
           i += 1
           if cmd[:status] == :enable
@@ -234,13 +231,13 @@ end
 #
 # main starts here
 #
-$debug = (ENV['DEBUG'] || false)
-ucome  = (ENV['UCOME'] || UCOME)
+debug = (ENV['DEBUG'] || false)
+ucome = (ENV['UCOME'] || UCOME)
 
 while (arg = ARGV.shift)
   case arg
   when /--debug/
-    $debug = true
+    debug = true
   when /--(druby)|(ucome)/
     ucome = ARGV.shift
   else
@@ -249,8 +246,7 @@ while (arg = ARGV.shift)
 end
 
 puts "ucome: #{ucome}"
-
 DRb.start_service
-icome = Icome.new(DRbObject.new(nil, ucome))
+icome = Icome.new(DRbObject.new(nil, ucome), debug)
 icome.start
 DRb.thread.join

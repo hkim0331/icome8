@@ -21,13 +21,13 @@ end
 class Ucome
   attr_reader :reset_count
 
-  def initialize(mongo = MONGO)
-    if $debug || !!ENV['DEBUG']
-      @upload = "./upload"
+  def initialize(mongo, debug)
+    if debug
+      @upload      = "./upload"
       logger       = Logger.new(STDERR)
       logger.level = Logger::DEBUG
     else
-      @upload = "/srv/ucome/upload"
+      @upload      = "/srv/ucome/upload"
       logger       = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
       logger.level = Logger::INFO
     end
@@ -38,7 +38,6 @@ class Ucome
     @commands = []
     @cur = 0
     @next = -1
-    puts "mongodb: #{@mongo}"
   end
 
   def insert(sid, uhour, date, ip)
@@ -152,27 +151,29 @@ end
 #
 # main starts here.
 #
-$debug = (ENV['DEBUG'] || false)
-druby  = (ENV['DRUBY'] || UCOME)
-mongo  = (ENV['MONGO'] || MONGO)
+debug = (ENV['DEBUG'] || false)
+ucome = (ENV['UCOME'] || UCOME)
+mongo = (ENV['MONGO'] || MONGO)
 
 while (arg = ARGV.shift)
   case arg
   when /--debug/
-    $debug = true
+    debug = true
   when /--mongo/
     mongo = ARGV.shift
-  when /--(druby)|(uri)|(ucome)/
-    druby = ARGV.shift
+  when /--(druby)|(ucome)/
+    ucomey = ARGV.shift
   else
     usage()
   end
 end
 
 if __FILE__ == $0
-  DRb.start_service(druby, Ucome.new(mongo))
-  puts "druby: #{DRb.uri}"
+  DRb.start_service(ucome, Ucome.new(mongo, debug))
+  if debug
+    puts "ucome: #{ucome}"
+  end
   DRb.thread.join
 else
-  puts "debug mode(irb?)"
+  puts "debug mode, use irb?"
 end

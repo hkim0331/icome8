@@ -1,22 +1,10 @@
 #!/bin/sh -e
-#
-# rc.local
-#
-# This script is executed at the end of each multiuser runlevel.
-# Make sure that the script will "exit 0" on success or any other
-# value on error.
-#
-# In order to enable or disable this script just change the execution
-# bits.
-#
-# By default this script does nothing.
-
-if [ -e /srv/yatt/bin/yatt_monitor.rb ]; then
-  ruby /srv/yatt/bin/yatt_monitor.rb --log /srv/yatt/log/yatt.log &
-fi
+# must not overwrite original /etc/rc.local by this file.
 
 if [ -e /srv/ucome/bin/ucome.rb ]; then
-  DRUBY='druby://150.69.90.82:9007' /srv/ucome/bin/ucome.rb 2> /srv/ucome/log/ucome.log &
+    /srv/ucome/bin/ucome.rb \
+        --mongo 'mongodb://127.0.0.1/ucome' \
+        --ucome 'druby://150.69.90.82:9007'
 fi
 
 exit 0
