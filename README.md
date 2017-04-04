@@ -34,7 +34,6 @@ localhost$ ./icome.rb --debug
 ## GitHub
 
 https://github.com/hkim0331/icome8.git
-
 ssh://git@github.com:hkim0331/icome8.git
 
 ## author
