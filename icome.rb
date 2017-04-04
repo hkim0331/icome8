@@ -28,11 +28,11 @@ class Icome
     puts "debug mode" if $debug
     @ui = UI.new(self, $debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
-    unless $debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
-      display("#{@ip}<br>教室外から icome 出来ません。<br>さようなら。")
-      quit
-      DRb.thread.join
-    end
+    # unless $debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
+    #   display("#{@ip}<br>教室外から icome 出来ません。<br>さようなら。")
+    #   quit
+    #   DRb.thread.join
+    # end
     @ucome = ucome
 
     @uid = ENV['USER']
@@ -47,6 +47,13 @@ class Icome
   end
 
   def icome
+    unless $debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
+      display("#{@ip}<br>教室外から icome 出来ません。<br>さようなら。")
+      return
+#      quit
+#      DRb.thread.join
+    end
+
     term  = this_term()
     now = Time.now
     today = now.strftime("%F")

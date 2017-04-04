@@ -17,7 +17,7 @@ all:
 isc:
 	if [ ! -d /edu ]; then \
 		@echo must exec on isc; \
-	else ;\
+	else \
 		install -m 0755 icome ${ISC_BIN}; \
 	fi
 
