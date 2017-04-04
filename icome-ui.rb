@@ -122,22 +122,23 @@ class UI
     panel
   end
 
-  def gtypist(pat)
-    gtypist = "#{ENV['HOME']}/.gtypist"
-    message = ""
-    if File.exists?(gtypist)
-      ret = []
-      File.foreach(gtypist) do |line|
-        if line =~ /#{pat}/
-          ret.push "#{line.chomp}<br>"
-        end
-      end
-      message = ret.join
-    else
-      message = "do gtypist!"
-    end
-    @icome.display(message)
-  end
+  # nouse?
+  # def gtypist(pat)
+  #   gtypist = "#{ENV['HOME']}/.gtypist"
+  #   message = ""
+  #   if File.exists?(gtypist)
+  #     ret = []
+  #     File.foreach(gtypist) do |line|
+  #       if line =~ /#{pat}/
+  #         ret.push "#{line.chomp}<br>"
+  #       end
+  #     end
+  #     message = ret.join
+  #   else
+  #     message = "do gtypist!"
+  #   end
+  #   @icome.display(message)
+  # end
 
   def gtypist_all()
     ret = []
@@ -155,9 +156,11 @@ class UI
     end
     greeting = ""
     if ret.length >= len[s]
-      greeting = "<p style='color:red;'>CLEAR!!</p>"
+#      greeting = "<p style='color:red;'>CLEAR!!</p>"
+      greeting = "CLEAR!!"
     elsif ret.length == 0
-      greeting = "<p style='color:blue;'>やっとかないと平常点つかないよ。</p>"
+#      greeting = "<p style='color:blue;'>やっとかないと平常点つかないよ。</p>"
+      greeting = "やっとかないと平常点つかないよ。"
     end
     @icome.display(ret.join('<br>') + greeting)
   end

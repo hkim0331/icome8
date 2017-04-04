@@ -17,6 +17,7 @@ EOU
 end
 
 class Icome
+
   def initialize(ucome, debug)
     @debug = debug
     puts "debug mode" if @debug
@@ -33,7 +34,7 @@ class Icome
 
   def ping
     begin
-     @ucome.ping
+      @ucome.ping
     rescue
       puts $!
       @ui.dialog "ucome does not respond. will quit."
@@ -43,8 +44,9 @@ class Icome
   end
 
   def icome
+
     unless @debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
-      display("#{@ip}<br>教室外からできません。")
+      display("#{@ip}教室外からできません。")
       return
     end
 
@@ -55,7 +57,6 @@ class Icome
     if @debug
       puts "#{term} #{today} #{uhour}"
     else
-      # CHECK, should be function.
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
         (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thu1)|(thu4)/i)
         display("授業時間じゃありません。")
@@ -103,7 +104,7 @@ class Icome
   end
 
   # FIXME: メソッド名は personal_ex がいいと思う。
-  def personal()
+  def personal_ex()
     ret = @ucome.personal(@sid)
     if ret.empty?
       display("秘密裡に抜きます。<br>"+
