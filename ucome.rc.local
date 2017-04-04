@@ -4,7 +4,7 @@
 if [ -e /srv/ucome/bin/ucome.rb ]; then
     /srv/ucome/bin/ucome.rb \
         --mongo 'mongodb://127.0.0.1/ucome' \
-        --ucome 'druby://150.69.90.82:9007'
+        --ucome 'druby://150.69.90.82:9007' &
 fi
 
 exit 0

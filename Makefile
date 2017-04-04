@@ -5,7 +5,7 @@ ISC_BIN=/edu/bin
 
 all:
 	@echo "'make isc' on isc to install icome client."
-	@echo "'make ucome' on server to install/setup ucome."
+	@echo "'make ucome-install' on server to install/setup ucome."
 	@echo "'make start' start the installed server ucome"
 	@echo "acome from installed isc folder (hkimura only)"
 

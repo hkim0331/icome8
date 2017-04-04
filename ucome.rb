@@ -162,7 +162,7 @@ while (arg = ARGV.shift)
   when /--mongo/
     mongo = ARGV.shift
   when /--(druby)|(ucome)/
-    ucomey = ARGV.shift
+    ucome = ARGV.shift
   else
     usage()
   end
