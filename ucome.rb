@@ -145,7 +145,7 @@ class Ucome
 
   # for checking ucome availability
   def ping(ip)
-    @logger.info("ping from #{ip}")
+    @logger.debug("ping from #{ip}")
     "pong"
   end
 
