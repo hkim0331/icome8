@@ -24,16 +24,17 @@ class Ucome
   def initialize(mongo, debug)
     if debug
       @upload      = "./upload"
-      logger       = Logger.new(STDERR)
-      logger.level = Logger::DEBUG
+      @logger       = Logger.new(STDERR)
     else
       @upload      = "/srv/ucome/upload"
-      logger       = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
-      logger.level = Logger::INFO
+      @logger       = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
     end
+    @logger.level = Logger::DEBUG
+    #@logger.datetime_format="%F %T"
+
     # determin mongodb collection from launch time info.
     @mongo = mongo
-    @ds = Mongo::Client.new(@mongo, logger: logger)
+    @ds = Mongo::Client.new(@mongo, logger: @logger)
     @cl = @ds[collection()]
     @commands = []
     @cur = 0
@@ -53,7 +54,7 @@ class Ucome
   # 個人課題の提出状況。
   # アップロード先は ucome の動くサーバなので、
   # icome の動いているローカル PC では解決できない。
-  def personal(sid)
+  def personal_ex(sid)
     dir = File.join(@upload, sid)
     if File.directory?(dir)
       Dir.entries(dir).delete_if{|x| x=~ /^\./}
@@ -98,6 +99,7 @@ class Ucome
   # %F_#{save_as_name} は並び順のため。
   # CHECK: contents?
   def upload(sid, save_as, contents)
+    @log.info("upload from #{sid}, save as #{save_as}")
     dir = File.join(@upload, sid)
     Dir.mkdir(dir) unless File.directory?(dir)
     to = File.join(dir, Time.now.strftime("%F_#{save_as}"))
@@ -142,7 +144,8 @@ class Ucome
   end
 
   # for checking ucome availability
-  def ping
+  def ping(ip)
+    @logger.debug("ping from #{ip}")
     "pong"
   end
 
@@ -175,5 +178,5 @@ if __FILE__ == $0
   end
   DRb.thread.join
 else
-  puts "debug mode, use irb?"
+  puts "REPL debug mode. using irb?"
 end
