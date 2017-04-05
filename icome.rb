@@ -24,7 +24,7 @@ class Icome
     @ui = UI.new(self, @debug)
     @ip = IPSocket::getaddress(Socket::gethostname)
     @ucome = ucome
-    self.ping
+    self.ping(@ip)
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
     # FIXME: これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
@@ -32,9 +32,9 @@ class Icome
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
   end
 
-  def ping
+  def ping(ip)
     begin
-      @ucome.ping
+      @ucome.ping(ip)
     rescue
       puts $!
       @ui.dialog "ucome does not respond. will quit."
@@ -105,7 +105,7 @@ class Icome
 
   # FIXME: メソッド名は personal_ex がいいと思う。
   def personal_ex()
-    ret = @ucome.personal(@sid)
+    ret = @ucome.personal_ex(@sid)
     if ret.empty?
       display("秘密裡に抜きます。<br>"+
               "ファイルを指定した名前でセーブすること。<br>"+
