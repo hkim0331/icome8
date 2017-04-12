@@ -14,7 +14,7 @@ isc:
 		@echo must exec on isc; \
 	else \
 		install -m 0755 icome.sh ${ISC_BIN}/icome; \
-	  install -m 0755 bin/gtyist-check.rb  ${ISC_BIN}/; \
+		install -m 0755 bin/gtypist-check.rb  ${ISC_BIN}/; \
 	fi
 
 acome:
