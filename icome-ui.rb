@@ -151,7 +151,7 @@ class UI
   def gtypist_stage(s)
     ret = []
     len = {'Q1' => 8, 'Q2' =>  8, 'Q3' => 10, 'Q4' => 11, 'Q5' => 9}
-    IO.popen("./bin/gtypist-check.rb") do |p|
+    IO.popen(GTYPIST_CHECK) do |p|
       ret = p.readlines.map{|l| l.chomp}.find_all{|l| l =~ /#{s}/}
     end
     greeting = ""

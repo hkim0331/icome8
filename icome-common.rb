@@ -11,6 +11,14 @@ MAX_UPLOAD_SIZE  = 5000000
 PREFIX = {'j' => '10', 'k' => '11', 'm' => '12', 'n' => '13',
           'o' => '14', 'p' => '15', 'q' => '16', 'r' => '17' }
 
+if File.exists?("/edu/bin/gtypist-check.rb")
+  GTYPIST_CHECK="/edu/bin/gtypist-check.rb"
+elsif File.exists?("./bin/gtypist-check.rb")
+  GTYPIST_CHECK="./bin/gtypist-check.rb"
+else
+  raise "can not find gtypist-check.rb"
+end
+
 def uid2sid(uid)
   PREFIX[uid[0]] + uid[1,6]
 rescue
