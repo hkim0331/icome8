@@ -7,11 +7,11 @@ require 'socket'
 require_relative 'icome-common'
 require_relative 'icome-ui'
 
-def usage
+def usage(s)
   print <<EOU
-icome #{VERSION}
-# usage
-$ icome [--debug] [--ucome druby://ucome_ip:port]
+#{s}
+usage:
+$ icome [--version] [--debug] [--ucome druby://ucome_ip:port]
 EOU
   exit(1)
 end
@@ -245,8 +245,11 @@ while (arg = ARGV.shift)
     debug = true
   when /--(druby)|(ucome)/
     ucome = ARGV.shift
+  when /--version/
+    puts VERSION
+    exit(1)
   else
-    usage()
+    usage("unkown option: #{arg}")
   end
 end
 
