@@ -49,12 +49,12 @@ class UI
     menu.set_layout(BoxLayout.new(menu, BoxLayout::Y_AXIS))
     menu.add(common_menu)
     if @debug
-      menu.add(gtypist_menu)
+      menu.add(gtypist_menu) unless GTYPIST_CHECK.empty?
       menu.add(robocar_menu)
     else
       case this_term()
       when /(q1)|(q2)/
-        menu.add(gtypist_menu)
+        menu.add(gtypist_menu) unless GTYPIST_CHECK.empty?
       when /(q3)|(q4)/
         menu.add(robocar_menu)
       end
@@ -101,7 +101,6 @@ class UI
   def gtypist_menu
     panel = JPanel.new
     panel.set_layout(BoxLayout.new(panel, BoxLayout::Y_AXIS))
-
     %w{Q1 Q2 Q3 Q4 Q5}.each do |s|
       button = JButton.new("gtypist #{s}")
       button.add_action_listener do |e|
@@ -122,32 +121,6 @@ class UI
     panel
   end
 
-  # nouse?
-  # def gtypist(pat)
-  #   gtypist = "#{ENV['HOME']}/.gtypist"
-  #   message = ""
-  #   if File.exists?(gtypist)
-  #     ret = []
-  #     File.foreach(gtypist) do |line|
-  #       if line =~ /#{pat}/
-  #         ret.push "#{line.chomp}<br>"
-  #       end
-  #     end
-  #     message = ret.join
-  #   else
-  #     message = "do gtypist!"
-  #   end
-  #   @icome.display(message)
-  # end
-
-  def gtypist_all()
-    ret = []
-    IO.popen("./bin/gtypist-check.rb") do |p|
-      ret = p.readlines.map{|l| l.chomp}
-    end
-    @icome.display(ret.join('<br>'))
-  end
-
   def gtypist_stage(s)
     ret = []
     len = {'Q1' => 8, 'Q2' =>  8, 'Q3' => 10, 'Q4' => 11, 'Q5' => 9}
@@ -156,10 +129,8 @@ class UI
     end
     greeting = ""
     if ret.length >= len[s]
-#      greeting = "<p style='color:red;'>CLEAR!!</p>"
       greeting = "CLEAR!!"
     elsif ret.length == 0
-#      greeting = "<p style='color:blue;'>やっとかないと平常点つかないよ。</p>"
       greeting = "やっとかないと平常点つかないよ。"
     end
     @icome.display(ret.join('<br>') + greeting)
