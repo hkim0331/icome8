@@ -127,7 +127,7 @@ class Icome
 
   # improve-menu
   def firefox_recover()
-    if File.exists?("/usr/bin/firerox")
+    if File.exists?("/usr/bin/firefox")
       system("kill `pidof firefox`")
       system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
       system("/usr/bin/firefox &")
