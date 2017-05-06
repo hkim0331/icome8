@@ -125,15 +125,21 @@ class Icome
     end
   end
 
+  # improve-menu
   def firefox_recover()
-    system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
-    display("トライしてみた。<br>"+
-            "firefox を再起動してみれ。<br>ダメなら hkimura を呼ぶ。")
+    if File.exists?("/usr/bin/firefox")
+      system("kill `pidof firefox`")
+      system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
+      system("/usr/bin/firefox &")
+      display("firefox を再起動しました。<br>これでダメなら hkimura を呼ぼう。")
+    else
+      display("情報センターでしか効きません。")
+    end
   end
 
   def lpcxpresso_recover()
     system("find ~/LPCXresso/workspace -name .lock -exec rm {} \\;")
-    display("lpcxpresso & してみよう。ダメなら hkimura を呼ぶ。")
+    display("lpcxpresso & してみよう。ダメなら hkimura を呼ぶしか。")
   end
 
   def quit
