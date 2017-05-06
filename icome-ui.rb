@@ -92,9 +92,11 @@ class UI
     uri = "http://literacy.melt.kyutech.ac.jp/cgi/exam.cgi"
     uid = ENV['USER']
     sid = uid2sid(uid)
-    jname = uid2jname(uid)
+    jname = uid2jname(uid).gsub(/ /,'%20')
+    cmd = "firefox '#{uri}?uid=#{uid}&sid=#{sid}&jname=#{jname}' &"
+    puts "cmd: #{cmd}"
     button.add_action_listener do |e|
-      system("firefox #{uri}?uid=#{uid}&sid=#{sid}&jname=#{jname} &")
+      system(cmd)
     end
     panel.add(button)
 
