@@ -89,8 +89,12 @@ class UI
     panel.add(button)
 
     button = JButton.new('TEST!')
+    uri = "http://literacy.melt.kyutech.ac.jp/cgi/exam.cgi"
+    uid = ENV['USER']
+    sid = uid2sid(uid)
+    jname = uid2jname(uid)
     button.add_action_listener do |e|
-      system("firefox http://literacy.melt.kyutech.ac.jp/cgi/exam.cgi?uid=#{ENV['USER']} &")
+      system("firefox #{uri}?uid=#{uid}&sid=#{sid}&jname=#{jname} &")
     end
     panel.add(button)
 
