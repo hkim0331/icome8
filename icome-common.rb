@@ -19,6 +19,26 @@ GTYPIST_CHECK = if File.exists?("/edu/bin/gtypist-check.rb")
                   ""
                 end
 
+SID_UID_JNAME = if File.exists?("/edu/lib/literacy/sid-uid-jname.txt")
+  "/edu/lib/literacy/sid-uid-jname.txt"
+elsif File.exists?("/Users/hkim/workspace/literacy/data/sid-uid-jname.txt")
+  "/Users/hkim/workspace/literacy/data/sid-uid-jname.txt"
+elsif File.exists?("/home/hkim/workspace/literacy/data/sid-uid-jname.txt")
+  "/home/hkim/workspace/literacy/data/sid-uid-jname.txt"
+else
+  raise "can not find SID_UID_JNAME"
+end
+
+def uid2jname(u)
+    File.foreach(SID_UID_JNAME) do |line|
+      sid,uid,jname=line.chomp.split(/ /, 3)
+      if u == uid
+        return jname
+      end
+    end
+    return "can not find uid: #{u}"
+end
+
 def uid2sid(uid)
   PREFIX[uid[0]] + uid[1,6]
 rescue
