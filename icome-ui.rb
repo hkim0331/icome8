@@ -90,7 +90,7 @@ class UI
 
     button = JButton.new('TEST!')
     button.add_action_listener do |e|
-      system("firefox http://literacy.melt.kyutech.ac.jp/cgi/exam.cgi?uid=#{ENV['USER']}")
+      system("firefox http://literacy.melt.kyutech.ac.jp/cgi/exam.cgi?uid=#{ENV['USER']} &")
     end
     panel.add(button)
 
