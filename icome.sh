@@ -20,7 +20,6 @@ if [ -f /home/t/hkimura/icome8/icome.rb ]; then
               --check /home/t/hkimura/Desktop/xwatch-ss.conf 2>/dev/null &
     fi
 else
-    echo "debug mode. consider to use --debug option."
-    ./icome.rb $@
+    echo "for debug, consider to use --debug option."
+    UCOME='druby://150.69.90.82:9007' ./icome.rb $@
 fi
-

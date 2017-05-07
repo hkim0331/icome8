@@ -249,6 +249,7 @@ while (arg = ARGV.shift)
   case arg
   when /--debug/
     debug = true
+    ucome = UCOME
   when /--(druby)|(ucome)/
     ucome = ARGV.shift
   when /--version/

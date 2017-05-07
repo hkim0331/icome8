@@ -90,10 +90,12 @@ class UI
 
     button = JButton.new('TEST!')
     uri = "http://literacy.melt.kyutech.ac.jp/cgi/exam.cgi"
-    uid = ENV['USER']
-    sid = uid2sid(uid)
-    jname = uid2jname(uid).gsub(/ /,'%20')
-    cmd = "firefox '#{uri}?uid=#{uid}&sid=#{sid}&jname=#{jname}' &"
+    ## see redmine #3337
+    # uid = ENV['USER']
+    # sid = uid2sid(uid)
+    # jname = uid2jname(uid).gsub(/ /,'%20')
+    # cmd = "firefox '#{uri}?uid=#{uid}&sid=#{sid}&jname=#{jname}' &"
+    cmd = "firefox #{uri} &"
     button.add_action_listener do |e|
       system(cmd)
     end
