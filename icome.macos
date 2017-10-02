@@ -1,0 +1,3 @@
+#!/bin/sh
+# icome wrapper for macos.
+${HOME}/projects/icome8/icome.rb --ucome druby://150.69.90.82:9007 $@
