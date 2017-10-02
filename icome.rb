@@ -130,6 +130,7 @@ class Icome
     if File.exists?("/usr/bin/firefox")
       system("kill `pidof firefox`")
       system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
+      system("find ~/.mozilla/firefox -name .parentlock -exec rm {} \\;")
       system("/usr/bin/firefox &")
       display("firefox を再起動しました。<br>これでダメなら hkimura を呼ぼう。")
     else
@@ -260,7 +261,7 @@ while (arg = ARGV.shift)
   end
 end
 
-puts "ucome: #{ucome}"
+"ucome: #{ucome}" if debug
 DRb.start_service
 icome = Icome.new(DRbObject.new(nil, ucome), debug)
 icome.start

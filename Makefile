@@ -18,7 +18,7 @@ isc:
 	fi
 
 acome:
-	@echo use ./acome to launch.
+	@echo use ${PWD}/acome to launch.
 
 ucome-install:
 	cp ucome.rb icome-common.rb /srv/ucome/bin
