@@ -19,9 +19,7 @@ def try_first(files)
 end
 
 GTYPIST_CHECK = try_first(
-  ["/edu/bin/gtypist-check.rb",
-   "./bin/gtypist-check.rb"])
-
+  ["/edu/bin/gtypist-check.rb", "./bin/gtypist-check.rb"])
 
 SID_UID_JNAME = try_first(
   ["/edu/lib/robocar/sid-uid-jname.txt",

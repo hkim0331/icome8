@@ -1,0 +1,4 @@
+#!/bin/sh
+# no pkill since icome process is java.
+
+kill `ps ax | grep [i]come | awk '{print $1}'`
