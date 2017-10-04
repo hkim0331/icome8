@@ -57,10 +57,10 @@ def uhour(time)
 end
 
 def this_term()
-  month = Time.now.mont
+  month = Time.now.month
   if 4<=month && month <=9
     "q1"
-  else  
+  else
     "q3"
   end
 end

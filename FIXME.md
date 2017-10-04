@@ -1,10 +1,8 @@
-# BUG
-
-* thr ではなく thu。/edu/lib/icome を使うのは面倒か？
-* 2016-09-29 教室チェックが機能しない。c-2g? c-2b? とその周りのコード。
-
 # FIXME
 
+* SID-UID-JNAME.txt ファイルがないとき？
+* [fixed] thr ではなく thu。/edu/lib/icome を使うのは面倒か？
+* 2016-09-29 教室チェックが機能しない。c-2g? c-2b? とその周りのコード。
 * upload 時、ファイルが見つからない時、素朴に「ファイルがない」を表示するべきか？
 * dialog の表示位置。
 * BUG? druby://localhost:9001 で通信できないわけは？
@@ -23,12 +21,7 @@
   disable reset の番号
   だけどな。
 
-# DONE
-
-* コレクション名に subj を入れるか？
-  => NO. 入れるならドキュメントに。
-
-## old
+## OLD DOCS
 
 ### 2015-05-13
 
