@@ -1,6 +1,6 @@
 APP_NAME="icome8"
 VERSION="1.7.0"
-UPDATE="2017-10-03"
+UPDATE="2017-10-04"
 
 MONGO='mongodb://127.0.0.1:27017/ucome'
 UCOME='druby://127.0.0.1:9007'
@@ -19,9 +19,7 @@ def try_first(files)
 end
 
 GTYPIST_CHECK = try_first(
-  ["/edu/bin/gtypist-check.rb",
-   "./bin/gtypist-check.rb"])
-
+  ["/edu/bin/gtypist-check.rb", "./bin/gtypist-check.rb"])
 
 SID_UID_JNAME = try_first(
   ["/edu/lib/robocar/sid-uid-jname.txt",
@@ -58,24 +56,28 @@ def uhour(time)
   time.strftime("%a") + hour(time.strftime("%T")).to_s
 end
 
-# FIXME
 def this_term()
-  "q3"
+  month = Time.now.mont
+  if 4<=month && month <=9
+    "q1"
+  else  
+    "q3"
+  end
 end
 
 # academic year. used by ucome only.
 def a_year()
   now = Time.now
   if now.month < 4
-    now.year-1
+    now.year - 1
   else
     now.year
   end
 end
 
-# which is better?
+# alias?
 def term_year()
-  "#{this_term()}_#{a_year()}"
+  collection()
 end
 
 def collection()
