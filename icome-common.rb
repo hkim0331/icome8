@@ -56,24 +56,28 @@ def uhour(time)
   time.strftime("%a") + hour(time.strftime("%T")).to_s
 end
 
-# FIXME
 def this_term()
-  "q3"
+  month = Time.now.mont
+  if 4<=month && month <=9
+    "q1"
+  else  
+    "q3"
+  end
 end
 
 # academic year. used by ucome only.
 def a_year()
   now = Time.now
   if now.month < 4
-    now.year-1
+    now.year - 1
   else
     now.year
   end
 end
 
-# which is better?
+# alias?
 def term_year()
-  "#{this_term()}_#{a_year()}"
+  collection()
 end
 
 def collection()
