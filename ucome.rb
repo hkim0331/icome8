@@ -18,7 +18,7 @@ $ ucome [--debug]
         [--mongodb mongodb://server:port/db]
         [--ucome druby://my_ip_address:port]
 
-default: 
+default:
 
 EOF
   exit(1)

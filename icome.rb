@@ -59,7 +59,7 @@ class Icome
     else
       # MUST ADJUST
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
-        (term =~ /q[34]/ and uhour !~ /(tue2)|(thu1)|(thu4)|(fri5)/i)
+        (term =~ /q[34]/ and uhour !~ /(tue2)|(thu1)|(thu4)|(fri4)/i)
         display("授業時間じゃありません。")
         return
       end
