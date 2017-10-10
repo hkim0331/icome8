@@ -46,7 +46,7 @@ class Icome
   def icome
 
     unless @debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
-      display("#{@ip}教室外からできません。")
+      display("from: #{@ip}<br>教室外からできません。")
       return
     end
 
@@ -189,7 +189,7 @@ class Icome
   end
 
   def xcowsay(s)
-    system("xcowsay --at=200,100 --reading-speed=1000 '#{s}'")
+    system("xcowsay --at=200,100 '#{s}'")
   end
 
   def has_xcowsay?()
