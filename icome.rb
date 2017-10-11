@@ -170,17 +170,14 @@ class Icome
   end
 
   # rename as isc_to_ucome?
-  def upload(local)
-    it = File.join(ENV['HOME'], local)
-    if File.exists?(it)
-      if File.size(it) < MAX_UPLOAD_SIZE
-        @ucome.upload(@sid, File.basename(local), File.open(it).read)
-      else
-        display("too big: #{it}: #{File.size(it)}")
-      end
+  def upload(file)
+    path = File.join(ENV['HOME'], file)
+    if File.exists?(path) and File.size(path) < MAX_UPLOAD_SIZE
+      puts "will upload #{file}" if @debug
+      @ucome.upload(@sid, File.basename(file), File.open(path).read)
+      puts "done" if @debug
     else
-      # 表示するとめんどくさいか？ 「もう一度取ってください」とか。
-      display("ファイルがありません。#{it}")
+      display "#{file} is missing or too big."
     end
   end
 
@@ -211,8 +208,10 @@ class Icome
       while true do
         sleep INTERVAL
         cmd = @ucome.fetch(i)
-        puts cmd if @debug and (not cmd.nil?)
-        unless cmd.nil?
+        if cmd.nil?
+          puts "cmd is nil" if @debug
+        else
+          puts "cmd: #{cmd}"if @debug
           i += 1
           if cmd[:status] == :enable
             case cmd[:command]

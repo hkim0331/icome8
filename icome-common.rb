@@ -1,8 +1,10 @@
+# coding: utf-8
 APP_NAME="icome8"
-VERSION="1.7.1"
-UPDATE="2017-10-04"
+VERSION="1.7.2"
+UPDATE="2017-10-11"
 
 MONGO='mongodb://127.0.0.1:27017/ucome'
+# this for development. is it good?
 UCOME='druby://127.0.0.1:9007'
 
 INTERVAL = 2
