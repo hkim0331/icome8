@@ -35,7 +35,8 @@ class Ucome
       @upload      = "/srv/ucome/upload"
       @logger       = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
     end
-    @logger.level = Logger::DEBUG
+#    @logger.level = Logger::DEBUG
+    @logger.level = Logger::INFO
     #@logger.datetime_format="%F %T"
 
     # determin mongodb collection from launch time info.
@@ -102,16 +103,17 @@ class Ucome
     @commands[n]
   end
 
-  # %F_#{save_as_name} は並び順のため。
-  # CHECK: contents?
+  # %F_#{save_as} は並び順のため。
   def upload(sid, save_as, contents)
-    @log.info("upload from #{sid}, save as #{save_as}")
+    @logger.debug "upload from #{sid}, save as #{save_as}"
     dir = File.join(@upload, sid)
     Dir.mkdir(dir) unless File.directory?(dir)
     to = File.join(dir, Time.now.strftime("%F_#{save_as}"))
     File.open(to, "w") do |f|
       f.puts contents
     end
+  rescue
+    @logger.warn "can not mkdir #{dir}"
   end
 
   def download(file, save_as)

@@ -1,5 +1,7 @@
 # FIXME
 
+* [change] 2017-1-10 acome 使わず、環境変数 UCOME を .bash_profile で定義、
+  acome.rb でつなぐ。
 * SID-UID-JNAME.txt ファイルがないとき？
 * [fixed] thr ではなく thu。/edu/lib/icome を使うのは面倒か？
 * 2016-09-29 教室チェックが機能しない。c-2g? c-2b? とその周りのコード。
