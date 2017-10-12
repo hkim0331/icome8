@@ -7,6 +7,10 @@ require 'socket'
 require 'logger'
 require_relative 'icome-common'
 
+# must change
+DB  = "rb_2017"
+GRP = "as_2017"
+
 def usage()
   print <<EOF
 ucome #{VERSION}
@@ -65,11 +69,11 @@ class Ucome
 
   # FIXME, ダサい。データベースの設計がまずいのが原因か。
   def sid2gid(sid)
-    if ret = @ds["rb_2016"].find({status: 1, m1: sid}).first
+    if ret = @ds[DB].find({status: 1, m1: sid}).first
       ret[:gid]
-    elsif ret = @ds["rb_2016"].find({status: 1, m2: sid}).first
+    elsif ret = @ds[DB].find({status: 1, m2: sid}).first
       ret[:gid]
-    elsif ret = @ds["rb_2016"].find({status: 1, m3: sid}).first
+    elsif ret = @ds[DB].find({status: 1, m3: sid}).first
       ret[:gid]
     else
       nil
@@ -81,7 +85,7 @@ class Ucome
     if gid.nil?
       ["グループが見つからないよ。"]
     else
-      ret = @ds["as_2016"].find({gid: gid}, {num: 1}).
+      ret = @ds[GRP].find({gid: gid}, {num: 1}).
               map{|x| x[:num]}
       [ "gid #{gid}:"] + ret
     end
