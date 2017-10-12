@@ -17,7 +17,7 @@ if [ -f /home/t/hkimura/icome8/icome.rb ]; then
     if [ -e ${XWATCH} ]; then
         nohup ${XWATCH}/xwatch-ss.rb \
               --image ${XWATCH}/images/ghost-busters.png \
-              --check /home/t/hkimura/Desktop/xwatch-ss.conf 2>/dev/null &
+              --conf /home/t/hkimura/Desktop/xwatch-ss.conf 2>/dev/null &
     fi
 else
     echo "for debug, consider to use --debug option."
