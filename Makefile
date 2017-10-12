@@ -6,7 +6,7 @@ ISC_BIN=/edu/bin
 all:
 	@echo "'make isc' on isc to install icome client."
 	@echo "'make ucome-install' on server to install/setup ucome."
-	@echo "'make start' start the installed server ucome"
+	@echo "'make ucome-start' start the installed server ucome"
 	@echo "acome from installed isc folder (hkimura only)"
 
 isc:
@@ -18,13 +18,16 @@ isc:
 	fi
 
 acome:
-	@echo use ./acome to launch.
+	@echo use ${PWD}/acome to launch.
 
 ucome-install:
 	cp ucome.rb icome-common.rb /srv/ucome/bin
 	chmod +x /srv/ucome/bin/ucome.rb
 
-stop:
+ucome-start:
+	[ -e /srv/ucome/bin/ucome.sh ] && /srv/ucome/bin/ucome.sh &
+
+ucome-stop:
 	kill `ps ax | grep '[u]come' | awk '{print $$1}'`
 
 clean:

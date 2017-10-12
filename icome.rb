@@ -46,7 +46,7 @@ class Icome
   def icome
 
     unless @debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
-      display("#{@ip}教室外からできません。")
+      display("from: #{@ip}<br>教室外からできません。")
       return
     end
 
@@ -57,8 +57,9 @@ class Icome
     if @debug
       puts "#{term} #{today} #{uhour}"
     else
+      # MUST ADJUST
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
-        (term =~ /q[34]/ and uhour !~ /(tue2)|(tue4)|(thu1)|(thu4)/i)
+        (term =~ /q[34]/ and uhour !~ /(tue2)|(thu1)|(thu4)|(fri4)/i)
         display("授業時間じゃありません。")
         return
       end
@@ -130,6 +131,7 @@ class Icome
     if File.exists?("/usr/bin/firefox")
       system("kill `pidof firefox`")
       system("find ~/.mozilla/firefox -name lock -exec rm {} \\;")
+      system("find ~/.mozilla/firefox -name .parentlock -exec rm {} \\;")
       system("/usr/bin/firefox &")
       display("firefox を再起動しました。<br>これでダメなら hkimura を呼ぼう。")
     else
@@ -168,17 +170,14 @@ class Icome
   end
 
   # rename as isc_to_ucome?
-  def upload(local)
-    it = File.join(ENV['HOME'], local)
-    if File.exists?(it)
-      if File.size(it) < MAX_UPLOAD_SIZE
-        @ucome.upload(@sid, File.basename(local), File.open(it).read)
-      else
-        display("too big: #{it}: #{File.size(it)}")
-      end
+  def upload(file)
+    path = File.join(ENV['HOME'], file)
+    if File.exists?(path) and File.size(path) < MAX_UPLOAD_SIZE
+      puts "will upload #{file}" if @debug
+      @ucome.upload(@sid, File.basename(file), File.open(path).read)
+      puts "done" if @debug
     else
-      # 表示するとめんどくさいか？ 「もう一度取ってください」とか。
-      display("ファイルがありません。#{it}")
+      display "#{file} is missing or too big."
     end
   end
 
@@ -187,7 +186,7 @@ class Icome
   end
 
   def xcowsay(s)
-    system("xcowsay --at=200,100 --reading-speed=1000 '#{s}'")
+    system("xcowsay --at=200,100 '#{s}'")
   end
 
   def has_xcowsay?()
@@ -209,8 +208,10 @@ class Icome
       while true do
         sleep INTERVAL
         cmd = @ucome.fetch(i)
-        puts cmd if @debug and (not cmd.nil?)
-        unless cmd.nil?
+        if cmd.nil?
+          puts "cmd is nil" if @debug
+        else
+          puts "cmd: #{cmd}"if @debug
           i += 1
           if cmd[:status] == :enable
             case cmd[:command]
@@ -260,7 +261,7 @@ while (arg = ARGV.shift)
   end
 end
 
-puts "ucome: #{ucome}"
+"ucome: #{ucome}" if debug
 DRb.start_service
 icome = Icome.new(DRbObject.new(nil, ucome), debug)
 icome.start

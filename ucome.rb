@@ -7,9 +7,8 @@ require 'socket'
 require 'logger'
 require_relative 'icome-common'
 
-# must change
-DB  = "rb_2017"
-GRP = "as_2017"
+ROBOCAR = "rb_2017"
+ANSWERS = "as_2017"
 
 def usage()
   print <<EOF
@@ -18,6 +17,9 @@ usage:
 $ ucome [--debug]
         [--mongodb mongodb://server:port/db]
         [--ucome druby://my_ip_address:port]
+
+default:
+
 EOF
   exit(1)
 end
@@ -33,7 +35,8 @@ class Ucome
       @upload      = "/srv/ucome/upload"
       @logger       = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
     end
-    @logger.level = Logger::DEBUG
+#    @logger.level = Logger::DEBUG
+    @logger.level = Logger::INFO
     #@logger.datetime_format="%F %T"
 
     # determin mongodb collection from launch time info.
@@ -69,11 +72,11 @@ class Ucome
 
   # FIXME, ダサい。データベースの設計がまずいのが原因か。
   def sid2gid(sid)
-    if ret = @ds[DB].find({status: 1, m1: sid}).first
+    if ret = @ds[ROBOCAR].find({status: 1, m1: sid}).first
       ret[:gid]
-    elsif ret = @ds[DB].find({status: 1, m2: sid}).first
+    elsif ret = @ds[ROBOCAR].find({status: 1, m2: sid}).first
       ret[:gid]
-    elsif ret = @ds[DB].find({status: 1, m3: sid}).first
+    elsif ret = @ds[ROBOCAR].find({status: 1, m3: sid}).first
       ret[:gid]
     else
       nil
@@ -85,7 +88,7 @@ class Ucome
     if gid.nil?
       ["グループが見つからないよ。"]
     else
-      ret = @ds[GRP].find({gid: gid}, {num: 1}).
+      ret = @ds[ANSWERS].find({gid: gid}, {num: 1}).
               map{|x| x[:num]}
       [ "gid #{gid}:"] + ret
     end
@@ -100,16 +103,17 @@ class Ucome
     @commands[n]
   end
 
-  # %F_#{save_as_name} は並び順のため。
-  # CHECK: contents?
+  # %F_#{save_as} は並び順のため。
   def upload(sid, save_as, contents)
-    @log.info("upload from #{sid}, save as #{save_as}")
+    @logger.debug "upload from #{sid}, save as #{save_as}"
     dir = File.join(@upload, sid)
     Dir.mkdir(dir) unless File.directory?(dir)
     to = File.join(dir, Time.now.strftime("%F_#{save_as}"))
     File.open(to, "w") do |f|
       f.puts contents
     end
+  rescue
+    @logger.warn "can not mkdir #{dir}"
   end
 
   def download(file, save_as)

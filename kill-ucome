@@ -1,0 +1,3 @@
+#!/bin/sh
+# no pkill
+kill `ps ax | grep [u]come | awk '{print $1}'`

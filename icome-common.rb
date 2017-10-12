@@ -1,8 +1,10 @@
+# coding: utf-8
 APP_NAME="icome8"
-VERSION="1.6.3"
-UPDATE="2017-05-06"
+VERSION="1.7.2"
+UPDATE="2017-10-11"
 
 MONGO='mongodb://127.0.0.1:27017/ucome'
+# this for development. is it good?
 UCOME='druby://127.0.0.1:9007'
 
 INTERVAL = 2
@@ -11,23 +13,20 @@ MAX_UPLOAD_SIZE  = 5000000
 PREFIX = {'j' => '10', 'k' => '11', 'm' => '12', 'n' => '13',
           'o' => '14', 'p' => '15', 'q' => '16', 'r' => '17' }
 
-GTYPIST_CHECK = if File.exists?("/edu/bin/gtypist-check.rb")
-                  "/edu/bin/gtypist-check.rb"
-                elsif File.exists?("./bin/gtypist-check.rb")
-                  "./bin/gtypist-check.rb"
-                else
-                  ""
-                end
-
-SID_UID_JNAME = if File.exists?("/edu/lib/literacy/sid-uid-jname.txt")
-  "/edu/lib/literacy/sid-uid-jname.txt"
-elsif File.exists?("/Users/hkim/workspace/literacy/data/sid-uid-jname.txt")
-  "/Users/hkim/workspace/literacy/data/sid-uid-jname.txt"
-elsif File.exists?("/home/hkim/workspace/literacy/data/sid-uid-jname.txt")
-  "/home/hkim/workspace/literacy/data/sid-uid-jname.txt"
-else
-  raise "can not find SID_UID_JNAME"
+def try_first(files)
+  while file = files.shift
+    return file if File.exists?(file)
+  end
+  ""
 end
+
+GTYPIST_CHECK = try_first(
+  ["/edu/bin/gtypist-check.rb", "./bin/gtypist-check.rb"])
+
+SID_UID_JNAME = try_first(
+  ["/edu/lib/robocar/sid-uid-jname.txt",
+   "/Users/hkim/workspace/robocar/data/sid-uid-jname.txt",
+   "/home/hkim/workspace/robocar/data/sid-uid-jname.txt"])
 
 def uid2jname(u)
     File.foreach(SID_UID_JNAME) do |line|
@@ -36,7 +35,8 @@ def uid2jname(u)
         return jname
       end
     end
-    return "can not find uid: #{u}"
+    #    return "an not find uid: #{u}"
+    return ""
 end
 
 def uid2sid(uid)
@@ -58,24 +58,28 @@ def uhour(time)
   time.strftime("%a") + hour(time.strftime("%T")).to_s
 end
 
-# FIXME
 def this_term()
-  "q1"
+  month = Time.now.month
+  if 4<=month && month <=9
+    "q1"
+  else
+    "q3"
+  end
 end
 
 # academic year. used by ucome only.
 def a_year()
   now = Time.now
   if now.month < 4
-    now.year-1
+    now.year - 1
   else
     now.year
   end
 end
 
-# which is better?
+# alias?
 def term_year()
-  "#{this_term()}_#{a_year()}"
+  collection()
 end
 
 def collection()
