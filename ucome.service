@@ -1,0 +1,11 @@
+[Unit]
+Description=ucome server daemon
+After=mongodb.service
+
+[Service]
+Type=simple
+User=hkim
+ExecStart=/srv/ucome/bin/ucome.sh
+
+[Install]
+WantedBy=multi-user.target
