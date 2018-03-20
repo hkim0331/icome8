@@ -22,8 +22,8 @@ acome:
 
 ucome-install:
 	mkdir -p /srv/ucome/bin
-	cp ucome.rb icome-common.rb /srv/ucome/bin
-	chmod +x /srv/ucome/bin/ucome.rb
+	cp ucome.sh ucome.rb icome-common.rb /srv/ucome/bin
+	chmod +x /srv/ucome/bin/ucome.rb /srv/ucome/bin/ucome.sh
 	cp ucome.service /etc/system/ystemd/
 	systemctl enable ucome.service
 
