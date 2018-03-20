@@ -10,7 +10,7 @@ echo icome の起動には 5 秒くらいかかります。
 
 if [ -f /home/t/hkimura/icome8/icome.rb ]; then
     ICOME=/home/t/hkimura/icome8/icome.rb
-    UCOME='druby://150.69.90.82:9007' nohup ${ICOME} 2>/dev/null &
+    UCOME='druby://150.69.90.3:4002' nohup ${ICOME} 2>/dev/null &
 
     # in isc, launch xwatch-ss simultaneously.
     XWATCH=/home/t/hkimura/xwatch-ss
@@ -21,5 +21,5 @@ if [ -f /home/t/hkimura/icome8/icome.rb ]; then
     fi
 else
     echo "for debug, consider to use --debug option."
-    UCOME='druby://150.69.90.82:9007' ./icome.rb $@
+    UCOME='druby://150.69.90.3:4002' ./icome.rb $@
 fi

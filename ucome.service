@@ -1,0 +1,15 @@
+[Unit]
+Description = ucome daemon
+After = network.target
+Wants = mongodb.Service
+
+[Service]
+WorkingDirectory = /srv/ucome/bin
+ExecStart = /srv/ucome/bin/ucome.sh
+Restart = always
+TimeoutSec = 300
+Type = simple
+User = ubuntu
+
+[Install]
+WantedBy = multi-user.target

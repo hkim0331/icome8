@@ -21,14 +21,19 @@ acome:
 	@echo use ${PWD}/acome to launch.
 
 ucome-install:
+	mkdir -p /srv/ucome/bin
 	cp ucome.rb icome-common.rb /srv/ucome/bin
 	chmod +x /srv/ucome/bin/ucome.rb
+	cp ucome.service /etc/system/ystemd/
+	systemctl enable ucome.service
 
 ucome-start:
-	[ -e /srv/ucome/bin/ucome.sh ] && /srv/ucome/bin/ucome.sh &
+	systemctl start ucome
+#	[ -e /srv/ucome/bin/ucome.sh ] && /srv/ucome/bin/ucome.sh &
 
 ucome-stop:
-	kill `ps ax | grep '[u]come' | awk '{print $$1}'`
+	systemstp stop ucome
+#	kill `ps ax | grep '[u]come' | awk '{print $$1}'`
 
 clean:
 	${RM} *~ .#* *.bak nohup.out
