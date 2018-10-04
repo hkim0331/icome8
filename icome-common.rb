@@ -1,7 +1,7 @@
 # coding: utf-8
 APP_NAME="icome8"
-VERSION="1.8"
-UPDATE="2018-03-20"
+VERSION="1.8.1"
+UPDATE="2018-10-04"
 
 MONGO='mongodb://127.0.0.1:27017/ucome'
 # this for development. is it good?
