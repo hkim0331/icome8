@@ -26,4 +26,4 @@ done
 
 echo ${VERSION} > VERSION
 
-git tag VERSION
+git tag ${VERSION}
