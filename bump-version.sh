@@ -25,3 +25,5 @@ UPDATE=\"${TODAY}\"" $i
 done
 
 echo ${VERSION} > VERSION
+
+git tag ${VERSION}
