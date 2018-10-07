@@ -30,15 +30,16 @@ class Ucome
   def debug(s)
     puts
     puts s if @debug
+    puts
   end
 
   def initialize(mongo, debug_flag)
+    @debug = false
     if debug_flag
       @debug   = true
       @upload  = "./upload"
       @logger  = Logger.new(STDERR)
     else
-      @debug   = false
       @upload  = "/srv/ucome/upload"
       @logger  = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
     end
@@ -58,7 +59,6 @@ class Ucome
     info= {sid: sid, uhour: uhour, date: date, ip: ip}
     debug "icome " + info.to_s
     @col.insert_one(info)
-    true
   end
 
   #@col.find() returns a View instance.
