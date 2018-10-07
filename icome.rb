@@ -7,7 +7,7 @@ require 'socket'
 require_relative 'icome-common'
 require_relative 'icome-ui'
 
-def usage(s)
+def usage_exit(s)
   print <<EOU
 #{s}
 usage:
@@ -18,35 +18,42 @@ end
 
 class Icome
 
-  def initialize(ucome, debug)
-    @debug = debug
-    puts "debug mode" if @debug
+  def debug(s)
+    puts "debug: #{s}" if @debug
+  end
+
+  def initialize(ucome, debug_flag)
+    @debug = debug_flag
     @ui = UI.new(self, @debug)
-    @ip = IPSocket::getaddress(Socket::gethostname)
+    @myip = IPSocket::getaddress(Socket::gethostname)
     @ucome = ucome
-    self.ping(@ip)
+    #
+    # ここでタイムアウト待ち。早期終了を目指して逆にあだになった。
+    # self.ping(@ip)
+    #
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
-    # FIXME: これだと isc で DEBUG=1 icome した時、~/icome フォルダを作ってしまう。
-    @icome8_dir = @debug ? "icome8" : File.expand_path("~/.icome8")
+    @icome8_dir = File.expand_path(@debug? "~/Desktop/dot-icome8" : "/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
   end
 
-  def ping(ip)
-    begin
-      @ucome.ping(ip)
-    rescue
-      puts $!
-      @ui.dialog "ucome does not respond. will quit."
-      self.quit
-      DRb.thread.join
-    end
-  end
+  #working?
+  # def ping(ip)
+  #   begin
+  #     puts "ping"
+  #     @ucome.ping(ip)
+  #     puts "ping returns"
+  #   rescue
+  #     puts $!
+  #     @ui.dialog "ucome does not respond. will quit."
+  #     self.quit
+  #     DRb.thread.join
+  #   end
+  # end
 
   def icome
-
-    unless @debug or c_2b?(@ip) or c_2g?(@ip) or remote_t?(@ip)
-      display("from: #{@ip}<br>教室外からできません。")
+    unless @debug or c_2b?(@myip) or c_2g?(@myip)
+      display("from: #{@myip}<br>教室外からできません。")
       return
     end
 
@@ -54,17 +61,23 @@ class Icome
     now = Time.now
     today = now.strftime("%F")
     uhour = uhour(now)
-    # MUST ADJUST
-    if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
-      (term =~ /q[34]/ and uhour !~ /(tue2)|(thu1)|(thu4)|(fri4)/i)
-      display("授業時間じゃありません。")
-      return
+    #
+    # MUST ADJUST annually
+    #
+    debug "term: #{term} uhour: #{uhour}"
+    unless @debug
+      if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
+        (term =~ /q[34]/ and uhour !~ /(tue2)|(thu1)|(thu4)|(fri4)/i)
+        display("授業時間じゃありません。")
+        return
+      end
     end
 
     records = @ucome.find_date_ip(@sid, uhour)
+    debug records.to_s
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
-        @ucome.insert(@sid, uhour, today, @ip)
+        @ucome.insert(@sid, uhour, today, @myip)
       else
         return
       end
@@ -73,11 +86,11 @@ class Icome
         display("出席記録は一回の授業にひとつです。")
         return
       end
-      @ucome.insert(@sid, uhour, today, @ip)
+      @ucome.insert(@sid, uhour, today, @myip)
     end
     display("出席を記録しました。<br>" +
-            "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
-    memo(uhour, now.strftime("%F %T"), @ip)
+            "学生番号:#{@sid}<br>端末番号:#{@myip.split(/\./)[3]}")
+    memo(uhour, now.strftime("%F %T"), @myip)
   end
 
   def show
@@ -141,6 +154,7 @@ class Icome
     java.lang.System.exit(0)
   end
 
+  # FIXME. デバッグ時と一貫して
   def memo(uhour, date_time, ip)
     name = File.join(@icome8_dir, "#{collection()}_#{uhour}")
     File.open(name, "a") do |fp|
@@ -250,12 +264,15 @@ while (arg = ARGV.shift)
     puts VERSION
     exit(1)
   else
-    usage("unkown option: #{arg}")
+    usage_exit("unkown option: #{arg}")
   end
 end
 
-"ucome: #{ucome}" if debug
 DRb.start_service
+if debug
+  puts "150.69.0.0/16 以外から ucome 接続できないよ。"
+  puts "ucome: #{ucome}"
+end
 icome = Icome.new(DRbObject.new(nil, ucome), debug)
 icome.start
 DRb.thread.join
