@@ -35,7 +35,8 @@ class Ucome
       @upload      = "/srv/ucome/upload"
       @logger       = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
     end
-#    @logger.level = Logger::DEBUG
+
+    #    @logger.level = Logger::DEBUG
     @logger.level = Logger::INFO
     #@logger.datetime_format="%F %T"
 

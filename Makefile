@@ -1,4 +1,4 @@
-# FIXME: This Makefile is not suffice.
+# FIXME: This Makefile is not enough.
 # must write which are insuffice.
 
 ISC_BIN=/edu/bin
@@ -20,11 +20,12 @@ isc:
 acome:
 	@echo use ${PWD}/acome to launch.
 
-ucome-install:
-	mkdir -p /srv/ucome/bin
+ucome:
+	mkdir -p /srv/ucome/bin /srv/ucome/log
+	chown ubuntu:ubuntu /srv/ucome/log
 	cp ucome.sh ucome.rb icome-common.rb /srv/ucome/bin
 	chmod +x /srv/ucome/bin/ucome.rb /srv/ucome/bin/ucome.sh
-	cp ucome.service /etc/system/ystemd/
+	cp ucome.service /etc/systemd/system/
 	systemctl enable ucome.service
 
 ucome-start:
