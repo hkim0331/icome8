@@ -10,6 +10,7 @@ UCOME='druby://127.0.0.1:4002'
 INTERVAL = 2
 MAX_UPLOAD_SIZE  = 5000000
 
+# s never exists. isc vanished.
 PREFIX = {'j' => '10', 'k' => '11', 'm' => '12', 'n' => '13',
           'o' => '14', 'p' => '15', 'q' => '16', 'r' => '17' }
 
