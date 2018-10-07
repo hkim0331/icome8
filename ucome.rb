@@ -47,21 +47,23 @@ class Ucome
     # determin mongodb collection from launch time info.
     @mongo = mongo
     @ds = Mongo::Client.new(@mongo, logger: @logger)
-    @cl = @ds[collection()]
+    @col = @ds[collection()]
     @commands = []
     @cur = 0
     @next = -1
   end
 
-  def insert(sid, uhour, date, ip)
+  def icome(sid, uhour, date, ip)
     info= {sid: sid, uhour: uhour, date: date, ip: ip}
-    @cl.insert_one(info)
+    debug "icome " + info.to_s
+    @col.insert_one(info)
     @log.info(info.to_s)
   end
 
-  #@cl.find() returns a View instance.
+  #@col.find() returns a View instance.
   def find_date_ip(sid, uhour)
-    @cl.find({sid: sid, uhour: uhour}, {date: 1, ip: 1}).
+    debug "find_date_ip " + sid + " " + uhour
+    @col.find({sid: sid, uhour: uhour}, {date: 1, ip: 1}).
       map{|x| [x[:date], x[:ip]]}
   end
 
