@@ -263,7 +263,10 @@ while (arg = ARGV.shift)
 end
 
 DRb.start_service
-puts "ucome: #{ucome}" if debug
+if debug
+  puts "150.69.0.0/16 以外から ucome 接続できないよ。"
+  puts "ucome: #{ucome}"
+end
 icome = Icome.new(DRbObject.new(nil, ucome), debug)
 icome.start
 DRb.thread.join
