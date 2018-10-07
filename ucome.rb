@@ -28,7 +28,8 @@ class Ucome
   attr_reader :reset_count
 
   def debug(s)
-    puts "ucome: #{s}" if @debug
+    puts
+    puts s if @debug
   end
 
   def initialize(mongo, debug_flag)
@@ -56,8 +57,9 @@ class Ucome
   def icome(sid, uhour, date, ip)
     info= {sid: sid, uhour: uhour, date: date, ip: ip}
     debug "icome " + info.to_s
-    @col.insert_one(info)
     @log.info(info.to_s)
+    @col.insert_one(info)
+    true
   end
 
   #@col.find() returns a View instance.
