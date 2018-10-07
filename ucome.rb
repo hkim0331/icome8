@@ -7,8 +7,8 @@ require 'socket'
 require 'logger'
 require_relative 'icome-common'
 
-ROBOCAR = "rb_2017"
-ANSWERS = "as_2017"
+ROBOCAR = "rb_2018"
+ANSWERS = "as_2018"
 
 def usage()
   print <<EOF
@@ -50,7 +50,9 @@ class Ucome
   end
 
   def insert(sid, uhour, date, ip)
-    @cl.insert_one({sid: sid, uhour: uhour, date: date, ip: ip})
+    info= {sid: sid, uhour: uhour, date: date, ip: ip}
+    @cl.insert_one(info)
+    @log.info(info.to_s)
   end
 
   #@cl.find() returns a View instance.
