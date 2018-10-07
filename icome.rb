@@ -70,6 +70,7 @@ class Icome
     end
 
     records = @ucome.find_date_ip(@sid, uhour)
+    debug records.to_s
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
         @ucome.insert(@sid, uhour, today, @myip)
@@ -264,7 +265,7 @@ end
 
 DRb.start_service
 if debug
-  puts "150.69.0.0/16 以外から ucome 接続できないよ。"
+  puts "注意:150.69.0.0/16 以外から ucome 接続できないよ。"
   puts "ucome: #{ucome}"
 end
 icome = Icome.new(DRbObject.new(nil, ucome), debug)
