@@ -54,23 +54,17 @@ class Icome
     now = Time.now
     today = now.strftime("%F")
     uhour = uhour(now)
-    if @debug
-      puts "#{term} #{today} #{uhour}"
-    else
-      # MUST ADJUST
-      if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
-        (term =~ /q[34]/ and uhour !~ /(tue2)|(thu1)|(thu4)|(fri4)/i)
-        display("授業時間じゃありません。")
-        return
-      end
+    # MUST ADJUST
+    if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
+      (term =~ /q[34]/ and uhour !~ /(tue2)|(thu1)|(thu4)|(fri4)/i)
+      display("授業時間じゃありません。")
+      return
     end
+
     records = @ucome.find_date_ip(@sid, uhour)
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
-        puts "will call @ucome.insert" if @debug
         @ucome.insert(@sid, uhour, today, @ip)
-      # FIXME: ここで myid を付与したい。面倒か？
-      #@ucome.create_myid(@sid, @uid)
       else
         return
       end
@@ -78,9 +72,8 @@ class Icome
       if records.map{|r| r.first}.include?(today)
         display("出席記録は一回の授業にひとつです。")
         return
-      else
-        @ucome.insert(@sid, uhour, today, @ip)
       end
+      @ucome.insert(@sid, uhour, today, @ip)
     end
     display("出席を記録しました。<br>" +
             "学生番号:#{@sid}<br>端末番号:#{@ip.split(/\./)[3]}")
