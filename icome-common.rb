@@ -1,6 +1,6 @@
 # coding: utf-8
 APP_NAME="icome8"
-VERSION="1.8.2"
+VERSION="1.8.3"
 UPDATE="2018-10-07"
 
 MONGO='mongodb://127.0.0.1:27017/ucome'
