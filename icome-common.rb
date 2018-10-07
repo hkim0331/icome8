@@ -1,6 +1,6 @@
 # coding: utf-8
 APP_NAME="icome8"
-VERSION="1.8.2"
+VERSION="1.8.3"
 UPDATE="2018-10-07"
 
 MONGO='mongodb://127.0.0.1:27017/ucome'
@@ -10,6 +10,7 @@ UCOME='druby://127.0.0.1:4002'
 INTERVAL = 200
 MAX_UPLOAD_SIZE  = 5000000
 
+# s never exists. isc vanished.
 PREFIX = {'j' => '10', 'k' => '11', 'm' => '12', 'n' => '13',
           'o' => '14', 'p' => '15', 'q' => '16', 'r' => '17' }
 
