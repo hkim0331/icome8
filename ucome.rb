@@ -57,7 +57,6 @@ class Ucome
   def icome(sid, uhour, date, ip)
     info= {sid: sid, uhour: uhour, date: date, ip: ip}
     debug "icome " + info.to_s
-    @log.info(info.to_s)
     @col.insert_one(info)
     true
   end
