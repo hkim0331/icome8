@@ -1,13 +1,13 @@
 # coding: utf-8
 APP_NAME="icome8"
-VERSION="1.8.1"
-UPDATE="2018-10-04"
+VERSION="1.8.2"
+UPDATE="2018-10-07"
 
 MONGO='mongodb://127.0.0.1:27017/ucome'
 # this for development. is it good?
 UCOME='druby://127.0.0.1:4002'
 
-INTERVAL = 2
+INTERVAL = 200
 MAX_UPLOAD_SIZE  = 5000000
 
 PREFIX = {'j' => '10', 'k' => '11', 'm' => '12', 'n' => '13',
@@ -30,7 +30,7 @@ SID_UID_JNAME = try_first(
 
 def uid2jname(u)
     File.foreach(SID_UID_JNAME) do |line|
-      sid,uid,jname=line.chomp.split(/ /, 3)
+      sid,uid,jname = line.chomp.split(/ /, 3)
       if u == uid
         return jname
       end
@@ -103,6 +103,6 @@ def c_2g?(ip)
   ip =~ /^10\.27\.102\.\d+/
 end
 
-def remote_t?(ip)
-  ip =~ /^10\.27\.104\.1$/
-end
+#def remote_t?(ip)
+#  ip =~ /^10\.27\.104\.1$/
+#end

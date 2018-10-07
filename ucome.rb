@@ -7,8 +7,8 @@ require 'socket'
 require 'logger'
 require_relative 'icome-common'
 
-ROBOCAR = "rb_2017"
-ANSWERS = "as_2017"
+ROBOCAR = "rb_2018"
+ANSWERS = "as_2018"
 
 def usage()
   print <<EOF
@@ -27,35 +27,44 @@ end
 class Ucome
   attr_reader :reset_count
 
-  def initialize(mongo, debug)
-    if debug
-      @upload      = "./upload"
-      @logger       = Logger.new(STDERR)
+  def debug(s)
+    puts
+    puts s if @debug
+  end
+
+  def initialize(mongo, debug_flag)
+    if debug_flag
+      @debug   = true
+      @upload  = "./upload"
+      @logger  = Logger.new(STDERR)
     else
-      @upload      = "/srv/ucome/upload"
-      @logger       = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
+      @debug   = false
+      @upload  = "/srv/ucome/upload"
+      @logger  = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
     end
 
-    #    @logger.level = Logger::DEBUG
-    @logger.level = Logger::INFO
-    #@logger.datetime_format="%F %T"
+    @logger.level = Logger::DEBUG
 
     # determin mongodb collection from launch time info.
     @mongo = mongo
     @ds = Mongo::Client.new(@mongo, logger: @logger)
-    @cl = @ds[collection()]
+    @col = @ds[collection()]
     @commands = []
     @cur = 0
     @next = -1
   end
 
-  def insert(sid, uhour, date, ip)
-    @cl.insert_one({sid: sid, uhour: uhour, date: date, ip: ip})
+  def icome(sid, uhour, date, ip)
+    info= {sid: sid, uhour: uhour, date: date, ip: ip}
+    debug "icome " + info.to_s
+    @col.insert_one(info)
+    true
   end
 
-  #@cl.find() returns a View instance.
+  #@col.find() returns a View instance.
   def find_date_ip(sid, uhour)
-    @cl.find({sid: sid, uhour: uhour}, {date: 1, ip: 1}).
+    debug "find_date_ip " + sid + " " + uhour
+    @col.find({sid: sid, uhour: uhour}, {date: 1, ip: 1}).
       map{|x| [x[:date], x[:ip]]}
   end
 

@@ -20,13 +20,17 @@ isc:
 acome:
 	@echo use ${PWD}/acome to launch.
 
-ucome:
+ucome: srv-ucome systemd-ucome
+
+srv-ucome:
 	mkdir -p /srv/ucome/bin /srv/ucome/log
 	chown ubuntu:ubuntu /srv/ucome/log
 	cp ucome.sh ucome.rb icome-common.rb /srv/ucome/bin
 	chmod +x /srv/ucome/bin/ucome.rb /srv/ucome/bin/ucome.sh
-	cp ucome.service /etc/systemd/system/
-	systemctl enable ucome.service
+
+systemd-ucome:
+	sudo cp ucome.service /lib/systemd/system/
+	sudo systemctl enable ucome.service
 
 ucome-start:
 	systemctl start ucome
