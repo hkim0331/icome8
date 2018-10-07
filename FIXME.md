@@ -1,46 +1,7 @@
 # FIXME
 
-* bug タイムアウト
-
-ucome とつながらない時、早めに報告し、終了したい。
-
-```
-ucome: druby://150.69.90.3:4002
-start
-warning: thread "Ruby-0-Thread-2: ./icome.rb:4" terminated with exception (report_on_exception is true):
-DRb::DRbConnError: druby://150.69.90.3:4002 - #<Errno::ECONNREFUSED: Connection refused - connect(2) for "150.69.90.3" port 4002>
-            block in open at /usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:785
-                     each at org/jruby/RubyArray.java:1801
-                     open at /usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:778
-               initialize at /usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1288
-                     open at /usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1268
-  block in method_missing at /usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1181
-              with_friend at /usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1200
-           method_missing at /usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1180
-           block in start at ./icome.rb:204
-org.jruby.exceptions.RuntimeError: (DRbConnError) druby://150.69.90.3:4002 - #<Errno::ECONNREFUSED: Connection refused - connect(2) for "150.69.90.3" port 4002>
-	at RUBY.block in open(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:785)
-	at org.jruby.RubyArray.each(org/jruby/RubyArray.java:1801)
-	at RUBY.open(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:778)
-	at RUBY.initialize(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1288)
-	at RUBY.open(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1268)
-	at RUBY.block in method_missing(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1181)
-	at RUBY.with_friend(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1200)
-	at RUBY.method_missing(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1180)
-	at $_dot_.icome.block in start(./icome.rb:204)
-Exception in thread "AWT-EventQueue-0" org.jruby.exceptions.RuntimeError: (DRbConnError) druby://150.69.90.3:4002 - #<Errno::ECONNREFUSED: Connection refused - connect(2) for "150.69.90.3" port 4002>
-	at RUBY.block in open(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:785)
-	at org.jruby.RubyArray.each(org/jruby/RubyArray.java:1801)
-	at RUBY.open(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:778)
-	at RUBY.initialize(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1288)
-	at RUBY.open(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1268)
-	at RUBY.block in method_missing(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1181)
-	at RUBY.with_friend(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1200)
-	at RUBY.method_missing(/usr/local/Cellar/jruby/9.2.0.0/libexec/lib/ruby/stdlib/drb/drb.rb:1180)
-	at $_dot_.icome.group_ex(./icome.rb:115)
-	at RUBY.block in robocar_menu(/Users/hkim/workspace/icome8/icome-ui.rb:160)
-```
-
+* [bugfix] 2018-10-07 logger をlog とタイポ。druby しているときはすご
+  く見つけにくい。
 * [bugfix] 2017-10-11 xwatch のオプションは --check ではなく --conf
 * [bugfix] 2017-10-11 icome.rb:@log.debug ではなく、@logger.debug
 * [change] 2017-10-10 acome 使わず、環境変数 UCOME を .bash_profile で定義、
