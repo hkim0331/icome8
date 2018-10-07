@@ -23,33 +23,15 @@ class Icome
   end
 
   def initialize(ucome, debug_flag)
-    @debug = debug_flag
-    @ui = UI.new(self, @debug)
-    @myip = IPSocket::getaddress(Socket::gethostname)
     @ucome = ucome
-    #
-    # ここでタイムアウト待ち。早期終了を目指して逆にあだになった。
-    # self.ping(@ip)
-    #
+    @debug = debug_flag
+    @myip = IPSocket::getaddress(Socket::gethostname)
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
     @icome8_dir = File.expand_path(@debug? "~/Desktop/dot-icome8" : "/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
+    @ui = UI.new(self, @debug)
   end
-
-  #working?
-  # def ping(ip)
-  #   begin
-  #     puts "ping"
-  #     @ucome.ping(ip)
-  #     puts "ping returns"
-  #   rescue
-  #     puts $!
-  #     @ui.dialog "ucome does not respond. will quit."
-  #     self.quit
-  #     DRb.thread.join
-  #   end
-  # end
 
   def icome
     unless @debug or c_2b?(@myip) or c_2g?(@myip)
@@ -58,7 +40,7 @@ class Icome
     end
 
     term  = this_term()
-    now = Time.now
+    now   = Time.now
     today = now.strftime("%F")
     uhour = uhour(now)
     #
@@ -73,11 +55,14 @@ class Icome
       end
     end
 
+    # BUG
     records = @ucome.find_date_ip(@sid, uhour)
     debug records.to_s
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
-        @ucome.insert(@sid, uhour, today, @myip)
+        debug [@sid, uhour, today, @myip].to_s
+        @ucome.icome(@sid, uhour, today, @myip)
+        debug "inserted"
       else
         return
       end
@@ -270,7 +255,7 @@ end
 
 DRb.start_service
 if debug
-  puts "150.69.0.0/16 以外から ucome 接続できないよ。"
+  puts "注意:150.69.0.0/16 以外から ucome 接続できないよ。"
   puts "ucome: #{ucome}"
 end
 icome = Icome.new(DRbObject.new(nil, ucome), debug)

@@ -1,13 +1,13 @@
 # coding: utf-8
 APP_NAME="icome8"
-VERSION="1.8.3"
+VERSION="1.8.4"
 UPDATE="2018-10-07"
 
 MONGO='mongodb://127.0.0.1:27017/ucome'
 # this for development. is it good?
 UCOME='druby://127.0.0.1:4002'
 
-INTERVAL = 2
+INTERVAL = 200
 MAX_UPLOAD_SIZE  = 5000000
 
 # s never exists. isc vanished.
@@ -31,7 +31,7 @@ SID_UID_JNAME = try_first(
 
 def uid2jname(u)
     File.foreach(SID_UID_JNAME) do |line|
-      sid,uid,jname=line.chomp.split(/ /, 3)
+      sid,uid,jname = line.chomp.split(/ /, 3)
       if u == uid
         return jname
       end
