@@ -18,8 +18,12 @@ end
 
 class Icome
 
-  def initialize(ucome, debug)
-    @debug = debug
+  def debug(s)
+    puts "debug: #{s}" if @debug
+  end
+
+  def initialize(ucome, debug_flag)
+    @debug = debug_flag
     @ui = UI.new(self, @debug)
     @myip = IPSocket::getaddress(Socket::gethostname)
     @ucome = ucome
@@ -60,7 +64,7 @@ class Icome
     #
     # MUST ADJUST annually
     #
-    puts "term: #{term} uhour: #{uhour}"
+    debug "term: #{term} uhour: #{uhour}"
     unless @debug
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
         (term =~ /q[34]/ and uhour !~ /(tue2)|(thu1)|(thu4)|(fri4)/i)
@@ -70,6 +74,7 @@ class Icome
     end
 
     records = @ucome.find_date_ip(@sid, uhour)
+    debug records.to_s
     if records.empty?
       if @ui.query?("#{uhour} を受講しますか？")
         @ucome.insert(@sid, uhour, today, @myip)

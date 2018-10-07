@@ -27,8 +27,12 @@ end
 class Ucome
   attr_reader :reset_count
 
-  def initialize(mongo, debug)
-    if debug
+  def debug(s)
+    puts "ucome: #{s}" if @debug
+  end
+
+  def initialize(mongo, debug_flag)
+    if debug_flag
       @upload      = "./upload"
       @logger       = Logger.new(STDERR)
     else
@@ -36,8 +40,8 @@ class Ucome
       @logger       = Logger.new("/srv/ucome/log/ucome.log", 5, 10*1024)
     end
 
-    #    @logger.level = Logger::DEBUG
-    @logger.level = Logger::INFO
+    @logger.level = Logger::DEBUG
+    #@logger.level = Logger::INFO
     #@logger.datetime_format="%F %T"
 
     # determin mongodb collection from launch time info.
