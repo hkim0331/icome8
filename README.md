@@ -22,12 +22,16 @@ localhost$ ./icome.rb --debug
 
 ## production
 
-dbs.melt.kyutech.ac.jp で ucome を起動させておき、
+db.melt.kyutech.ac.jp で ucome を起動させておき、
 
 ```
 isc$ make isc
 isc$ icome
 ```
+
+## MUST ADJUST
+
+icome.rb: 62 行目あたり、授業時間を開講学期に合わせて調節すること。
 
 ## changelog
 
