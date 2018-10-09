@@ -28,7 +28,7 @@ class Icome
     @myip = IPSocket::getaddress(Socket::gethostname)
     @uid = ENV['USER']
     @sid = uid2sid(@uid)
-    @icome8_dir = File.expand_path(@debug? "~/Desktop/dot-icome8" : "/.icome8")
+    @icome8_dir = File.expand_path(@debug? "~/Desktop/dot-icome8" : "~/.icome8")
     Dir.mkdir(@icome8_dir) unless Dir.exist?(@icome8_dir)
     @ui = UI.new(self, @debug)
   end
