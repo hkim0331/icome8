@@ -71,7 +71,7 @@ class Icome
         display("出席記録は一回の授業にひとつです。")
         return
       end
-      @ucome.insert(@sid, uhour, today, @myip)
+      @ucome.icome(@sid, uhour, today, @myip)
     end
     display("出席を記録しました。<br>" +
             "学生番号:#{@sid}<br>端末番号:#{@myip.split(/\./)[3]}")

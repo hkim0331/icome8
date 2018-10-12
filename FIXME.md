@@ -1,5 +1,6 @@
 # FIXME
 
+* [bugfix] 2018-10-12 @ucome.insert => @ucome.icome
 * [bugfix] 2018-10-07 logger をlog とタイポ。druby しているときはすご
   く見つけにくい。
 * [bugfix] 2017-10-11 xwatch のオプションは --check ではなく --conf
