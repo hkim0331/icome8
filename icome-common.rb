@@ -7,7 +7,7 @@ MONGO='mongodb://127.0.0.1:27017/ucome'
 # this for development. is it good?
 UCOME='druby://127.0.0.1:4002'
 
-INTERVAL = 200
+INTERVAL = 3
 MAX_UPLOAD_SIZE  = 5000000
 
 # s never exists. isc vanished.
