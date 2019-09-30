@@ -31,7 +31,7 @@ SID_UID_JNAME = try_first(
 
 def uid2jname(u)
     File.foreach(SID_UID_JNAME) do |line|
-      sid,uid,jname = line.chomp.split(/ /, 3)
+      _,uid,jname = line.chomp.split(/ /, 3)
       if u == uid
         return jname
       end
@@ -61,7 +61,7 @@ end
 
 def this_term()
   month = Time.now.month
-  if 4<=month && month <=9
+  if 4<=month && month<=9
     "q1"
   else
     "q3"
