@@ -45,11 +45,11 @@ class Icome
     uhour = uhour(now)
     #
     # MUST ADJUST annually
-    #
+    # 2019
     debug "term: #{term} uhour: #{uhour}"
     unless @debug
       if (term =~ /q[12]/ and uhour !~ /(wed1)|(wed2)/i) or
-        (term =~ /q[34]/ and uhour !~ /(tue2)|(thu1)|(thu4)|(fri4)/i)
+        (term =~ /q[34]/ and uhour !~ /(tue1)|(tue2)|(thu1)|(thu4)/i)
         display("授業時間じゃありません。")
         return
       end
@@ -261,5 +261,6 @@ if debug
   puts "ucome: #{ucome}"
 end
 icome = Icome.new(DRbObject.new(nil, ucome), debug)
-icome.start
+#2019 don't use.
+#icome.start
 DRb.thread.join

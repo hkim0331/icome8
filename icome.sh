@@ -13,12 +13,15 @@ if [ -f /home/t/hkimura/icome8/icome.rb ]; then
     UCOME='druby://150.69.90.3:4002' nohup ${ICOME} 2>/dev/null &
 
     # in isc, launch xwatch-ss simultaneously.
-    XWATCH=/home/t/hkimura/xwatch-ss
-    if [ -e ${XWATCH} ]; then
-        nohup ${XWATCH}/xwatch-ss.rb \
-              --image ${XWATCH}/images/ghost-busters.png \
-              --conf /home/t/hkimura/Desktop/xwatch-ss.conf 2>/dev/null &
-    fi
+    # r.hkim.jp is outside.
+
+    # XWATCH=/home/t/hkimura/xwatch-ss
+    # if [ -e ${XWATCH} ]; then
+    #     nohup ${XWATCH}/xwatch-ss.rb \
+    #           --image ${XWATCH}/images/ghost-busters.png \
+    #           --conf /home/t/hkimura/Desktop/xwatch-ss.conf 2>/dev/null &
+    # fi
+    
 else
     echo "for debug, consider to use --debug option."
     UCOME='druby://150.69.90.3:4002' ./icome.rb $@

@@ -48,6 +48,7 @@ class UI
     menu = JPanel.new
     menu.set_layout(BoxLayout.new(menu, BoxLayout::Y_AXIS))
     menu.add(common_menu)
+    puts "debug:this_term(): #{this_term()}"
     if @debug
       menu.add(gtypist_menu) unless GTYPIST_CHECK.empty?
       menu.add(robocar_menu)
@@ -88,14 +89,14 @@ class UI
     end
     panel.add(button)
 
-    button = JButton.new('TEST!')
-    uri = "http://literacy.melt.kyutech.ac.jp/cgi/exam.cgi"
-    ## FIXME if cmd terminates with '&', system() always returns true.
-    cmd = "firefox #{uri} &"
-    button.add_action_listener do |e|
-      system(cmd)
-    end
-    panel.add(button)
+#    button = JButton.new('TEST!')
+#    uri = "http://literacy.melt.kyutech.ac.jp/cgi/exam.cgi"
+#    ## FIXME if cmd terminates with '&', system() always returns true.
+#    cmd = "firefox #{uri} &"
+#    button.add_action_listener do |e|
+#      system(cmd)
+#    end
+#    panel.add(button)
 
     if @debug
       button = JButton.new('Quit')
