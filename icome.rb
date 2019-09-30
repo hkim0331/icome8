@@ -132,6 +132,7 @@ class Icome
 
   def lpcxpresso_recover()
     system("find ~/LPCXresso/workspace -name .lock -exec rm {} \\;")
+    system("rm -rf ~/LPCXpresso/workspace/must_be_renamed")
     display("lpcxpresso & してみよう。ダメなら hkimura を呼ぶしか。")
   end
 
@@ -164,6 +165,7 @@ class Icome
   # rename as isc_to_ucome?
   def upload(file)
     path = File.join(ENV['HOME'], file)
+    display "called upload #{file}."
     if File.exists?(path) and File.size(path) < MAX_UPLOAD_SIZE
       puts "will upload #{file}" if @debug
       @ucome.upload(@sid, File.basename(file), File.open(path).read)
